@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
     db:
@@ -14,9 +14,21 @@ services:
             - postgres_data:/var/lib/postgresql/data
         networks:
             - streaming-backend
+    redis:
+        container_name: redis
+        image: redis:7.4.2
+        restart: always
+        ports:
+            - 6379:6379
+        command: redis-server --requirepass ${REDIS_PASSWORD}
+        volumes:
+            - redis_data:/data
+        networks:
+            - streaming-backend
 
 volumes:
     postgres_data:
+    redis_data:
 
 networks:
     streaming-backend:
