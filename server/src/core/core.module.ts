@@ -7,16 +7,17 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { getGraphQLConfig } from './config/graphql.config';
 import { RedisModule } from './redis/redis.module';
 import { AccountModule } from '../modules/auth/account/account.module';
+import { SessionModule } from '../modules/auth/session/session.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
+        isGlobal: true,
         ignoreEnvFile: !IS_DEV_ENV,
-        isGlobal: true
     }), GraphQLModule.forRootAsync({
         driver: ApolloDriver,
         imports: [ConfigModule],
         useFactory: getGraphQLConfig,
         inject: [ConfigService]
-    }), PrismaModule, RedisModule, AccountModule]
+    }), PrismaModule, RedisModule, AccountModule, SessionModule]
 })
 export class CoreModule { }

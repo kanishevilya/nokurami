@@ -130,7 +130,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\Programming\\step_marketplace\\server\\prisma\\generated",
+      "value": "E:\\Programming\\thesis\\streaming_service\\server\\prisma\\generated",
       "fromEnvVar": null
     },
     "config": {
@@ -144,11 +144,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\Programming\\step_marketplace\\server\\prisma\\schema.prisma",
+    "sourceFilePath": "E:\\Programming\\thesis\\streaming_service\\server\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../.env"
   },
   "relativePath": "..",
@@ -158,6 +158,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
