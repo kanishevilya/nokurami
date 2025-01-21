@@ -20,8 +20,8 @@ input LoginInput {
 
 type Mutation {
   createUser(data: CreateUserInput!): Boolean!
-  login(data: LoginInput!): UserModel!
-  logout: Boolean!
+  loginUser(data: LoginInput!): UserModel!
+  logoutUser: Boolean!
 }
 
 type Query {

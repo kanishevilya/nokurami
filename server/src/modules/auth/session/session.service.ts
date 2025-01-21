@@ -34,13 +34,18 @@ export class SessionService {
             throw new UnauthorizedException("Неверный пароль")
         }
 
+        req.session.createdAt = new Date()
+        req.session.userId = user.id
+
         return new Promise((resolve, reject) => {
-            req.session.createdAt = new Date()
-            req.session.userId = user.id
 
             req.session.save(err => {
                 if (err) {
-                    return reject(new InternalServerErrorException('Не удалось сохранить сессию'))
+                    return reject(
+                        new InternalServerErrorException(
+                            'Не удалось сохранить сессию'
+                        )
+                    )
                 }
 
                 resolve(user)
@@ -52,15 +57,17 @@ export class SessionService {
         return new Promise((resolve, reject) => {
             req.session.destroy(err => {
                 if (err) {
-                    console.error('Ошибка при удалении сессии:', err);
-                } else {
-                    console.log('Сессия успешно удалена');
+                    return reject(
+                        new InternalServerErrorException(
+                            'Не удалось завершить сессию'
+                        )
+                    )
                 }
-                if (err) {
-                    return reject(new InternalServerErrorException('Не удалось завершить сессию'))
-                }
-                console.log(this.configService.getOrThrow<string>("SESSION_NAME"))
-                req.res.clearCookie(this.configService.getOrThrow<string>("SESSION_NAME"))
+
+                req.res.clearCookie(
+                    this.configService.getOrThrow<string>('SESSION_NAME')
+                )
+
                 resolve(true)
             })
         })
