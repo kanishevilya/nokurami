@@ -23,7 +23,7 @@ async function bootstrap() {
       transform: true
     })
   );
-  console.log(1)
+
   app.use(
     session({
       secret: config.getOrThrow<string>('SESSION_SECRET'),
