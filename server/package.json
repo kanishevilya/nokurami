@@ -45,6 +45,7 @@
     "hi-base32": "^0.5.1",
     "i18n-iso-countries": "^7.13.0",
     "ioredis": "^5.4.2",
+    "nestjs-admin": "^0.4.1",
     "otpauth": "^9.3.6",
     "prisma": "^6.2.1",
     "qrcode": "^1.5.4",
