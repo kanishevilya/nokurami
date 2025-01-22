@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { VerificationService } from './verification.service';
 import { UserAgent } from '@/src/shared/decorators/user-agent.decorator';
-import { UserModel } from '../account/modules/user.model';
+import { UserModel } from '../account/models/user.model';
 import type { GraphqlContext } from '@/src/shared/types/graphql.context.types'
 import { VerificationInput } from './inputs/verification.input';
 

@@ -8,6 +8,7 @@ import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { RedisService } from '@/src/core/redis/redis.service';
 import { destroySession, saveSession } from '@/src/shared/utils/sessions.util';
 import { VerificationService } from '../verification/verification.service';
+import { TOTP } from 'otpauth';
 
 @Injectable()
 export class SessionService {
@@ -18,7 +19,20 @@ export class SessionService {
         private readonly verificationService: VerificationService,
     ) { }
 
-    public async getSessionByUser(req: Request) {
+    public async getAllSessions() {
+        const keys = await this.redisService.keys('*')
+
+        const userSessions = []
+
+        for (const key of keys) {
+            const session = JSON.parse(await this.redisService.get(key))
+            userSessions.push(session)
+        }
+        userSessions.sort((a, b) => b.createdAt - a.createdAt)
+        return userSessions
+    }
+
+    public async getSessionsByUser(req: Request) {
         const userId = req.session.userId;
 
         if (!userId) {
@@ -82,7 +96,7 @@ export class SessionService {
     }
 
     public async login(req: Request, input: LoginInput, userAgent: string) {
-        const { login, password } = input
+        const { login, password, pin } = input
 
         const user = await this.prismaService.user.findFirst({
             where: {
@@ -107,6 +121,27 @@ export class SessionService {
             await this.verificationService.sendVerificationToken(user)
 
             throw new BadRequestException("Почта пользователя не верифицирована")
+        }
+
+        if (user.isTwoFAEnabled) {
+            if (!pin) {
+                return { message: "Необходим код для двухфакторной аутентификации" }
+            }
+
+            const totp = new TOTP({
+                issuer: "Nokurami",
+                label: user.email,
+                algorithm: "SHA1",
+                digits: 6,
+                secret: user.twoFASecret
+            })
+
+            const result = totp.validate({ token: pin })
+
+            if (result === null) {
+                throw new BadRequestException("Неверный код")
+            }
+
         }
 
         const metadata = getSessionMetadata(req, userAgent)

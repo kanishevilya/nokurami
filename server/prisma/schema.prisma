@@ -20,8 +20,13 @@ model User {
   avatar      String?
   information String?
 
+  role UserRole @default(REGULAR)
+
   isEmailVerified Boolean @default(false) @map("is_email_verified")
-  tokens          Token[]
+  isTwoFAEnabled  Boolean @default(false) @map("is_two_fa_enabled")
+  twoFASecret     String? @map("two_fa_secret")
+
+  tokens Token[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -43,6 +48,11 @@ model Token {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("tokens")
+}
+
+enum UserRole {
+  REGULAR
+  ADMIN
 }
 
 enum TokenType {

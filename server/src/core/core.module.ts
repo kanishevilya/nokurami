@@ -11,6 +11,7 @@ import { SessionModule } from '../modules/auth/session/session.module';
 import { MailModule } from '../modules/lib/mail/mail.module';
 import { VerificationModule } from '../modules/auth/verification/verification.module';
 import { PasswordResetModule } from '../modules/auth/password-reset/password-reset.module';
+import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-authentification/two-factor-authentification.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -21,6 +22,15 @@ import { PasswordResetModule } from '../modules/auth/password-reset/password-res
         imports: [ConfigModule],
         useFactory: getGraphQLConfig,
         inject: [ConfigService]
-    }), PrismaModule, RedisModule, MailModule, AccountModule, SessionModule, VerificationModule, PasswordResetModule]
+    }),
+        PrismaModule,
+        RedisModule,
+        MailModule,
+        AccountModule,
+        SessionModule,
+        VerificationModule,
+        PasswordResetModule,
+        TwoFactorAuthentificationModule
+    ]
 })
 export class CoreModule { }
