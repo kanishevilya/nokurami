@@ -155,7 +155,8 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 exports.TokenType = exports.$Enums.TokenType = {
-  EMAIL_VERIFY: 'EMAIL_VERIFY'
+  EMAIL_VERIFY: 'EMAIL_VERIFY',
+  PASSWORD_RESET: 'PASSWORD_RESET'
 };
 
 exports.Prisma.ModelName = {

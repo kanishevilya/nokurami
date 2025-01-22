@@ -36,14 +36,26 @@ type Mutation {
   createUser(data: CreateUserInput!): Boolean!
   login(data: LoginInput!): UserModel!
   logout: Boolean!
+  new_password(data: NewPasswordInput!): Boolean!
   removeSession(id: String!): Boolean!
+  reset_password(data: ResetPasswordInput!): Boolean!
   verifyAccount(data: VerificationInput!): UserModel!
+}
+
+input NewPasswordInput {
+  confirmPassword: String!
+  newPassword: String!
+  token: String!
 }
 
 type Query {
   getCurrentSession: SessionModel!
   getProfile: UserModel!
   getSessionsByUser: [SessionModel!]!
+}
+
+input ResetPasswordInput {
+  email: String!
 }
 
 type SessionMetadataModel {

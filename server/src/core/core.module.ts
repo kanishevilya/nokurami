@@ -10,6 +10,7 @@ import { AccountModule } from '../modules/auth/account/account.module';
 import { SessionModule } from '../modules/auth/session/session.module';
 import { MailModule } from '../modules/lib/mail/mail.module';
 import { VerificationModule } from '../modules/auth/verification/verification.module';
+import { PasswordResetModule } from '../modules/auth/password-reset/password-reset.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -20,6 +21,6 @@ import { VerificationModule } from '../modules/auth/verification/verification.mo
         imports: [ConfigModule],
         useFactory: getGraphQLConfig,
         inject: [ConfigService]
-    }), PrismaModule, RedisModule, MailModule, AccountModule, SessionModule, VerificationModule]
+    }), PrismaModule, RedisModule, MailModule, AccountModule, SessionModule, VerificationModule, PasswordResetModule]
 })
 export class CoreModule { }
