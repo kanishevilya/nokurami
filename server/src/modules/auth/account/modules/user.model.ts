@@ -24,6 +24,8 @@ export class UserModel implements User {
     @Field(() => String, { nullable: true })
     information: string
 
+    @Field(() => Boolean)
+    isEmailVerified: boolean;
 
     @Field(() => Date)
     createdAt: Date

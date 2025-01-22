@@ -8,6 +8,8 @@ import { getGraphQLConfig } from './config/graphql.config';
 import { RedisModule } from './redis/redis.module';
 import { AccountModule } from '../modules/auth/account/account.module';
 import { SessionModule } from '../modules/auth/session/session.module';
+import { MailModule } from '../modules/lib/mail/mail.module';
+import { VerificationModule } from '../modules/auth/verification/verification.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -18,6 +20,6 @@ import { SessionModule } from '../modules/auth/session/session.module';
         imports: [ConfigModule],
         useFactory: getGraphQLConfig,
         inject: [ConfigService]
-    }), PrismaModule, RedisModule, AccountModule, SessionModule]
+    }), PrismaModule, RedisModule, MailModule, AccountModule, SessionModule, VerificationModule]
 })
 export class CoreModule { }
