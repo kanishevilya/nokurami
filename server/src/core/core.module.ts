@@ -13,6 +13,7 @@ import { VerificationModule } from '../modules/auth/verification/verification.mo
 import { PasswordResetModule } from '../modules/auth/password-reset/password-reset.module';
 import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-authentification/two-factor-authentification.module';
 import { ProfileModule } from '../modules/auth/profile/profile.module';
+import { StreamModule } from '../modules/stream/stream.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -30,6 +31,7 @@ import { ProfileModule } from '../modules/auth/profile/profile.module';
         AccountModule,
         SessionModule,
         ProfileModule,
+        StreamModule,
         VerificationModule,
         PasswordResetModule,
         TwoFactorAuthentificationModule

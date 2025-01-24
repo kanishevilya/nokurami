@@ -58,6 +58,7 @@ type Mutation {
   changePassword(data: ChangePasswordInput!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
   clearSessionFromCookie: Boolean!
+  createSocialLink(data: SocialLinkInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!
   disable2FA: Boolean!
   enable2FA(data: Enable2FAInput!): Boolean!
@@ -65,8 +66,11 @@ type Mutation {
   logout: Boolean!
   new_password(data: NewPasswordInput!): Boolean!
   removeSession(id: String!): Boolean!
+  removeSocialLink(id: String!): Boolean!
+  reorderSocialLinks(list: [SocialLinkOrderInput!]!): Boolean!
   requestToEmailChange: Boolean!
   reset_password(data: ResetPasswordInput!): Boolean!
+  updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(data: VerificationInput!): UserModel!
 }
 
@@ -77,6 +81,8 @@ input NewPasswordInput {
 }
 
 type Query {
+  findAllStreams: [StreamModel!]!
+  findSocialLinks: [SocialLinkModel!]!
   generateTotpSecret: TotpModel!
   getAllSessions: [SessionModel!]!
   getCurrentSession: SessionModel!
@@ -101,6 +107,40 @@ type SessionModel {
   userId: String!
 }
 
+input SocialLinkInput {
+  title: String!
+  url: String!
+}
+
+type SocialLinkModel {
+  createdAt: DateTime!
+  id: ID!
+  position: Float!
+  title: String!
+  updatedAt: DateTime!
+  url: String!
+  userId: String!
+}
+
+input SocialLinkOrderInput {
+  id: String!
+  position: Float!
+}
+
+type StreamModel {
+  createdAt: DateTime!
+  id: ID!
+  ingressId: String
+  isLive: Boolean!
+  previewUrl: String
+  serverUrl: String
+  streamKey: String
+  title: String!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
 type TotpModel {
   qrcodeUrl: String!
   secret: String!
@@ -117,6 +157,8 @@ type UserModel {
   isTwoFAEnabled: Boolean!
   password: String!
   role: String!
+  socialLinks: [SocialLinkModel!]!
+  stream: StreamModel!
   twoFASecret: String!
   updatedAt: DateTime!
   username: String!
