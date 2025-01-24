@@ -38,7 +38,8 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 export const TokenType: {
   EMAIL_VERIFY: 'EMAIL_VERIFY',
-  PASSWORD_RESET: 'PASSWORD_RESET'
+  PASSWORD_RESET: 'PASSWORD_RESET',
+  EMAIL_CHANGE: 'EMAIL_CHANGE'
 };
 
 export type TokenType = (typeof TokenType)[keyof typeof TokenType]

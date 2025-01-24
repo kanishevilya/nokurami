@@ -5,6 +5,7 @@ import { render } from "@react-email/components"
 import { VerificationTemplate } from './templates/verefication.template';
 import { SessionMetadata } from '@/src/shared/types/session-metada.types';
 import { ResetPasswordTemplate } from './templates/reset-password.template';
+import { ChangeEmailTemplate } from './templates/change-email.template';
 
 @Injectable()
 export class MailService {
@@ -33,6 +34,19 @@ export class MailService {
 
         return this.sendMail(email, 'Сброс пароля', html)
     }
+
+    public async sendMailChangeToken(
+        email: string,
+        token: string
+    ) {
+        const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
+        const html = await render(
+            ChangeEmailTemplate({ domain, token })
+        )
+
+        return this.sendMail(email, 'Изменение Почты', html)
+    }
+
 
     private sendMail(email: string, subject: string, html: string) {
         return this.mailerService.sendMail({

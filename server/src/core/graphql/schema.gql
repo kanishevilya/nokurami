@@ -2,6 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input ChangeEmailInput {
+  email: String!
+  token: String!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -38,6 +48,8 @@ input LoginInput {
 }
 
 type Mutation {
+  changeEmail(data: ChangeEmailInput!): Boolean!
+  changePassword(data: ChangePasswordInput!): Boolean!
   clearSessionFromCookie: Boolean!
   createUser(data: CreateUserInput!): Boolean!
   disable2FA: Boolean!
@@ -46,6 +58,7 @@ type Mutation {
   logout: Boolean!
   new_password(data: NewPasswordInput!): Boolean!
   removeSession(id: String!): Boolean!
+  requestToEmailChange: Boolean!
   reset_password(data: ResetPasswordInput!): Boolean!
   verifyAccount(data: VerificationInput!): UserModel!
 }

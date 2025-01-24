@@ -164,7 +164,8 @@ exports.UserRole = exports.$Enums.UserRole = {
 
 exports.TokenType = exports.$Enums.TokenType = {
   EMAIL_VERIFY: 'EMAIL_VERIFY',
-  PASSWORD_RESET: 'PASSWORD_RESET'
+  PASSWORD_RESET: 'PASSWORD_RESET',
+  EMAIL_CHANGE: 'EMAIL_CHANGE'
 };
 
 exports.Prisma.ModelName = {

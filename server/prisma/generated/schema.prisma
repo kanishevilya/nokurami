@@ -58,6 +58,7 @@ enum UserRole {
 enum TokenType {
   EMAIL_VERIFY
   PASSWORD_RESET
+  EMAIL_CHANGE
 
   @@map("token_types")
 }
