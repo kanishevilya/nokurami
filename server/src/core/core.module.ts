@@ -12,6 +12,7 @@ import { MailModule } from '../modules/lib/mail/mail.module';
 import { VerificationModule } from '../modules/auth/verification/verification.module';
 import { PasswordResetModule } from '../modules/auth/password-reset/password-reset.module';
 import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-authentification/two-factor-authentification.module';
+import { ProfileModule } from '../modules/auth/profile/profile.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-auth
         MailModule,
         AccountModule,
         SessionModule,
+        ProfileModule,
         VerificationModule,
         PasswordResetModule,
         TwoFactorAuthentificationModule

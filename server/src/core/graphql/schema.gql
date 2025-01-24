@@ -12,6 +12,12 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
+input ChangeProfileInfoInput {
+  displayName: String!
+  information: String!
+  username: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -50,6 +56,7 @@ input LoginInput {
 type Mutation {
   changeEmail(data: ChangeEmailInput!): Boolean!
   changePassword(data: ChangePasswordInput!): Boolean!
+  changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
   clearSessionFromCookie: Boolean!
   createUser(data: CreateUserInput!): Boolean!
   disable2FA: Boolean!

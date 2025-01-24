@@ -133,6 +133,16 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SocialLinkScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  url: 'url',
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+};
+
 exports.Prisma.TokenScalarFieldEnum = {
   id: 'id',
   token: 'token',
@@ -170,6 +180,7 @@ exports.TokenType = exports.$Enums.TokenType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  SocialLink: 'SocialLink',
   Token: 'Token'
 };
 
