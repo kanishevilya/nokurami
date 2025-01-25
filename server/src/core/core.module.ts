@@ -14,6 +14,7 @@ import { PasswordResetModule } from '../modules/auth/password-reset/password-res
 import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-authentification/two-factor-authentification.module';
 import { ProfileModule } from '../modules/auth/profile/profile.module';
 import { StreamModule } from '../modules/stream/stream.module';
+import { LivekitModule } from '../modules/libs/livekit/livekit.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { StreamModule } from '../modules/stream/stream.module';
         PrismaModule,
         RedisModule,
         MailModule,
+        LivekitModule,
         AccountModule,
         SessionModule,
         ProfileModule,
