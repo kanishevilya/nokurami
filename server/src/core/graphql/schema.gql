@@ -40,6 +40,12 @@ input Enable2FAInput {
   secret: String!
 }
 
+input FiltersInput {
+  searchKey: String
+  skip: Float
+  take: Float
+}
+
 type LocationModel {
   city: String!
   country: String!
@@ -81,7 +87,8 @@ input NewPasswordInput {
 }
 
 type Query {
-  findAllStreams: [StreamModel!]!
+  findAllStreams(filters: FiltersInput!): [StreamModel!]!
+  findRandomStreams: [StreamModel!]!
   findSocialLinks: [SocialLinkModel!]!
   generateTotpSecret: TotpModel!
   getAllSessions: [SessionModel!]!
