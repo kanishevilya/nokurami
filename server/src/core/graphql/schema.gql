@@ -29,6 +29,11 @@ input ChangeProfileInfoInput {
   username: String!
 }
 
+input ChangeStreamInfoInput {
+  categoryId: String!
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -84,6 +89,8 @@ type Mutation {
   changePassword(data: ChangePasswordInput!): Boolean!
   changeProfileAvatar(avatar: Upload!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
+  changeStreamInfo(data: ChangeStreamInfoInput!): Boolean!
+  changeStreamPreview(thumbnail: Upload!): Boolean!
   clearSessionFromCookie: Boolean!
   createIngress(ingressType: Float!): Boolean!
   createSocialLink(data: SocialLinkInput!): Boolean!
@@ -97,6 +104,7 @@ type Mutation {
   removeProfileAvatar: Boolean!
   removeSession(id: String!): Boolean!
   removeSocialLink(id: String!): Boolean!
+  removeStreamPreview: Boolean!
   reorderSocialLinks(list: [SocialLinkOrderInput!]!): Boolean!
   requestToEmailChange: Boolean!
   reset_password(data: ResetPasswordInput!): Boolean!

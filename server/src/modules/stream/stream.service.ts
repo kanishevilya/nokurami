@@ -6,12 +6,15 @@ import { ChangeStreamInfoInput } from './inputs/change-stream-info.input';
 import { GenerateStreamTokenInput } from './inputs/generate-stream-token.input';
 import { ConfigService } from '@nestjs/config';
 import { AccessToken } from 'livekit-server-sdk';
-
+import * as Upload from "graphql-upload/Upload.js"
+import * as sharp from 'sharp'
+import { MinioStorageService } from '../libs/minio-storage/minio-storage.service';
 @Injectable()
 export class StreamService {
     public constructor(
         private readonly prismaService: PrismaService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly minioStorageService: MinioStorageService
     ) { }
 
     public async findAll(input: FiltersInput = {}) {
@@ -78,6 +81,81 @@ export class StreamService {
         return true
     }
 
+
+    public async changePreview(user: User, file: Upload) {
+        const stream = await this.findByUserId(user)
+
+        if (stream.previewUrl) {
+            await this.minioStorageService.remove(stream.previewUrl)
+        }
+
+        const chunks: Buffer[] = []
+
+        for await (const chunk of file.createReadStream()) {
+            chunks.push(chunk)
+        }
+
+        const buffer = Buffer.concat(chunks)
+
+        const fileName = `/streams/${user.username}.webp`
+
+        if (file.filename && file.filename.endsWith('.gif')) {
+            const processedBuffer = await sharp(buffer, { animated: true })
+                .resize(1280, 720)
+                .webp()
+                .toBuffer()
+
+            await this.minioStorageService.upload(
+                processedBuffer,
+                fileName,
+                'image/webp'
+            )
+        } else {
+            const processedBuffer = await sharp(buffer)
+                .resize(1280, 720)
+                .webp()
+                .toBuffer()
+
+            await this.minioStorageService.upload(
+                processedBuffer,
+                fileName,
+                'image/webp'
+            )
+        }
+
+        await this.prismaService.stream.update({
+            where: {
+                userId: user.id
+            },
+            data: {
+                previewUrl: fileName
+            }
+        })
+
+        return true
+    }
+
+    public async removePreview(user: User) {
+        const stream = await this.findByUserId(user)
+
+        if (!stream.previewUrl) {
+            return
+        }
+
+        await this.minioStorageService.remove(stream.previewUrl)
+
+        await this.prismaService.stream.update({
+            where: {
+                userId: user.id
+            },
+            data: {
+                previewUrl: null
+            }
+        })
+
+        return true
+    }
+
     public async generateStreamToken(input: GenerateStreamTokenInput) {
         const { userId, channelId } = input
 
@@ -128,7 +206,7 @@ export class StreamService {
     }
 
     private async findByUserId(user: User) {
-        const stream = await this.prismaService.stream.findMany({
+        const stream = await this.prismaService.stream.findUnique({
             where: {
                 userId: user.id
             }
