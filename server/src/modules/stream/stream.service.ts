@@ -26,7 +26,8 @@ export class StreamService {
                 ...whereClause
             },
             include: {
-                user: true
+                user: true,
+                category: true
             },
             orderBy: {
                 createdAt: 'desc'
@@ -47,7 +48,8 @@ export class StreamService {
 
         const streams = await this.prismaService.stream.findMany({
             include: {
-                user: true
+                user: true,
+                category: true
             },
             take: total,
             skip: 0,
@@ -57,7 +59,6 @@ export class StreamService {
     }
 
     public async changeInfo(user: User, input: ChangeStreamInfoInput) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { title, categoryId } = input
 
         await this.prismaService.stream.update({
@@ -65,7 +66,12 @@ export class StreamService {
                 userId: user.id
             },
             data: {
-                title
+                title,
+                category: {
+                    connect: {
+                        id: categoryId
+                    }
+                }
             }
         })
 
