@@ -15,6 +15,7 @@ import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-auth
 import { ProfileModule } from '../modules/auth/profile/profile.module';
 import { StreamModule } from '../modules/stream/stream.module';
 import { LivekitModule } from '../modules/libs/livekit/livekit.module';
+import { IngressModule } from '../modules/stream/ingress/ingress.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -34,6 +35,7 @@ import { LivekitModule } from '../modules/libs/livekit/livekit.module';
         SessionModule,
         ProfileModule,
         StreamModule,
+        IngressModule,
         VerificationModule,
         PasswordResetModule,
         TwoFactorAuthentificationModule
