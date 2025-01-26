@@ -21,10 +21,10 @@ export class LivekitService {
     }
 
     public get room(): RoomServiceClient {
-        return this.createProxy(this.room)
+        return this.createProxy(this.roomService)
     }
 
-    public get webhook(): WebhookReceiver {
+    public get receiver(): WebhookReceiver {
         return this.createProxy(this.webhookReceiver)
     }
 

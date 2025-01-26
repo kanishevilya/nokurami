@@ -16,6 +16,8 @@ import { ProfileModule } from '../modules/auth/profile/profile.module';
 import { StreamModule } from '../modules/stream/stream.module';
 import { LivekitModule } from '../modules/libs/livekit/livekit.module';
 import { IngressModule } from '../modules/stream/ingress/ingress.module';
+import { getLiveKitConfig } from './config/livekit.config';
+import { WebhookModule } from '../modules/webhook/webhook.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -25,6 +27,10 @@ import { IngressModule } from '../modules/stream/ingress/ingress.module';
         driver: ApolloDriver,
         imports: [ConfigModule],
         useFactory: getGraphQLConfig,
+        inject: [ConfigService]
+    }), LivekitModule.registerAsync({
+        imports: [ConfigModule],
+        useFactory: getLiveKitConfig,
         inject: [ConfigService]
     }),
         PrismaModule,
@@ -38,7 +44,8 @@ import { IngressModule } from '../modules/stream/ingress/ingress.module';
         IngressModule,
         VerificationModule,
         PasswordResetModule,
-        TwoFactorAuthentificationModule
+        TwoFactorAuthentificationModule,
+        WebhookModule
     ]
 })
 export class CoreModule { }
