@@ -1,11 +1,11 @@
 import { User } from '@/prisma/generated';
 import * as Upload from "graphql-upload/Upload.js"
+import * as sharp from 'sharp'
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { ChangeProfileInfoInput } from './inputs/change-profile-info.input';
 import { SocialLinkInput, SocialLinkOrderInput } from './inputs/social-link.input';
 import { MinioStorageService } from '../../libs/minio-storage/minio-storage.service';
-import sharp from 'sharp';
 
 @Injectable()
 export class ProfileService {
