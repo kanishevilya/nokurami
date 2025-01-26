@@ -1,7 +1,9 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { StreamService } from './stream.service';
 import { StreamModel } from './models/stream.model';
 import { FiltersInput } from './inputs/filters.input';
+import { GenerateStreamTokenModel } from './models/generate-stream-token.model';
+import { GenerateStreamTokenInput } from './inputs/generate-stream-token.input';
 
 @Resolver('Stream')
 export class StreamResolver {
@@ -15,6 +17,11 @@ export class StreamResolver {
   @Query(() => [StreamModel], { name: "findRandomStreams" })
   public async findRandomStreams() {
     return this.streamService.findRandom()
+  }
+
+  @Mutation(() => GenerateStreamTokenModel, { name: 'generateStreamToken' })
+  public async generateStreamToken(@Args("data") input: GenerateStreamTokenInput) {
+    return this.streamService.generateStreamToken(input)
   }
 
 }

@@ -46,6 +46,15 @@ input FiltersInput {
   take: Float
 }
 
+input GenerateStreamTokenInput {
+  channelId: String!
+  userId: String!
+}
+
+type GenerateStreamTokenModel {
+  token: String!
+}
+
 type LocationModel {
   city: String!
   country: String!
@@ -69,6 +78,7 @@ type Mutation {
   createUser(data: CreateUserInput!): Boolean!
   disable2FA: Boolean!
   enable2FA(data: Enable2FAInput!): Boolean!
+  generateStreamToken(data: GenerateStreamTokenInput!): GenerateStreamTokenModel!
   login(data: LoginInput!): UserModel!
   logout: Boolean!
   new_password(data: NewPasswordInput!): Boolean!

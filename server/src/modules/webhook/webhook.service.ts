@@ -17,7 +17,6 @@ export class WebhookService {
         )
 
         if (event.event === 'ingress_started') {
-            console.log("STREAM STARTED: ", event.ingressInfo.url)
             await this.prismaService.stream.update({
                 where: {
                     ingressId: event.ingressInfo.ingressId
