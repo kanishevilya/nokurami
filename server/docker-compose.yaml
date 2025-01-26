@@ -25,6 +25,29 @@ services:
             - redis_data:/data
         networks:
             - streaming-backend
+    minio:
+        image: quay.io/minio/minio
+        container_name: minio
+        ports:
+            - '9000:9000'
+            - '9001:9001'
+        volumes:
+            - ./media:/data
+        environment:
+            MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+        command: server /data --console-address ":9001"
+
+    minio-console:
+        depends_on:
+            - minio
+        image: quay.io/minio/mc
+        container_name: minio-console
+        entrypoint: /bin/sh
+        command: -c "while true; do sleep 30; done"
+        environment:
+            MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
 
 volumes:
     postgres_data:

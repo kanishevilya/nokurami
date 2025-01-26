@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CategoryModel {
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  previewUrl: String!
+  slug: String!
+  streams: [StreamModel!]!
+  title: String!
+  updatedAt: DateTime!
+}
+
 input ChangeEmailInput {
   email: String!
   token: String!
@@ -98,7 +109,10 @@ input NewPasswordInput {
 }
 
 type Query {
+  findAllCategories: [CategoryModel!]!
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
+  findCategoryBySlug(slug: String!): CategoryModel!
+  findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
   findSocialLinks: [SocialLinkModel!]!
   generateTotpSecret: TotpModel!
@@ -146,6 +160,8 @@ input SocialLinkOrderInput {
 }
 
 type StreamModel {
+  category: CategoryModel!
+  categoryId: String!
   createdAt: DateTime!
   id: ID!
   ingressId: String

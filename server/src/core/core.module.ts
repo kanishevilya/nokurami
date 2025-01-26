@@ -19,6 +19,7 @@ import { IngressModule } from '../modules/stream/ingress/ingress.module';
 import { getLiveKitConfig } from './config/livekit.config';
 import { WebhookModule } from '../modules/webhook/webhook.module';
 import { CategoryModule } from '../modules/category/category.module';
+import { MinioStorageModule } from '../modules/libs/minio-storage/minio-storage.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -44,6 +45,7 @@ import { CategoryModule } from '../modules/category/category.module';
         CategoryModule,
         StreamModule,
         IngressModule,
+        MinioStorageModule,
         VerificationModule,
         PasswordResetModule,
         TwoFactorAuthentificationModule,
