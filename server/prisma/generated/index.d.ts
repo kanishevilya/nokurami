@@ -4010,6 +4010,9 @@ export namespace Prisma {
     serverUrl: string | null
     streamKey: string | null
     isLive: boolean | null
+    isChatEnabled: boolean | null
+    isChatFollowersOnly: boolean | null
+    isChatSubscribersOnly: boolean | null
     userId: string | null
     categoryId: string | null
     createdAt: Date | null
@@ -4024,6 +4027,9 @@ export namespace Prisma {
     serverUrl: string | null
     streamKey: string | null
     isLive: boolean | null
+    isChatEnabled: boolean | null
+    isChatFollowersOnly: boolean | null
+    isChatSubscribersOnly: boolean | null
     userId: string | null
     categoryId: string | null
     createdAt: Date | null
@@ -4038,6 +4044,9 @@ export namespace Prisma {
     serverUrl: number
     streamKey: number
     isLive: number
+    isChatEnabled: number
+    isChatFollowersOnly: number
+    isChatSubscribersOnly: number
     userId: number
     categoryId: number
     createdAt: number
@@ -4054,6 +4063,9 @@ export namespace Prisma {
     serverUrl?: true
     streamKey?: true
     isLive?: true
+    isChatEnabled?: true
+    isChatFollowersOnly?: true
+    isChatSubscribersOnly?: true
     userId?: true
     categoryId?: true
     createdAt?: true
@@ -4068,6 +4080,9 @@ export namespace Prisma {
     serverUrl?: true
     streamKey?: true
     isLive?: true
+    isChatEnabled?: true
+    isChatFollowersOnly?: true
+    isChatSubscribersOnly?: true
     userId?: true
     categoryId?: true
     createdAt?: true
@@ -4082,6 +4097,9 @@ export namespace Prisma {
     serverUrl?: true
     streamKey?: true
     isLive?: true
+    isChatEnabled?: true
+    isChatFollowersOnly?: true
+    isChatSubscribersOnly?: true
     userId?: true
     categoryId?: true
     createdAt?: true
@@ -4169,6 +4187,9 @@ export namespace Prisma {
     serverUrl: string | null
     streamKey: string | null
     isLive: boolean
+    isChatEnabled: boolean
+    isChatFollowersOnly: boolean
+    isChatSubscribersOnly: boolean
     userId: string | null
     categoryId: string | null
     createdAt: Date
@@ -4200,6 +4221,9 @@ export namespace Prisma {
     serverUrl?: boolean
     streamKey?: boolean
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: boolean
     categoryId?: boolean
     createdAt?: boolean
@@ -4218,6 +4242,9 @@ export namespace Prisma {
     serverUrl?: boolean
     streamKey?: boolean
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: boolean
     categoryId?: boolean
     createdAt?: boolean
@@ -4234,6 +4261,9 @@ export namespace Prisma {
     serverUrl?: boolean
     streamKey?: boolean
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: boolean
     categoryId?: boolean
     createdAt?: boolean
@@ -4250,13 +4280,16 @@ export namespace Prisma {
     serverUrl?: boolean
     streamKey?: boolean
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: boolean
     categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StreamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "previewUrl" | "ingressId" | "serverUrl" | "streamKey" | "isLive" | "userId" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["stream"]>
+  export type StreamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "previewUrl" | "ingressId" | "serverUrl" | "streamKey" | "isLive" | "isChatEnabled" | "isChatFollowersOnly" | "isChatSubscribersOnly" | "userId" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["stream"]>
   export type StreamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     messages?: boolean | Stream$messagesArgs<ExtArgs>
     user?: boolean | Stream$userArgs<ExtArgs>
@@ -4287,6 +4320,9 @@ export namespace Prisma {
       serverUrl: string | null
       streamKey: string | null
       isLive: boolean
+      isChatEnabled: boolean
+      isChatFollowersOnly: boolean
+      isChatSubscribersOnly: boolean
       userId: string | null
       categoryId: string | null
       createdAt: Date
@@ -4724,6 +4760,9 @@ export namespace Prisma {
     readonly serverUrl: FieldRef<"Stream", 'String'>
     readonly streamKey: FieldRef<"Stream", 'String'>
     readonly isLive: FieldRef<"Stream", 'Boolean'>
+    readonly isChatEnabled: FieldRef<"Stream", 'Boolean'>
+    readonly isChatFollowersOnly: FieldRef<"Stream", 'Boolean'>
+    readonly isChatSubscribersOnly: FieldRef<"Stream", 'Boolean'>
     readonly userId: FieldRef<"Stream", 'String'>
     readonly categoryId: FieldRef<"Stream", 'String'>
     readonly createdAt: FieldRef<"Stream", 'DateTime'>
@@ -9580,6 +9619,9 @@ export namespace Prisma {
     serverUrl: 'serverUrl',
     streamKey: 'streamKey',
     isLive: 'isLive',
+    isChatEnabled: 'isChatEnabled',
+    isChatFollowersOnly: 'isChatFollowersOnly',
+    isChatSubscribersOnly: 'isChatSubscribersOnly',
     userId: 'userId',
     categoryId: 'categoryId',
     createdAt: 'createdAt',
@@ -9949,6 +9991,9 @@ export namespace Prisma {
     serverUrl?: StringNullableFilter<"Stream"> | string | null
     streamKey?: StringNullableFilter<"Stream"> | string | null
     isLive?: BoolFilter<"Stream"> | boolean
+    isChatEnabled?: BoolFilter<"Stream"> | boolean
+    isChatFollowersOnly?: BoolFilter<"Stream"> | boolean
+    isChatSubscribersOnly?: BoolFilter<"Stream"> | boolean
     userId?: StringNullableFilter<"Stream"> | string | null
     categoryId?: StringNullableFilter<"Stream"> | string | null
     createdAt?: DateTimeFilter<"Stream"> | Date | string
@@ -9966,6 +10011,9 @@ export namespace Prisma {
     serverUrl?: SortOrderInput | SortOrder
     streamKey?: SortOrderInput | SortOrder
     isLive?: SortOrder
+    isChatEnabled?: SortOrder
+    isChatFollowersOnly?: SortOrder
+    isChatSubscribersOnly?: SortOrder
     userId?: SortOrderInput | SortOrder
     categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -9987,6 +10035,9 @@ export namespace Prisma {
     serverUrl?: StringNullableFilter<"Stream"> | string | null
     streamKey?: StringNullableFilter<"Stream"> | string | null
     isLive?: BoolFilter<"Stream"> | boolean
+    isChatEnabled?: BoolFilter<"Stream"> | boolean
+    isChatFollowersOnly?: BoolFilter<"Stream"> | boolean
+    isChatSubscribersOnly?: BoolFilter<"Stream"> | boolean
     categoryId?: StringNullableFilter<"Stream"> | string | null
     createdAt?: DateTimeFilter<"Stream"> | Date | string
     updatedAt?: DateTimeFilter<"Stream"> | Date | string
@@ -10003,6 +10054,9 @@ export namespace Prisma {
     serverUrl?: SortOrderInput | SortOrder
     streamKey?: SortOrderInput | SortOrder
     isLive?: SortOrder
+    isChatEnabled?: SortOrder
+    isChatFollowersOnly?: SortOrder
+    isChatSubscribersOnly?: SortOrder
     userId?: SortOrderInput | SortOrder
     categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -10023,6 +10077,9 @@ export namespace Prisma {
     serverUrl?: StringNullableWithAggregatesFilter<"Stream"> | string | null
     streamKey?: StringNullableWithAggregatesFilter<"Stream"> | string | null
     isLive?: BoolWithAggregatesFilter<"Stream"> | boolean
+    isChatEnabled?: BoolWithAggregatesFilter<"Stream"> | boolean
+    isChatFollowersOnly?: BoolWithAggregatesFilter<"Stream"> | boolean
+    isChatSubscribersOnly?: BoolWithAggregatesFilter<"Stream"> | boolean
     userId?: StringNullableWithAggregatesFilter<"Stream"> | string | null
     categoryId?: StringNullableWithAggregatesFilter<"Stream"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Stream"> | Date | string
@@ -10494,6 +10551,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageCreateNestedManyWithoutStreamInput
@@ -10509,6 +10569,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: string | null
     categoryId?: string | null
     createdAt?: Date | string
@@ -10524,6 +10587,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutStreamNestedInput
@@ -10539,6 +10605,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10554,6 +10623,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: string | null
     categoryId?: string | null
     createdAt?: Date | string
@@ -10568,6 +10640,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10580,6 +10655,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11146,6 +11224,9 @@ export namespace Prisma {
     serverUrl?: SortOrder
     streamKey?: SortOrder
     isLive?: SortOrder
+    isChatEnabled?: SortOrder
+    isChatFollowersOnly?: SortOrder
+    isChatSubscribersOnly?: SortOrder
     userId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
@@ -11160,6 +11241,9 @@ export namespace Prisma {
     serverUrl?: SortOrder
     streamKey?: SortOrder
     isLive?: SortOrder
+    isChatEnabled?: SortOrder
+    isChatFollowersOnly?: SortOrder
+    isChatSubscribersOnly?: SortOrder
     userId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
@@ -11174,6 +11258,9 @@ export namespace Prisma {
     serverUrl?: SortOrder
     streamKey?: SortOrder
     isLive?: SortOrder
+    isChatEnabled?: SortOrder
+    isChatFollowersOnly?: SortOrder
+    isChatSubscribersOnly?: SortOrder
     userId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
@@ -12057,6 +12144,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageCreateNestedManyWithoutStreamInput
@@ -12071,6 +12161,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12233,6 +12326,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutStreamNestedInput
@@ -12247,6 +12343,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12677,6 +12776,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutStreamInput
@@ -12691,6 +12793,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: string | null
     categoryId?: string | null
     createdAt?: Date | string
@@ -12774,6 +12879,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutStreamNestedInput
@@ -12788,6 +12896,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13002,6 +13113,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageCreateNestedManyWithoutStreamInput
@@ -13016,6 +13130,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13059,6 +13176,9 @@ export namespace Prisma {
     serverUrl?: StringNullableFilter<"Stream"> | string | null
     streamKey?: StringNullableFilter<"Stream"> | string | null
     isLive?: BoolFilter<"Stream"> | boolean
+    isChatEnabled?: BoolFilter<"Stream"> | boolean
+    isChatFollowersOnly?: BoolFilter<"Stream"> | boolean
+    isChatSubscribersOnly?: BoolFilter<"Stream"> | boolean
     userId?: StringNullableFilter<"Stream"> | string | null
     categoryId?: StringNullableFilter<"Stream"> | string | null
     createdAt?: DateTimeFilter<"Stream"> | Date | string
@@ -13365,6 +13485,9 @@ export namespace Prisma {
     serverUrl?: string | null
     streamKey?: string | null
     isLive?: boolean
+    isChatEnabled?: boolean
+    isChatFollowersOnly?: boolean
+    isChatSubscribersOnly?: boolean
     userId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13378,6 +13501,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutStreamNestedInput
@@ -13392,6 +13518,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13406,6 +13535,9 @@ export namespace Prisma {
     serverUrl?: NullableStringFieldUpdateOperationsInput | string | null
     streamKey?: NullableStringFieldUpdateOperationsInput | string | null
     isLive?: BoolFieldUpdateOperationsInput | boolean
+    isChatEnabled?: BoolFieldUpdateOperationsInput | boolean
+    isChatFollowersOnly?: BoolFieldUpdateOperationsInput | boolean
+    isChatSubscribersOnly?: BoolFieldUpdateOperationsInput | boolean
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
