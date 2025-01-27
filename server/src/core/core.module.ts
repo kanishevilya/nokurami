@@ -22,6 +22,7 @@ import { CategoryModule } from '../modules/category/category.module';
 import { MinioStorageModule } from '../modules/libs/minio-storage/minio-storage.module';
 import { ChatModule } from '../modules/chat/chat.module';
 import { FollowModule } from '../modules/follow/follow.module';
+import { ChannelModule } from '../modules/channel/channel.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -48,6 +49,7 @@ import { FollowModule } from '../modules/follow/follow.module';
         StreamModule,
         ChatModule,
         FollowModule,
+        ChannelModule,
         IngressModule,
         MinioStorageModule,
         VerificationModule,

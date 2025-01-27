@@ -105,10 +105,10 @@ model Message {
 model Follow {
   id String @id @default(uuid())
 
-  follower   User   @relation(name: "followers", fields: [followerId], references: [id], onDelete: Cascade)
+  follower   User   @relation(name: "followings", fields: [followerId], references: [id], onDelete: Cascade)
   followerId String @map("follower_id")
 
-  following   User   @relation(name: "followings", fields: [followingId], references: [id], onDelete: Cascade)
+  following   User   @relation(name: "followers", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String @map("following_id")
 
   createdAt DateTime @default(now()) @map("created_at")

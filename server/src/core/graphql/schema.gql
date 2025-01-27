@@ -153,11 +153,14 @@ type Query {
   findAllCategories: [CategoryModel!]!
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
   findCategoryBySlug(slug: String!): CategoryModel!
+  findChannelByUsername(username: String!): UserModel!
+  findFollowersCountByChannel(channelId: String!): Float!
   findMessagesByStream(streamId: String!): [MessageModel!]!
   findMyFollowers: [FollowModel!]!
   findMyFollowings: [FollowModel!]!
   findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
+  findRecommendedChannels: [UserModel!]!
   findSocialLinks: [SocialLinkModel!]!
   generateTotpSecret: TotpModel!
   getAllSessions: [SessionModel!]!
