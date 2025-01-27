@@ -29,6 +29,9 @@ model User {
   tokens      Token[]
   socialLinks SocialLink[]
   stream      Stream?
+  messages    Message[]
+  followers   Follow[]     @relation(name: "followers")
+  followings  Follow[]     @relation(name: "followings")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -64,6 +67,8 @@ model Stream {
 
   isLive Boolean @default(false) @map("is_live")
 
+  messages Message[]
+
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @unique @map("user_id")
 
@@ -74,6 +79,41 @@ model Stream {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("streams")
+}
+
+model Message {
+  id String @id @default(uuid())
+
+  text String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @map("user_id")
+
+  stream   Stream? @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId String? @map("stream_id")
+
+  @@map("messages")
+}
+
+model Follow {
+  id String @id @default(uuid())
+
+  follower   User   @relation(name: "followers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId String @map("follower_id")
+
+  following   User   @relation(name: "followings", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String @map("following_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
 }
 
 model Category {
