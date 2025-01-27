@@ -44,7 +44,12 @@ services:
         image: quay.io/minio/mc
         container_name: minio-console
         entrypoint: /bin/sh
-        command: -c "while true; do sleep 30; done"
+        command: -c "
+            sleep 15;
+            mc alias set myminio http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+            mc mb --ignore-existing myminio/nokurami-records;
+            mc anonymous set public myminio/nokurami-records;
+            while true; do sleep 30; done;"
         environment:
             MINIO_ROOT_USER: ${MINIO_ROOT_USER}
             MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}

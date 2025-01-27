@@ -56,4 +56,5 @@ export class MinioStorageService {
             throw error;
         }
     }
+
 }
