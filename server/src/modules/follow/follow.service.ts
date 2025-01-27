@@ -65,7 +65,7 @@ export class FollowService {
             throw new ConflictException('Вы уже подписаны на этот канал')
         }
 
-        const follow = await this.prismaService.follow.create({
+        await this.prismaService.follow.create({
             data: {
                 followerId: userId,
                 followingId: channel.id
@@ -76,7 +76,7 @@ export class FollowService {
             }
         })
 
-        return follow
+        return true
     }
 
     public async unfollow(userId: string, channelId: string) {
