@@ -20,6 +20,7 @@ import { getLiveKitConfig } from './config/livekit.config';
 import { WebhookModule } from '../modules/webhook/webhook.module';
 import { CategoryModule } from '../modules/category/category.module';
 import { MinioStorageModule } from '../modules/libs/minio-storage/minio-storage.module';
+import { ChatModule } from '../modules/chat/chat.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -44,6 +45,7 @@ import { MinioStorageModule } from '../modules/libs/minio-storage/minio-storage.
         ProfileModule,
         CategoryModule,
         StreamModule,
+        ChatModule,
         IngressModule,
         MinioStorageModule,
         VerificationModule,

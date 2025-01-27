@@ -13,6 +13,12 @@ type CategoryModel {
   updatedAt: DateTime!
 }
 
+input ChangeChatSettingsInput {
+  isChatEnabled: Boolean!
+  isChatFollowersOnly: Boolean!
+  isChatSubscribersOnly: Boolean!
+}
+
 input ChangeEmailInput {
   email: String!
   token: String!
@@ -62,6 +68,16 @@ input FiltersInput {
   take: Float
 }
 
+type FollowModel {
+  createdAt: DateTime!
+  follower: UserModel!
+  followerId: String!
+  following: UserModel!
+  followingId: String!
+  id: ID!
+  updatedAt: DateTime!
+}
+
 input GenerateStreamTokenInput {
   channelId: String!
   userId: String!
@@ -84,7 +100,19 @@ input LoginInput {
   pin: String
 }
 
+type MessageModel {
+  createdAt: DateTime!
+  id: ID!
+  stream: StreamModel!
+  streamId: String!
+  text: String!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
 type Mutation {
+  changeChatSettings(data: ChangeChatSettingsInput!): Boolean!
   changeEmail(data: ChangeEmailInput!): Boolean!
   changePassword(data: ChangePasswordInput!): Boolean!
   changeProfileAvatar(avatar: Upload!): Boolean!
@@ -108,6 +136,7 @@ type Mutation {
   reorderSocialLinks(list: [SocialLinkOrderInput!]!): Boolean!
   requestToEmailChange: Boolean!
   reset_password(data: ResetPasswordInput!): Boolean!
+  sendMessage(data: SendMessageInput!): MessageModel!
   updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(data: VerificationInput!): UserModel!
 }
@@ -122,6 +151,7 @@ type Query {
   findAllCategories: [CategoryModel!]!
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
   findCategoryBySlug(slug: String!): CategoryModel!
+  findMessagesByStream(streamId: String!): [MessageModel!]!
   findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
   findSocialLinks: [SocialLinkModel!]!
@@ -134,6 +164,11 @@ type Query {
 
 input ResetPasswordInput {
   email: String!
+}
+
+input SendMessageInput {
+  streamId: String!
+  text: String!
 }
 
 type SessionMetadataModel {
@@ -175,6 +210,9 @@ type StreamModel {
   createdAt: DateTime!
   id: ID!
   ingressId: String
+  isChatEnabled: Boolean!
+  isChatFollowersOnly: Boolean!
+  isChatSubscribersOnly: Boolean!
   isLive: Boolean!
   previewUrl: String
   serverUrl: String
@@ -183,6 +221,10 @@ type StreamModel {
   updatedAt: DateTime!
   user: UserModel!
   userId: String!
+}
+
+type Subscription {
+  newMessageAdded(streamId: String!): MessageModel!
 }
 
 type TotpModel {
@@ -198,6 +240,8 @@ type UserModel {
   createdAt: DateTime!
   displayName: String!
   email: String!
+  followers: [FollowModel!]!
+  followings: [FollowModel!]!
   id: ID!
   information: String
   isEmailVerified: Boolean!

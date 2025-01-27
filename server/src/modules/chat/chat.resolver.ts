@@ -30,7 +30,7 @@ export class ChatResolver {
   ) {
     const message = await this.chatService.sendMessage(userId, input)
 
-    this.pubSub.publish('NEW_MESSAGE_ADDED', { chatMessageAdded: message })
+    this.pubSub.publish('NEW_MESSAGE_ADDED', { newMessageAdded: message })
 
     return message
   }
@@ -40,7 +40,7 @@ export class ChatResolver {
     filter: (payload, variables) =>
       payload.newMessageAdded.streamId === variables.streamId
   })
-  public chatMessageAdded(@Args('streamId') streamId: string) {
+  public newMessageAdded(@Args('streamId') streamId: string) {
     return this.pubSub.asyncIterableIterator('NEW_MESSAGE_ADDED')
   }
 

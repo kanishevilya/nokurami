@@ -26,6 +26,15 @@ export class StreamModel implements Stream {
     @Field(() => Boolean)
     isLive: boolean;
 
+    @Field(() => Boolean)
+    isChatEnabled: boolean;
+
+    @Field(() => Boolean)
+    isChatFollowersOnly: boolean;
+
+    @Field(() => Boolean)
+    isChatSubscribersOnly: boolean;
+
     @Field(() => UserModel)
     user: UserModel
 
