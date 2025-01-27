@@ -125,6 +125,7 @@ type Mutation {
   createUser(data: CreateUserInput!): Boolean!
   disable2FA: Boolean!
   enable2FA(data: Enable2FAInput!): Boolean!
+  followToChannel(channelId: String!): Boolean!
   generateStreamToken(data: GenerateStreamTokenInput!): GenerateStreamTokenModel!
   login(data: LoginInput!): UserModel!
   logout: Boolean!
@@ -137,6 +138,7 @@ type Mutation {
   requestToEmailChange: Boolean!
   reset_password(data: ResetPasswordInput!): Boolean!
   sendMessage(data: SendMessageInput!): MessageModel!
+  unfollowFromChannel(channelId: String!): Boolean!
   updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(data: VerificationInput!): UserModel!
 }
@@ -152,6 +154,8 @@ type Query {
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
   findCategoryBySlug(slug: String!): CategoryModel!
   findMessagesByStream(streamId: String!): [MessageModel!]!
+  findMyFollowers: [FollowModel!]!
+  findMyFollowings: [FollowModel!]!
   findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
   findSocialLinks: [SocialLinkModel!]!

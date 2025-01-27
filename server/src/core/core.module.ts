@@ -21,6 +21,7 @@ import { WebhookModule } from '../modules/webhook/webhook.module';
 import { CategoryModule } from '../modules/category/category.module';
 import { MinioStorageModule } from '../modules/libs/minio-storage/minio-storage.module';
 import { ChatModule } from '../modules/chat/chat.module';
+import { FollowModule } from '../modules/follow/follow.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -46,6 +47,7 @@ import { ChatModule } from '../modules/chat/chat.module';
         CategoryModule,
         StreamModule,
         ChatModule,
+        FollowModule,
         IngressModule,
         MinioStorageModule,
         VerificationModule,
