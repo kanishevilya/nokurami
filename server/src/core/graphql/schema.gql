@@ -251,15 +251,28 @@ type UserModel {
   followings: [FollowModel!]!
   id: ID!
   information: String
-  isEmailVerified: Boolean!
-  isTwoFAEnabled: Boolean!
   password: String!
-  role: String!
+  role: UserRole!
   socialLinks: [SocialLinkModel!]!
   stream: StreamModel!
+  updatedAt: DateTime!
+  userSecurity: UserSecurityModel!
+  username: String!
+}
+
+enum UserRole {
+  ADMIN
+  REGULAR
+}
+
+type UserSecurityModel {
+  createdAt: DateTime!
+  id: ID!
+  isEmailVerified: Boolean!
+  isTwoFAEnabled: Boolean!
   twoFASecret: String!
   updatedAt: DateTime!
-  username: String!
+  userId: String!
 }
 
 input VerificationInput {

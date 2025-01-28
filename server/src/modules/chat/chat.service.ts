@@ -76,9 +76,13 @@ export class ChatService {
                 userId: user.id
             },
             data: {
-                isChatEnabled,
-                isChatFollowersOnly,
-                isChatSubscribersOnly
+                chatSettings: {
+                    update: {
+                        isChatEnabled,
+                        isChatFollowersOnly,
+                        isChatSubscribersOnly
+                    }
+                }
             }
         })
 

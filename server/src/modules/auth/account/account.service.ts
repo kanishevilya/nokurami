@@ -31,7 +31,8 @@ export class AccountService {
                 id
             },
             include: {
-                socialLinks: true
+                socialLinks: true,
+                userSecurity: true
             }
         })
         return user
@@ -70,6 +71,9 @@ export class AccountService {
                     create: {
                         title: `Stream ${username}`
                     }
+                },
+                userSecurity: {
+                    create: {}
                 }
             }
         })
@@ -125,7 +129,11 @@ export class AccountService {
             },
             data: {
                 email,
-                isEmailVerified: false
+                userSecurity: {
+                    update: {
+                        isEmailVerified: false
+                    }
+                }
             }
         })
 

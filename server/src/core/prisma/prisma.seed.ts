@@ -20,8 +20,12 @@ async function main() {
 
         await prisma.$transaction([
             prisma.user.deleteMany(),
+            prisma.userSecurity.deleteMany(),
             prisma.socialLink.deleteMany(),
             prisma.stream.deleteMany(),
+            prisma.chatSettings.deleteMany(),
+            prisma.notification.deleteMany(),
+            prisma.notificationSettings.deleteMany(),
             prisma.category.deleteMany()
         ])
 
@@ -62,7 +66,14 @@ async function main() {
                             username,
                             displayName: username,
                             avatar: `/channels/${username}.webp`,
-                            isEmailVerified: true,
+                            userSecurity: {
+                                create: {
+                                    isEmailVerified: true,
+                                }
+                            },
+                            notificationSettings: {
+                                create: {}
+                            },
                             socialLinks: {
                                 createMany: {
                                     data: [
@@ -105,6 +116,9 @@ async function main() {
                                 connect: {
                                     id: randomCategory.id
                                 }
+                            },
+                            chatSettings: {
+                                create: {}
                             }
                         }
                     })

@@ -104,6 +104,9 @@ export class SessionService {
                     { username: { equals: login } },
                     { email: { equals: login } },
                 ]
+            },
+            include: {
+                userSecurity: true
             }
         })
 
@@ -117,13 +120,13 @@ export class SessionService {
             throw new UnauthorizedException("Неверный пароль")
         }
 
-        if (!user.isEmailVerified) {
+        if (!user.userSecurity.isEmailVerified) {
             await this.verificationService.sendVerificationToken(user)
 
             throw new BadRequestException("Почта пользователя не верифицирована")
         }
 
-        if (user.isTwoFAEnabled) {
+        if (user.userSecurity.isTwoFAEnabled) {
             if (!pin) {
                 return { message: "Необходим код для двухфакторной аутентификации" }
             }
@@ -133,7 +136,7 @@ export class SessionService {
                 label: user.email,
                 algorithm: "SHA1",
                 digits: 6,
-                secret: user.twoFASecret
+                secret: user.userSecurity.twoFASecret
             })
 
             const result = totp.validate({ token: pin })

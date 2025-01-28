@@ -37,7 +37,11 @@ export class VerificationService {
                 id: existingToken.userId
             },
             data: {
-                isEmailVerified: true
+                userSecurity: {
+                    update: {
+                        isEmailVerified: true
+                    }
+                }
             }
         })
 

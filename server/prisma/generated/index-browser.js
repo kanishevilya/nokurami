@@ -126,9 +126,16 @@ exports.Prisma.UserScalarFieldEnum = {
   avatar: 'avatar',
   information: 'information',
   role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserSecurityScalarFieldEnum = {
+  id: 'id',
   isEmailVerified: 'isEmailVerified',
   isTwoFAEnabled: 'isTwoFAEnabled',
   twoFASecret: 'twoFASecret',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -151,11 +158,37 @@ exports.Prisma.StreamScalarFieldEnum = {
   serverUrl: 'serverUrl',
   streamKey: 'streamKey',
   isLive: 'isLive',
+  userId: 'userId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChatSettingsScalarFieldEnum = {
+  id: 'id',
   isChatEnabled: 'isChatEnabled',
   isChatFollowersOnly: 'isChatFollowersOnly',
   isChatSubscribersOnly: 'isChatSubscribersOnly',
+  streamId: 'streamId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  message: 'message',
+  type: 'type',
+  isRead: 'isRead',
   userId: 'userId',
-  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationSettingsScalarFieldEnum = {
+  id: 'id',
+  siteNotificationsEnable: 'siteNotificationsEnable',
+  telegramNotificationsEnable: 'telegramNotificationsEnable',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -216,6 +249,12 @@ exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  STREAM_START: 'STREAM_START',
+  NEW_FOLLOWER: 'NEW_FOLLOWER',
+  ENABLE_TWO_FACTOR: 'ENABLE_TWO_FACTOR'
+};
+
 exports.TokenType = exports.$Enums.TokenType = {
   EMAIL_VERIFY: 'EMAIL_VERIFY',
   PASSWORD_RESET: 'PASSWORD_RESET',
@@ -224,8 +263,12 @@ exports.TokenType = exports.$Enums.TokenType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  UserSecurity: 'UserSecurity',
   SocialLink: 'SocialLink',
   Stream: 'Stream',
+  ChatSettings: 'ChatSettings',
+  Notification: 'Notification',
+  NotificationSettings: 'NotificationSettings',
   Message: 'Message',
   Follow: 'Follow',
   Category: 'Category',

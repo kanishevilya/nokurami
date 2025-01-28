@@ -52,8 +52,12 @@ export class TwoFactorAuthentificationService {
                 id: user.id
             },
             data: {
-                isTwoFAEnabled: true,
-                twoFASecret: secret
+                userSecurity: {
+                    update: {
+                        isTwoFAEnabled: true,
+                        twoFASecret: secret
+                    }
+                }
             }
         })
 
@@ -66,8 +70,12 @@ export class TwoFactorAuthentificationService {
                 id: user.id
             },
             data: {
-                isTwoFAEnabled: false,
-                twoFASecret: null
+                userSecurity: {
+                    update: {
+                        isTwoFAEnabled: false,
+                        twoFASecret: null
+                    }
+                }
             }
         })
         return true

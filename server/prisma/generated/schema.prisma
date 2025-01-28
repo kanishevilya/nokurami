@@ -22,21 +22,39 @@ model User {
 
   role UserRole @default(REGULAR)
 
-  isEmailVerified Boolean @default(false) @map("is_email_verified")
-  isTwoFAEnabled  Boolean @default(false) @map("is_two_fa_enabled")
-  twoFASecret     String? @map("two_fa_secret")
+  userSecurity UserSecurity?
 
   tokens      Token[]
   socialLinks SocialLink[]
   stream      Stream?
   messages    Message[]
-  followers   Follow[]     @relation(name: "followers")
-  followings  Follow[]     @relation(name: "followings")
+
+  notifications        Notification[]
+  notificationSettings NotificationSettings?
+
+  followers  Follow[] @relation(name: "followers")
+  followings Follow[] @relation(name: "followings")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model UserSecurity {
+  id String @id @default(uuid())
+
+  isEmailVerified Boolean @default(false) @map("is_email_verified")
+  isTwoFAEnabled  Boolean @default(false) @map("is_two_fa_enabled")
+  twoFASecret     String? @map("two_fa_secret")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_securities")
 }
 
 model SocialLink {
@@ -69,9 +87,7 @@ model Stream {
 
   messages Message[]
 
-  isChatEnabled         Boolean @default(true) @map("is_chat_enabled")
-  isChatFollowersOnly   Boolean @default(false) @map("is_chat_followers_only")
-  isChatSubscribersOnly Boolean @default(false) @map("is_chat_subscribers_only")
+  chatSettings ChatSettings?
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @unique @map("user_id")
@@ -83,6 +99,53 @@ model Stream {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("streams")
+}
+
+model ChatSettings {
+  id String @id @default(uuid())
+
+  isChatEnabled         Boolean @default(true) @map("is_chat_enabled")
+  isChatFollowersOnly   Boolean @default(false) @map("is_chat_followers_only")
+  isChatSubscribersOnly Boolean @default(false) @map("is_chat_subscribers_only")
+
+  stream   Stream @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId String @unique @map("stream_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("chats_settings")
+}
+
+model Notification {
+  id String @id @default(uuid())
+
+  message String
+  type    NotificationType
+  isRead  Boolean          @default(false) @map("is_read")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notifications")
+}
+
+model NotificationSettings {
+  id String @id @default(uuid())
+
+  siteNotificationsEnable     Boolean @default(true) @map("site_notifications_enable")
+  telegramNotificationsEnable Boolean @default(true) @map("telegram_notifications_enable")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_settings")
 }
 
 model Message {
@@ -155,6 +218,14 @@ model Token {
 enum UserRole {
   REGULAR
   ADMIN
+}
+
+enum NotificationType {
+  STREAM_START
+  NEW_FOLLOWER
+  ENABLE_TWO_FACTOR
+
+  @@map("notification_types")
 }
 
 enum TokenType {

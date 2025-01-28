@@ -1,8 +1,14 @@
 import { User, UserRole } from "@/prisma/generated";
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { SocialLinkModel } from "../../profile/models/social-link.model";
 import { StreamModel } from "@/src/modules/stream/models/stream.model";
 import { FollowModel } from "@/src/modules/follow/models/follow.model";
+import { UserSecurityModel } from "./user-security.model";
+
+
+registerEnumType(UserRole, {
+    name: 'UserRole'
+})
 
 @ObjectType()
 export class UserModel implements User {
@@ -27,16 +33,10 @@ export class UserModel implements User {
     @Field(() => String, { nullable: true })
     information: string
 
-    @Field(() => Boolean)
-    isEmailVerified: boolean;
+    @Field(() => UserSecurityModel)
+    userSecurity: UserSecurityModel
 
-    @Field(() => String)
-    twoFASecret: string;
-
-    @Field(() => Boolean)
-    isTwoFAEnabled: boolean;
-
-    @Field(() => String)
+    @Field(() => UserRole)
     role: UserRole;
 
     @Field(() => [SocialLinkModel])

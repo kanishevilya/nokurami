@@ -30,6 +30,7 @@ export class StreamService {
             },
             include: {
                 user: true,
+                chatSettings: true,
                 category: true
             },
             orderBy: {
@@ -52,6 +53,7 @@ export class StreamService {
         const streams = await this.prismaService.stream.findMany({
             include: {
                 user: true,
+                chatSettings: true,
                 category: true
             },
             take: total,
