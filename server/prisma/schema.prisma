@@ -20,6 +20,8 @@ model User {
   avatar      String?
   information String?
 
+  telegramChatId String? @unique @map("telegram_chat_id")
+
   role UserRole @default(REGULAR)
 
   userSecurity UserSecurity?
@@ -232,6 +234,7 @@ enum TokenType {
   EMAIL_VERIFY
   PASSWORD_RESET
   EMAIL_CHANGE
+  TELEGRAM_AUTHENTICATION
 
   @@map("token_types")
 }

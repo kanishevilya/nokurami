@@ -4,6 +4,8 @@ import { SocialLinkModel } from "../../profile/models/social-link.model";
 import { StreamModel } from "@/src/modules/stream/models/stream.model";
 import { FollowModel } from "@/src/modules/follow/models/follow.model";
 import { UserSecurityModel } from "./user-security.model";
+import { NotificationModel } from "@/src/modules/notification/models/notification.model";
+import { NotificationSettingsModel } from "@/src/modules/notification/models/notification-settings.model";
 
 
 registerEnumType(UserRole, {
@@ -33,6 +35,9 @@ export class UserModel implements User {
     @Field(() => String, { nullable: true })
     information: string
 
+    @Field(() => String, { nullable: true })
+    telegramChatId: string;
+
     @Field(() => UserSecurityModel)
     userSecurity: UserSecurityModel
 
@@ -42,12 +47,17 @@ export class UserModel implements User {
     @Field(() => [SocialLinkModel])
     socialLinks: SocialLinkModel[]
 
+    @Field(() => [NotificationModel])
+    notifications: NotificationModel[]
+
+    @Field(() => NotificationSettingsModel)
+    notificationSettings: NotificationSettingsModel
 
     @Field(() => [FollowModel])
-    public followers: FollowModel[]
+    followers: FollowModel[]
 
     @Field(() => [FollowModel])
-    public followings: FollowModel[]
+    followings: FollowModel[]
 
 
     @Field(() => StreamModel)

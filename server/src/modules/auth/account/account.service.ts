@@ -87,7 +87,7 @@ export class AccountService {
         req: Request, user: User
     ) {
 
-        const resetToken = await GenerateToken(this.prismaService, user, TokenType.EMAIL_CHANGE)
+        const resetToken = await GenerateToken(this.prismaService, user.id, TokenType.EMAIL_CHANGE)
 
         await this.mailService.sendMailChangeToken(
             user.email,

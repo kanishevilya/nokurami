@@ -149,6 +149,33 @@ input NewPasswordInput {
   token: String!
 }
 
+type NotificationModel {
+  createdAt: DateTime!
+  id: String!
+  isRead: Boolean!
+  message: String!
+  type: NotificationType!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
+type NotificationSettingsModel {
+  createdAt: DateTime!
+  id: String!
+  siteNotificationsEnable: Boolean!
+  telegramNotificationsEnable: Boolean!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
+enum NotificationType {
+  ENABLE_TWO_FACTOR
+  NEW_FOLLOWER
+  STREAM_START
+}
+
 type Query {
   findAllCategories: [CategoryModel!]!
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
@@ -251,10 +278,13 @@ type UserModel {
   followings: [FollowModel!]!
   id: ID!
   information: String
+  notificationSettings: NotificationSettingsModel!
+  notifications: [NotificationModel!]!
   password: String!
   role: UserRole!
   socialLinks: [SocialLinkModel!]!
   stream: StreamModel!
+  telegramChatId: String
   updatedAt: DateTime!
   userSecurity: UserSecurityModel!
   username: String!

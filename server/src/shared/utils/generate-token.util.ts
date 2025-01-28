@@ -1,4 +1,4 @@
-import { TokenType, User } from "@/prisma/generated";
+import { TokenType } from "@/prisma/generated";
 import { PrismaService } from "@/src/core/prisma/prisma.service";
 import { v4 } from 'uuid'
 import { ms } from "./ms.util";
@@ -6,7 +6,7 @@ import { ms } from "./ms.util";
 
 export async function GenerateToken(
     prismaService: PrismaService,
-    user: User,
+    userId: string,
     type: TokenType
 ) {
     const token = v4()
@@ -16,7 +16,7 @@ export async function GenerateToken(
     const existingToken = await prismaService.token.findFirst({
         where: {
             type,
-            userId: user.id
+            userId
         }
     })
 
@@ -35,7 +35,7 @@ export async function GenerateToken(
             type,
             user: {
                 connect: {
-                    id: user.id
+                    id: userId
                 }
             }
         },

@@ -125,6 +125,7 @@ exports.Prisma.UserScalarFieldEnum = {
   displayName: 'displayName',
   avatar: 'avatar',
   information: 'information',
+  telegramChatId: 'telegramChatId',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -258,7 +259,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
 exports.TokenType = exports.$Enums.TokenType = {
   EMAIL_VERIFY: 'EMAIL_VERIFY',
   PASSWORD_RESET: 'PASSWORD_RESET',
-  EMAIL_CHANGE: 'EMAIL_CHANGE'
+  EMAIL_CHANGE: 'EMAIL_CHANGE',
+  TELEGRAM_AUTHENTICATION: 'TELEGRAM_AUTHENTICATION'
 };
 
 exports.Prisma.ModelName = {
