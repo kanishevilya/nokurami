@@ -1,10 +1,12 @@
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class FollowService {
     public constructor(
-        private readonly prismaService: PrismaService
+        private readonly prismaService: PrismaService,
+        private readonly notificationService: NotificationService
     ) { }
 
     public async findFollowersByUserId(userId: string) {
@@ -65,16 +67,24 @@ export class FollowService {
             throw new ConflictException('Вы уже подписаны на этот канал')
         }
 
-        await this.prismaService.follow.create({
+        const follow = await this.prismaService.follow.create({
             data: {
                 followerId: userId,
                 followingId: channel.id
             },
             include: {
                 follower: true,
-                following: true
+                following: {
+                    include: {
+                        notificationSettings: true
+                    }
+                }
             }
         })
+
+        if (follow.following.notificationSettings.siteNotificationsEnable) {
+            await this.notificationService.createNewFollower(channel.id, follow.follower)
+        }
 
         return true
     }

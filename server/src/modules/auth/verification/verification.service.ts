@@ -5,7 +5,7 @@ import { saveSession } from '@/src/shared/utils/sessions.util';
 import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { TokenType, User } from '@/prisma/generated';
-import { MailService } from '../../lib/mail/mail.service';
+import { MailService } from '../../libs/mail/mail.service';
 import { GenerateToken } from '@/src/shared/utils/generate-token.util';
 
 @Injectable()

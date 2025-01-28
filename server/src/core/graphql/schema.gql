@@ -24,6 +24,16 @@ input ChangeEmailInput {
   token: String!
 }
 
+input ChangeNotificationsSettingsInput {
+  siteNotificationsEnable: Boolean!
+  telegramNotificationsEnable: Boolean!
+}
+
+type ChangeNotificationsSettingsResponse {
+  notificationSettings: NotificationSettingsModel!
+  telegramToken: String
+}
+
 input ChangePasswordInput {
   newPassword: String!
   oldPassword: String!
@@ -114,6 +124,7 @@ type MessageModel {
 type Mutation {
   changeChatSettings(data: ChangeChatSettingsInput!): Boolean!
   changeEmail(data: ChangeEmailInput!): Boolean!
+  changeNotificationSettings(data: ChangeNotificationsSettingsInput!): ChangeNotificationsSettingsResponse!
   changePassword(data: ChangePasswordInput!): Boolean!
   changeProfileAvatar(avatar: Upload!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
@@ -185,10 +196,12 @@ type Query {
   findMessagesByStream(streamId: String!): [MessageModel!]!
   findMyFollowers: [FollowModel!]!
   findMyFollowings: [FollowModel!]!
+  findNotificationsByUserId: [NotificationModel!]!
   findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
   findRecommendedChannels: [UserModel!]!
   findSocialLinks: [SocialLinkModel!]!
+  findUnreadNotificationsCount: Float!
   generateTotpSecret: TotpModel!
   getAllSessions: [SessionModel!]!
   getCurrentSession: SessionModel!
@@ -259,6 +272,7 @@ type StreamModel {
 
 type Subscription {
   newMessageAdded(streamId: String!): MessageModel!
+  newNotificationAdded(userId: String!): NotificationModel!
 }
 
 type TotpModel {

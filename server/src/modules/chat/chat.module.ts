@@ -5,4 +5,4 @@ import { ChatResolver } from './chat.resolver';
 @Module({
   providers: [ChatResolver, ChatService],
 })
-export class ChatModule {}
+export class ChatModule { }

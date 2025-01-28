@@ -8,7 +8,7 @@ import { getGraphQLConfig } from './config/graphql.config';
 import { RedisModule } from './redis/redis.module';
 import { AccountModule } from '../modules/auth/account/account.module';
 import { SessionModule } from '../modules/auth/session/session.module';
-import { MailModule } from '../modules/lib/mail/mail.module';
+import { MailModule } from '../modules/libs/mail/mail.module';
 import { VerificationModule } from '../modules/auth/verification/verification.module';
 import { PasswordResetModule } from '../modules/auth/password-reset/password-reset.module';
 import { TwoFactorAuthentificationModule } from '../modules/auth/two-factor-authentification/two-factor-authentification.module';

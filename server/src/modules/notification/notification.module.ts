@@ -5,4 +5,4 @@ import { NotificationResolver } from './notification.resolver';
 @Module({
   providers: [NotificationResolver, NotificationService],
 })
-export class NotificationModule {}
+export class NotificationModule { }

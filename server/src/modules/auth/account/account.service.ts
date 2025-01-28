@@ -8,7 +8,7 @@ import { ChangeEmailInput } from './inputs/change-email.input';
 import { ChangePasswordInput } from './inputs/change-password.input';
 import { GenerateToken } from '@/src/shared/utils/generate-token.util';
 import { Request } from 'express';
-import { MailService } from '../../lib/mail/mail.service';
+import { MailService } from '../../libs/mail/mail.service';
 
 @Injectable()
 export class AccountService {
@@ -73,6 +73,9 @@ export class AccountService {
                     }
                 },
                 userSecurity: {
+                    create: {}
+                },
+                notificationSettings: {
                     create: {}
                 }
             }
