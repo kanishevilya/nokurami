@@ -8,14 +8,16 @@ import { Authorized } from '@/src/shared/decorators/authorized.decorator';
 import { SendMessageInput } from './inputs/send-message.input';
 import { User } from '@/prisma/generated';
 import { ChangeChatSettingsInput } from './inputs/change-chat-settings.input';
+import { Inject } from '@nestjs/common';
+import { PUB_SUB } from '../libs/pub-sub/pub-sub.provider';
 
 @Resolver('Chat')
 export class ChatResolver {
-  private readonly pubSub: PubSub
 
-  public constructor(private readonly chatService: ChatService) {
-    this.pubSub = new PubSub()
-  }
+  public constructor(
+    private readonly chatService: ChatService,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub
+  ) { }
 
   @Query(() => [MessageModel], { name: 'findMessagesByStream' })
   public async findByStream(@Args('streamId') streamId: string) {

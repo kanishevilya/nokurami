@@ -1,32 +1,31 @@
 import { PrismaService } from '@/src/core/prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ChangeNotificationsSettingsInput } from './inputs/change-notifications-settings.input';
 import { GenerateToken } from '@/src/shared/utils/generate-token.util';
 import { NotificationType, TokenType, User } from '@/prisma/generated';
-import { NotificationModel } from './models/notification.model';
+// import { NotificationModel } from './models/notification.model';
 import { PubSub } from 'graphql-subscriptions';
+import { NotificationModel } from './models/notification.model';
+import { PUB_SUB } from '../libs/pub-sub/pub-sub.provider';
 
 @Injectable()
 export class NotificationService {
-    private readonly pubSub: PubSub
-
-
-    public constructor(
+    constructor(
         private readonly prismaService: PrismaService,
-    ) {
-        this.pubSub = new PubSub()
-    }
+        @Inject(PUB_SUB) private readonly pubSub: PubSub,
+    ) { }
 
-    public async newNotificationAdded() {
+
+    public newNotificationAdded() {
         return this.pubSub.asyncIterableIterator('NEW_NOTIFICATION_ADDED');
     }
 
     public async publishNotification(notification: NotificationModel) {
-        console.log(notification)
         this.pubSub.publish('NEW_NOTIFICATION_ADDED', {
             newNotificationAdded: notification,
         });
     }
+
 
     public async findUnreadNotificationsCount(userId: string) {
         const count = this.prismaService.notification.count({
