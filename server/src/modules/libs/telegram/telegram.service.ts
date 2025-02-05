@@ -4,7 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Action, Command, Ctx, Start, Update } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
-import MESSAGES from './messages';
+import { FUNCTIONS, MESSAGES } from './messages';
+import { BUTTONS } from './buttons';
 
 @Update()
 @Injectable()
@@ -54,14 +55,14 @@ export class TelegramService extends Telegraf {
                 }
             })
 
-            await ctx.replyWithHTML(MESSAGES.authSuccess)
+            await ctx.replyWithHTML(MESSAGES.authSuccess, BUTTONS.authSuccess)
         } else {
             const user = await this.findUserByChatId(chatId)
 
             if (user) {
                 await this.onMeCommand(ctx)
             } else {
-                await ctx.replyWithHTML(MESSAGES.welcome)
+                await ctx.replyWithHTML(MESSAGES.welcome, BUTTONS.profile)
             }
         }
     }
@@ -73,7 +74,14 @@ export class TelegramService extends Telegraf {
 
         const user = await this.findUserByChatId(chatId)
 
-        await ctx.replyWithHTML(`Email пользователя:\r\n${user.email}`)
+        const followersCount = user.followers.length;
+
+        const followingsCount = user.followings.length
+
+        await ctx.replyWithHTML(
+            FUNCTIONS.profile(user, user.userSecurity, followersCount, followingsCount),
+            BUTTONS.profile
+        )
     }
 
     private async connectToTelegram(userId: string, chatId: string) {
@@ -94,7 +102,8 @@ export class TelegramService extends Telegraf {
             },
             include: {
                 followers: true,
-                followings: true
+                followings: true,
+                userSecurity: true
             }
         })
 
