@@ -1,4 +1,4 @@
-import { TokenType } from '@/prisma/generated';
+import { TokenType, User } from '@/prisma/generated';
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -6,6 +6,7 @@ import { Action, Command, Ctx, Start, Update } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
 import { FUNCTIONS, MESSAGES } from './messages';
 import { BUTTONS } from './buttons';
+import { SessionMetadata } from '@/src/shared/types/session-metada.types';
 
 @Update()
 @Injectable()
@@ -81,6 +82,76 @@ export class TelegramService extends Telegraf {
         await ctx.replyWithHTML(
             FUNCTIONS.profile(user, user.userSecurity, followersCount, followingsCount),
             BUTTONS.profile
+        )
+    }
+
+    @Command("followings")
+    @Action("followings")
+    public async onMyFollowingsCommand(@Ctx() ctx: any) {
+        const chatId = ctx.chat.id.toString()
+
+        const user = await this.findUserByChatId(chatId)
+        const follows = await this.prismaService.follow.findMany({
+            where: {
+                followerId: user.id
+            },
+            include: {
+                following: {
+                    include: {
+                        socialLinks: true
+                    }
+                }
+            }
+        })
+
+        if (user && follows.length) {
+            const followingsList = follows
+                .map(follow => FUNCTIONS.formatFollowing(follow.following, follow.following.socialLinks))
+                .join('\n')
+
+            const message = `<b>👥 Каналы на который вы подписаны (${follows.length}):</b>\n\n${followingsList}`
+
+            await ctx.replyWithHTML(message)
+        } else {
+            await ctx.replyWithHTML('<b>😔 У вас нет подписок.</b>')
+        }
+    }
+
+    public async sendResetPasswordToken(chatId: string, token: string, metadata: SessionMetadata) {
+        await this.telegram.sendMessage(
+            chatId,
+            FUNCTIONS.resetPassword(token, metadata),
+            {
+                parse_mode: 'HTML'
+            }
+        )
+    }
+
+    public async sendNewFollower(chatId: string, follower: User) {
+        const user = await this.findUserByChatId(chatId)
+
+        await this.telegram.sendMessage(
+            chatId,
+            FUNCTIONS.newFollower(follower, user.followings.length),
+            {
+                parse_mode: 'HTML'
+            }
+        )
+    }
+
+    public async sendStreamStart(chatId: string, channel: User) {
+        await this.telegram.sendMessage(
+            chatId,
+            FUNCTIONS.streamStart(channel),
+            { parse_mode: 'HTML' }
+        )
+    }
+
+    public async sendEnable2FA(chatId: string) {
+        await this.telegram.sendMessage(
+            chatId,
+            MESSAGES.enable2FA,
+            { parse_mode: 'HTML' }
         )
     }
 

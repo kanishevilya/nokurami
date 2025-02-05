@@ -13,7 +13,7 @@ export const MESSAGES = {
     `,
   authSuccess: "✅ <strong>Аутентификация успешна!</strong> Ваш аккаунт теперь связан с платформой, и вы готовы получать уведомления.",
   invalidToken: "⚠️ <strong>Ошибка:</strong> Недействительный или просроченный токен. Пожалуйста, попробуйте снова.",
-  enableTwoFactor:
+  enable2FA:
     `🔐 <b>Безопасность важна!</b>\n\n` +
     `Для защиты вашего аккаунта включите двухфакторную аутентификацию в <a href="https://4f30-37-151-36-118.ngrok-free.app/dashboard/settings">настройках аккаунта</a>.`,
 };
@@ -33,9 +33,9 @@ export const FUNCTIONS = {
   📅 <em>Дата регистрации:</em> ${user.createdAt.toLocaleString()}
 
   Чтобы изменить профиль, перейдите в настройки.`,
-  formatFollowing: (follower: User, socialLinks: SocialLink[]) =>
-    `👤 <strong>${follower.displayName}</strong>\n` +
-    `Канал: <a href="https://4f30-37-151-36-118.ngrok-free.app/${follower.username}">${follower.username}</a>\n` +
+  formatFollowing: (following: User, socialLinks: SocialLink[]) =>
+    `👤 <strong>${following.displayName}</strong>\n` +
+    `Канал: <a href="https://4f30-37-151-36-118.ngrok-free.app/${following.username}">${following.username}</a>\n` +
     `🔗 Социальные сети: ${socialLinks.map(link => `<a href="${link.url}">${link.title}</a>`).join(', ')}`,
   streamStart: (channel: User) =>
     `<b>📡 Трансляция на канале ${channel.displayName} началась!</b>\n\n` +
