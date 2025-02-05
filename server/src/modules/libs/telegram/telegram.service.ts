@@ -2,8 +2,9 @@ import { TokenType } from '@/prisma/generated';
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Ctx, Start, Update } from 'nestjs-telegraf';
+import { Action, Command, Ctx, Start, Update } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
+import MESSAGES from './messages';
 
 @Update()
 @Injectable()
@@ -33,14 +34,14 @@ export class TelegramService extends Telegraf {
             })
 
             if (!telegramToken) {
-                await ctx.replyWithHTML("Токен не найден")
+                await ctx.replyWithHTML(MESSAGES.invalidToken)
                 return
             }
 
             const hasExpired = new Date(telegramToken.expiresIn) < new Date()
 
             if (hasExpired) {
-                await ctx.replyWithHTML("Токен истек")
+                await ctx.replyWithHTML(MESSAGES.invalidToken)
                 return
             }
 
@@ -53,8 +54,26 @@ export class TelegramService extends Telegraf {
                 }
             })
 
-            await ctx.replyWithHTML("Успешная авторизация")
+            await ctx.replyWithHTML(MESSAGES.authSuccess)
+        } else {
+            const user = await this.findUserByChatId(chatId)
+
+            if (user) {
+                await this.onMeCommand(ctx)
+            } else {
+                await ctx.replyWithHTML(MESSAGES.welcome)
+            }
         }
+    }
+
+    @Command("me")
+    @Action('me')
+    public async onMeCommand(@Ctx() ctx: any) {
+        const chatId = ctx.chat.id.toString()
+
+        const user = await this.findUserByChatId(chatId)
+
+        await ctx.replyWithHTML(`Email пользователя:\r\n${user.email}`)
     }
 
     private async connectToTelegram(userId: string, chatId: string) {
@@ -66,5 +85,19 @@ export class TelegramService extends Telegraf {
                 telegramChatId: chatId
             }
         })
+    }
+
+    private async findUserByChatId(chatId: string) {
+        const user = await this.prismaService.user.findUnique({
+            where: {
+                telegramChatId: chatId
+            },
+            include: {
+                followers: true,
+                followings: true
+            }
+        })
+
+        return user
     }
 }
