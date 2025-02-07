@@ -3,15 +3,18 @@ import { Cron, CronExpression } from '@nestjs/schedule'
 
 import { PrismaService } from '@/src/core/prisma/prisma.service'
 import { TelegramService } from '../telegram/telegram.service'
+import { MailService } from '../mail/mail.service'
 
 @Injectable()
 export class CronService {
 	public constructor(
 		private readonly prismaService: PrismaService,
+		private readonly mailService: MailService,
 		private readonly telegramService: TelegramService,
 	) { }
 
-	@Cron(CronExpression.EVERY_WEEK)
+	// @Cron(CronExpression.EVERY_WEEK)
+	@Cron(CronExpression.EVERY_10_SECONDS)
 	public async notifyUsersEnableTwoFactor() {
 		const users = await this.prismaService.user.findMany({
 			where: {
@@ -25,6 +28,10 @@ export class CronService {
 		})
 
 		for (const user of users) {
+
+			if (user.email == "kanishevilya1@gmail.com") {
+				await this.mailService.sendEnable2FA(user.email)
+			}
 
 			if (
 				user.notificationSettings.telegramNotificationsEnable &&

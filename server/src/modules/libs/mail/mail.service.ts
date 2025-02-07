@@ -6,6 +6,7 @@ import { VerificationTemplate } from './templates/verefication.template';
 import { SessionMetadata } from '@/src/shared/types/session-metada.types';
 import { ResetPasswordTemplate } from './templates/reset-password.template';
 import { ChangeEmailTemplate } from './templates/change-email.template';
+import { Enable2FATemplate } from './templates/enable-two-factor.template';
 
 @Injectable()
 export class MailService {
@@ -47,6 +48,13 @@ export class MailService {
         return this.sendMail(email, 'Изменение Почты', html)
     }
 
+
+    public async sendEnable2FA(email: string) {
+        const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
+        const html = await render(Enable2FATemplate({ domain }))
+
+        return this.sendMail(email, 'Обеспечьте свою безопасность', html)
+    }
 
     private sendMail(email: string, subject: string, html: string) {
         return this.mailerService.sendMail({
