@@ -25,6 +25,7 @@ import { FollowModule } from '../modules/follow/follow.module';
 import { ChannelModule } from '../modules/channel/channel.module';
 import { NotificationModule } from '../modules/notification/notification.module';
 import { TelegramModule } from '../modules/libs/telegram/telegram.module';
+import { CronModule } from '../modules/libs/cron/cron.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -54,6 +55,7 @@ import { TelegramModule } from '../modules/libs/telegram/telegram.module';
         FollowModule,
         ChannelModule,
         IngressModule,
+        CronModule,
         TelegramModule,
         MinioStorageModule,
         VerificationModule,
