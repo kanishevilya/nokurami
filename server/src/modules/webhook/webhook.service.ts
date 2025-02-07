@@ -59,7 +59,7 @@ export class WebhookService {
                 ) {
                     await this.telegramService.sendStreamStart(
                         follower.telegramChatId,
-                        stream.user
+                        stream
                     )
                 }
             }

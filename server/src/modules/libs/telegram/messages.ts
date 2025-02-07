@@ -1,4 +1,4 @@
-import { SocialLink, User, UserSecurity } from "@/prisma/generated";
+import { SocialLink, Stream, User, UserSecurity } from "@/prisma/generated";
 import { SessionMetadata } from "@/src/shared/types/session-metada.types";
 
 export const MESSAGES = {
@@ -37,9 +37,9 @@ export const FUNCTIONS = {
     `👤 <strong>${following.displayName}</strong>\n` +
     `Канал: <a href="https://4f30-37-151-36-118.ngrok-free.app/${following.username}">${following.username}</a>\n` +
     `🔗 Социальные сети: ${socialLinks.map(link => `<a href="${link.url}">${link.title}</a>`).join(', ')}`,
-  streamStart: (channel: User) =>
-    `<b>📡 Трансляция на канале ${channel.displayName} началась!</b>\n\n` +
-    `Присоединяйтесь и смотрите: <a href="https://4f30-37-151-36-118.ngrok-free.app/${channel.username}">Перейти к трансляции</a>`,
+  streamStart: (stream: Stream & { user: User }) =>
+    `<b>📡 Трансляция на канале ${stream.user.displayName} началась!</b>\n\n` +
+    `Присоединяйтесь и смотрите: <a href="https://4f30-37-151-36-118.ngrok-free.app/${stream.user.username}">${stream.title}</a>`,
   newFollower: (follower: User, followersCount: number) =>
     `<b>🎉 Новый подписчик!</b>\n\n` +
     `Пользователь <a href="https://4f30-37-151-36-118.ngrok-free.app/${follower.username}">${follower.displayName}</a> подписался на ваш канал.\n\n` +

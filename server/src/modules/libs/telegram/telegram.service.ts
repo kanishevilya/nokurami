@@ -1,4 +1,4 @@
-import { TokenType, User } from '@/prisma/generated';
+import { Stream, TokenType, User } from '@/prisma/generated';
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -139,10 +139,10 @@ export class TelegramService extends Telegraf {
         )
     }
 
-    public async sendStreamStart(chatId: string, channel: User) {
+    public async sendStreamStart(chatId: string, stream: Stream & { user: User }) {
         await this.telegram.sendMessage(
             chatId,
-            FUNCTIONS.streamStart(channel),
+            FUNCTIONS.streamStart(stream),
             { parse_mode: 'HTML' }
         )
     }
