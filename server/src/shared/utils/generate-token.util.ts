@@ -40,7 +40,11 @@ export async function GenerateToken(
             }
         },
         include: {
-            user: true
+            user: {
+                include: {
+                    notificationSettings: true
+                }
+            }
         }
     })
 

@@ -8,6 +8,7 @@ import { GenerateToken } from '@/src/shared/utils/generate-token.util';
 import { TokenType } from '@/prisma/generated';
 import { NewPasswordInput } from './inputs/new-password.input';
 import { hash } from 'argon2';
+import { TelegramService } from '../../libs/telegram/telegram.service';
 
 @Injectable()
 export class PasswordResetService {
@@ -15,6 +16,7 @@ export class PasswordResetService {
     public constructor(
         private readonly prismaService: PrismaService,
         private readonly mailService: MailService,
+        private readonly telegramService: TelegramService,
     ) { }
 
     public async reset_password(
@@ -25,6 +27,9 @@ export class PasswordResetService {
         const existingUser = await this.prismaService.user.findUnique({
             where: {
                 email
+            },
+            include: {
+                notificationSettings: true
             }
         })
 
@@ -41,6 +46,18 @@ export class PasswordResetService {
             resetToken.token,
             metadata
         )
+
+
+        if (
+            resetToken.user.notificationSettings.telegramNotificationsEnable &&
+            resetToken.user.telegramChatId
+        ) {
+            await this.telegramService.sendResetPasswordToken(
+                resetToken.user.telegramChatId,
+                resetToken.token,
+                metadata
+            )
+        }
 
         return true
     }

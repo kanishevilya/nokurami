@@ -13,8 +13,8 @@ export class CronService {
 		private readonly telegramService: TelegramService,
 	) { }
 
-	// @Cron(CronExpression.EVERY_WEEK)
-	@Cron(CronExpression.EVERY_10_SECONDS)
+	@Cron(CronExpression.EVERY_WEEK)
+	// @Cron(CronExpression.EVERY_10_SECONDS)
 	public async notifyUsersEnableTwoFactor() {
 		const users = await this.prismaService.user.findMany({
 			where: {
