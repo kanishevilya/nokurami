@@ -2,7 +2,7 @@ import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { ChangeNotificationsSettingsInput } from './inputs/change-notifications-settings.input';
 import { GenerateToken } from '@/src/shared/utils/generate-token.util';
-import { NotificationType, TokenType, User } from '@/prisma/generated';
+import { NotificationType, Stream, TokenType, User } from '@/prisma/generated';
 // import { NotificationModel } from './models/notification.model';
 import { PubSub } from 'graphql-subscriptions';
 import { NotificationModel } from './models/notification.model';
@@ -61,11 +61,12 @@ export class NotificationService {
         return notifications
     }
 
-    public async createStreamStart(userId: string, channel: User) {
+    public async createStreamStart(userId: string, stream: Stream & { user: User }) {
         const notification = await this.prismaService.notification.create({
             data: {
-                message: `<b className='font-medium'>${channel.displayName} ведет трансляцию!</b>
-				<p>Чтобы поддержать и пообщаться <a href='/${channel.username}' className='font-semibold'>присоединяйтесь к стриму!</a></p>`,
+                message: `<b className='font-medium'>${stream.user.displayName} ведет трансляцию! </b>
+                <p>${stream.title}</p>
+				<p>Чтобы поддержать и пообщаться с <a href='/${stream.user.username}' className='font-semibold'> присоединяйтесь к стриму!</a></p>`,
                 type: NotificationType.STREAM_START,
                 user: {
                     connect: {

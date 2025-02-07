@@ -50,7 +50,7 @@ export class WebhookService {
                 const follower = follow.follower
 
                 if (follower.notificationSettings.siteNotificationsEnable) {
-                    await this.notificationService.createStreamStart(follower.id, stream.user)
+                    await this.notificationService.createStreamStart(follower.id, stream)
                 }
 
                 if (
