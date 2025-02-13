@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from "@/components/ui/shadcn/button";
 import { useTranslations } from "next-intl";
 
 export default function Home() {
