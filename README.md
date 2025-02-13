@@ -1,6 +1,8 @@
 # Fullstack Project Setup
 
-![alt text](<assets/Nokurami Logo.png>)
+<p align="center">
+  <img src="assets/Nokurami Logo.png" alt="Логотип" width="200">
+</p>
 
 ## Overview
 This project consists of a **frontend** built with [Next.js](https://nextjs.org) and a **backend** built with [NestJS](https://nestjs.com). Below are the instructions to set up and run both parts of the application.
