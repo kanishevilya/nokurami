@@ -1,7 +1,8 @@
 # Fullstack Project Setup
 
-## Overview
+![alt text](<assets/Nokurami Logo.png>)
 
+## Overview
 This project consists of a **frontend** built with [Next.js](https://nextjs.org) and a **backend** built with [NestJS](https://nestjs.com). Below are the instructions to set up and run both parts of the application.
 
 ---
@@ -15,7 +16,7 @@ This project consists of a **frontend** built with [Next.js](https://nextjs.org)
 ### Installation
 1. Navigate to the frontend directory:
    ```bash
-   cd frontend
+   cd web
    ```
 2. Install dependencies:
    ```bash
@@ -61,7 +62,7 @@ The recommended deployment platform is [Vercel](https://vercel.com). Refer to [N
 ### Installation
 1. Navigate to the backend directory:
    ```bash
-   cd backend
+   cd server
    ```
 2. Install dependencies:
    ```bash
