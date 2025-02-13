@@ -512,7 +512,7 @@ export type FindChannelByUsernameQueryVariables = Exact<{
 }>;
 
 
-export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', username: string, avatar?: string | null } };
+export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', username: string, avatar?: string | null, displayName: string, stream: { __typename?: 'StreamModel', title: string } } };
 
 
 export const FindChannelByUsernameDocument = gql`
@@ -520,6 +520,10 @@ export const FindChannelByUsernameDocument = gql`
   findChannelByUsername(username: $username) {
     username
     avatar
+    displayName
+    stream {
+      title
+    }
   }
 }
     `;
