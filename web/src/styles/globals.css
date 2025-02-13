@@ -2,20 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+	:root {
+		--background: 240, 7%, 97%;
+		--foreground: 240, 7%, 6%;
+
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
+
+		--accent: 260 40% 96.1%;
+		--accent-foreground: 270 47.4% 11.2%;
+
+		--popover: 0 0% 100%;
+		--popover-foreground: 270 47.4% 11.2%;
+
+		--card: 240, 10%, 93%;
+		--card-foreground: 270 47.4% 11.2%;
+
+		--primary: 270, 76%, 52%;
+		--primary-foreground: 210 40% 98%;
+
+		--secondary: 260, 29%, 96%;
+		--secondary-foreground: 270 47.4% 11.2%;
+
+		--border: 240 19% 91.4%;
+		--input: 240, 7%, 97%;
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 250, 13%, 14%;
+		--foreground: 270 31% 91%;
+
+		--muted: 250, 16%, 27%;
+		--muted-foreground: 255 16.3% 56.9%;
+
+		--accent: 250, 13%, 27%;
+		--accent-foreground: 270 40% 98%;
+
+		--popover: 255, 14%, 20%;
+		--popover-foreground: 270 31% 91%;
+
+		--card: 250, 16%, 19%;
+		--card-foreground: 270 31% 91%;
+
+		--primary: 270, 76%, 52%;
+		--primary-foreground: 210 40% 98%;
+
+		--secondary: 270, 12%, 29%;
+		--secondary-foreground: 210 40% 98%;
+
+		--border: 265, 19%, 27%;
+		--input: 250, 13%, 14%;
+		--radius: 0.5rem;
+	}
+}
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+		@apply scroll-smooth;
+	}
+
+  body {
+    @apply bg-background text-foreground;
+    
+	font-family: var(--font-geist-sans), sans-serif;
+
+    height: 100vh;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+::-webkit-scrollbar {
+	width: 9px;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply rounded-full bg-secondary;
 }
