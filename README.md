@@ -1,7 +1,7 @@
 # Fullstack Project Setup
 
 <p align="center">
-  <img src="assets/Nokurami Logo.png" alt="Логотип" width="200">
+  <img src="assets/Nokurami Logo.png" alt="Логотип" width="400">
 </p>
 
 ## Overview
