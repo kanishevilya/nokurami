@@ -151,7 +151,7 @@ type Mutation {
   sendMessage(data: SendMessageInput!): MessageModel!
   unfollowFromChannel(channelId: String!): Boolean!
   updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
-  verifyAccount(data: VerificationInput!): UserModel!
+  verifyAccount(data: VerificationInput!): VerificationModel!
 }
 
 input NewPasswordInput {
@@ -321,4 +321,9 @@ type UserSecurityModel {
 
 input VerificationInput {
   token: String!
+}
+
+type VerificationModel {
+  message: String
+  user: UserModel
 }
