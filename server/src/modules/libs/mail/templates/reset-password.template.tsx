@@ -23,7 +23,7 @@ export function ResetPasswordTemplate({
   token,
   metadata,
 }: VerificationTemplateProps) {
-  const resetLink = `${domain}/account/recovery/${token}`;
+  const resetLink = `${domain}/account/password-reset/${token}`;
 
   return (
     <Html>
