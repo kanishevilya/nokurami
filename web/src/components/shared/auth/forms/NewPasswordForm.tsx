@@ -64,6 +64,7 @@ export function NewPasswordForm() {
                   <Input
                     type="password"
                     placeholder="Новый пароль"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -83,6 +84,7 @@ export function NewPasswordForm() {
                   <Input
                     type="password"
                     placeholder="Подтвердите пароль"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
