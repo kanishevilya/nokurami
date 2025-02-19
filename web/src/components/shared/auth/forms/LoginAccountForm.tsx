@@ -32,10 +32,13 @@ import { useLoginMutation } from "@/graphql/generated/output";
 import { useRouter } from "next/navigation";
 import { InputOTPGroup } from "@/components/ui/shadcn/InputOtp";
 import { InputOTP, InputOTPSlot } from "@/components/ui/shadcn/InputOtp";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginAccountForm() {
   const [show2FA, setShow2FA] = useState(false);
   const router = useRouter();
+
+  const { authenticate } = useAuth();
 
   const form = useForm<TypeLoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -50,6 +53,7 @@ export function LoginAccountForm() {
       if (data.login.message) {
         setShow2FA(true);
       } else {
+        authenticate();
         toast.success("Вход в аккаунт выполнен успешно");
         router.push("/dashboard/settings");
       }

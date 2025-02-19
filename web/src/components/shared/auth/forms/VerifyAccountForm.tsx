@@ -6,15 +6,18 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { AuthWrapper } from "../AuthWrapper";
 import { Loader } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function VerifyAccountForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { authenticate } = useAuth();
 
   const token = searchParams.get("token") ?? "";
 
   const [verifyAccount] = useVerifyAccountMutation({
     onCompleted() {
+      authenticate();
       router.push("/dashboard/settings");
     },
     onError() {
