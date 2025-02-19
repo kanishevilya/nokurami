@@ -130,6 +130,7 @@ export class SessionService {
             if (!pin) {
                 return { message: "Необходим код для двухфакторной аутентификации" }
             }
+            console.log(user.userSecurity)
 
             const totp = new TOTP({
                 issuer: "Nokurami",

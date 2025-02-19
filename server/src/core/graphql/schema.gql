@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthModel {
+  message: String
+  user: UserModel
+}
+
 type CategoryModel {
   createdAt: DateTime!
   description: String!
@@ -138,7 +143,7 @@ type Mutation {
   enable2FA(data: Enable2FAInput!): Boolean!
   followToChannel(channelId: String!): Boolean!
   generateStreamToken(data: GenerateStreamTokenInput!): GenerateStreamTokenModel!
-  login(data: LoginInput!): UserModel!
+  login(data: LoginInput!): AuthModel!
   logout: Boolean!
   new_password(data: NewPasswordInput!): Boolean!
   removeProfileAvatar: Boolean!
@@ -151,7 +156,7 @@ type Mutation {
   sendMessage(data: SendMessageInput!): MessageModel!
   unfollowFromChannel(channelId: String!): Boolean!
   updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
-  verifyAccount(data: VerificationInput!): VerificationModel!
+  verifyAccount(data: VerificationInput!): AuthModel!
 }
 
 input NewPasswordInput {
@@ -321,9 +326,4 @@ type UserSecurityModel {
 
 input VerificationInput {
   token: String!
-}
-
-type VerificationModel {
-  message: String
-  user: UserModel
 }

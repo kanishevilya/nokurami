@@ -27,33 +27,42 @@ import {
   AlertTitle,
 } from "@/components/ui/shadcn/Alert";
 import { CircleCheck } from "lucide-react";
+import { loginSchema, TypeLoginSchema } from "@/schemas/auth/login.schema";
+import { useLoginMutation } from "@/graphql/generated/output";
+import { useRouter } from "next/navigation";
+import { InputOTPGroup } from "@/components/ui/shadcn/InputOtp";
+import { InputOTP, InputOTPSlot } from "@/components/ui/shadcn/InputOtp";
 
-export function CreateAccountForm() {
-  const [success, setSuccess] = useState(false);
+export function LoginAccountForm() {
+  const [show2FA, setShow2FA] = useState(false);
+  const router = useRouter();
 
-  const form = useForm<TypeCreateAccountSchema>({
-    resolver: zodResolver(createAccountSchema),
+  const form = useForm<TypeLoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: "",
-      email: "",
+      login: "",
       password: "",
     },
   });
 
-  const [createUser, { loading }] = useCreateUserMutation({
-    onCompleted() {
-      setSuccess(true);
-      // toast.success('Аккаунт успешно создан')
+  const [login, { loading }] = useLoginMutation({
+    onCompleted(data) {
+      if (data.login.message) {
+        setShow2FA(true);
+      } else {
+        toast.success("Вход в аккаунт выполнен успешно");
+        router.push("/dashboard/settings");
+      }
     },
     onError() {
-      toast.error("Ошибка при создании аккаунта");
+      toast.error("Ошибка при входе в аккаунт");
     },
   });
 
   const { isValid } = form.formState;
 
-  function onSubmit(data: TypeCreateAccountSchema) {
-    createUser({
+  function onSubmit(data: TypeLoginSchema) {
+    login({
       variables: {
         data,
       },
@@ -62,84 +71,85 @@ export function CreateAccountForm() {
 
   return (
     <AuthWrapper
-      heading="Регистрация в Nokurami"
-      backButtonLabel="Есть учетная запись? Войти"
-      backButtonHref="/account/login"
+      heading="Вход в Nokurami"
+      backButtonLabel="Нет учетной записи? Зарегистрироваться"
+      backButtonHref="/account/register"
     >
-      {success ? (
-        <Alert>
-          <CircleCheck className="h-4 w-4" />
-          <AlertTitle>Аккаунт успешно создан</AlertTitle>
-          <AlertDescription>
-            Теперь вы должны подтвердить почту
-          </AlertDescription>
-        </Alert>
-      ) : (
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-y-4">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-y-4">
+          {show2FA ? (
             <FormField
               control={form.control}
-              name="username"
+              name="pin"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Имя пользователя</FormLabel>
+                  <FormLabel>Код подтверждения</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="johanliebert"
-                      disabled={loading}
-                      {...field}
-                    />
+                    <InputOTP maxLength={6} disabled={loading} {...field}>
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
                   </FormControl>
                   <FormDescription>
-                    Поле для ввода имени пользователя
+                    Введите 6-значный код, отправленный на ваш email
                   </FormDescription>
                 </FormItem>
               )}
             />
+          ) : (
+            <>
+              <FormField
+                control={form.control}
+                name="login"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Логин</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Email или имя пользователя"
+                        disabled={loading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Введите email или имя пользователя
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Почта</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="johan.liebert@example.com"
-                      disabled={loading}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Поле для ввода email</FormDescription>
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Пароль</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="********"
+                        type="password"
+                        disabled={loading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Введите ваш пароль</FormDescription>
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Пароль</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="********"
-                      type="password"
-                      disabled={loading}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Поле для ввода пароля</FormDescription>
-                </FormItem>
-              )}
-            />
-
-            <Button className="w-full mt-4" disabled={!isValid || loading}>
-              Зарегистрироваться
-            </Button>
-          </form>
-        </Form>
-      )}
+          <Button className="w-full mt-4" disabled={!isValid || loading}>
+            Войти
+          </Button>
+        </form>
+      </Form>
     </AuthWrapper>
   );
 }

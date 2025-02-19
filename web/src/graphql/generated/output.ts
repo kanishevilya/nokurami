@@ -19,6 +19,12 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
+export type AuthModel = {
+  __typename?: 'AuthModel';
+  message?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<UserModel>;
+};
+
 export type CategoryModel = {
   __typename?: 'CategoryModel';
   createdAt: Scalars['DateTime']['output'];
@@ -158,7 +164,7 @@ export type Mutation = {
   enable2FA: Scalars['Boolean']['output'];
   followToChannel: Scalars['Boolean']['output'];
   generateStreamToken: GenerateStreamTokenModel;
-  login: UserModel;
+  login: AuthModel;
   logout: Scalars['Boolean']['output'];
   new_password: Scalars['Boolean']['output'];
   removeProfileAvatar: Scalars['Boolean']['output'];
@@ -171,7 +177,7 @@ export type Mutation = {
   sendMessage: MessageModel;
   unfollowFromChannel: Scalars['Boolean']['output'];
   updateSocialLink: Scalars['Boolean']['output'];
-  verifyAccount: VerificationModel;
+  verifyAccount: AuthModel;
 };
 
 
@@ -507,12 +513,6 @@ export type VerificationInput = {
   token: Scalars['String']['input'];
 };
 
-export type VerificationModel = {
-  __typename?: 'VerificationModel';
-  message?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<UserModel>;
-};
-
 export type CreateUserMutationVariables = Exact<{
   data: CreateUserInput;
 }>;
@@ -520,12 +520,19 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: boolean };
 
+export type LoginMutationVariables = Exact<{
+  data: LoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthModel', message?: string | null, user?: { __typename?: 'UserModel', id: string, username: string, email: string } | null } };
+
 export type VerifyAccountMutationVariables = Exact<{
   data: VerificationInput;
 }>;
 
 
-export type VerifyAccountMutation = { __typename?: 'Mutation', verifyAccount: { __typename?: 'VerificationModel', message?: string | null, user?: { __typename?: 'UserModel', userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean } } | null } };
+export type VerifyAccountMutation = { __typename?: 'Mutation', verifyAccount: { __typename?: 'AuthModel', message?: string | null, user?: { __typename?: 'UserModel', userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean } } | null } };
 
 export type FindChannelByUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
@@ -566,6 +573,44 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($data: LoginInput!) {
+  login(data: $data) {
+    user {
+      id
+      username
+      email
+    }
+    message
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const VerifyAccountDocument = gql`
     mutation VerifyAccount($data: VerificationInput!) {
   verifyAccount(data: $data) {
