@@ -3,7 +3,7 @@ import { UserModel } from '../../account/models/user.model'
 
 
 @ObjectType()
-export class VerificationModel {
+export class AuthModel {
 	@Field(() => UserModel, { nullable: true })
 	public user: UserModel
 

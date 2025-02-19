@@ -1,12 +1,12 @@
 import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { SessionService } from './session.service';
-import { UserModel } from '../account/models/user.model';
 import type { GraphqlContext } from '@/src/shared/types/graphql.context.types';
 import { LoginInput } from './inputs/login.input';
 import { UserAgent } from '@/src/shared/decorators/user-agent.decorator';
 import { Authorization } from '@/src/shared/decorators/auth.decorator';
 import { SessionModel } from './models/session.model';
 import { UserRole } from '@/prisma/generated';
+import { AuthModel } from './models/auth.model';
 
 @Resolver('Session')
 export class SessionResolver {
@@ -30,7 +30,7 @@ export class SessionResolver {
     return this.sessionService.getCurrentSession(req)
   }
 
-  @Mutation(() => UserModel, { name: "login" })
+  @Mutation(() => AuthModel, { name: "login" })
   public async login(@Context() { req }: GraphqlContext, @Args('data') input: LoginInput, @UserAgent() userAgent: string) {
     return this.sessionService.login(req, input, userAgent)
   }
