@@ -19,13 +19,13 @@ import { useLogoutUserMutation } from "@/graphql/generated/output";
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrent } from "@/hooks/useCurrent";
 import { ChannelAvatar } from "@/components/ui/items/ChannelAvatar";
+import { Notifications } from "@/components/layout/header/Notifications";
 
 export function ProfileMenu() {
   const router = useRouter();
 
   const { unauthenticate } = useAuth();
   const { user, isLoadingProfile } = useCurrent();
-  console.log(user);
 
   const [logout] = useLogoutUserMutation({
     onCompleted() {
@@ -38,16 +38,25 @@ export function ProfileMenu() {
     },
   });
 
-  return (
-    <>
+  return isLoadingProfile || !user ? (
+    <Loader className="size-6 animate-spin" />
+  ) : (
+    <div className="flex items-center gap-x-6">
+      <Notifications />
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <ChannelAvatar channel={{ username: "test" }} />
+          <ChannelAvatar
+            size="md"
+            channel={{ username: user.username, avatar: user.avatar }}
+          />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[230px]">
           <div className="flex items-center gap-x-3 p-2">
-            <ChannelAvatar channel={{ username: "test" }} />
-            <h2 className="font-medium text-foreground">test</h2>
+            <ChannelAvatar
+              size="md"
+              channel={{ username: user.username, avatar: user.avatar }}
+            />
+            <h2 className="font-medium text-foreground">{user.username}</h2>
           </div>
           <DropdownMenuSeparator />
           <Link href={`/test`}>
@@ -68,6 +77,6 @@ export function ProfileMenu() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }

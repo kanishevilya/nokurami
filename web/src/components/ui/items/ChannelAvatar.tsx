@@ -1,6 +1,7 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "../shadcn/Avatar";
+import { getMediaSource } from "@/utils/get-media-source";
 
 const avatarVariants = cva("relative rounded-full transition-all", {
   variants: {
@@ -8,6 +9,7 @@ const avatarVariants = cva("relative rounded-full transition-all", {
       xs: "size-6",
       sm: "size-8",
       default: "size-10",
+      md: "size-12",
       lg: "size-16",
       xl: "size-36",
     },
@@ -36,14 +38,19 @@ export function ChannelAvatar({
   channel,
   className,
 }: ChannelAvatarProps) {
+  console.log(channel.avatar);
   return (
     <Avatar className={cn(avatarVariants({ size, status }), className)}>
-      <AvatarImage className="object-cover" />
+      <AvatarImage
+        className="object-cover"
+        src={getMediaSource(channel.avatar)}
+      />
       <AvatarFallback
         className={cn(
           "bg-gradient-to-br from-neutral-700 to-neutral-900",
           size === "xl" && "text-4xl",
           size === "lg" && "text-2xl",
+          size === "md" && "text-xl",
           size === "sm" && "text-sm",
           size === "xs" && "text-xs"
         )}

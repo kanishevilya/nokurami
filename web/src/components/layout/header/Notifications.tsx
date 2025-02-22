@@ -1,54 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/shadcn/Popover";
+import { Loader } from "lucide-react";
+import { Bell } from "lucide-react";
+import { useFindUnreadNotificationsCountQuery } from "@/graphql/generated/output";
+import { NotificationsList } from "./NotificationsList";
 
-const Notifications = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export const Notifications = () => {
+  const { data, loading } = useFindUnreadNotificationsCountQuery();
+
+  const unreadCount = data?.findUnreadNotificationsCount ?? 0;
+
+  const count = unreadCount > 10 ? "+9" : unreadCount;
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 hover:bg-muted rounded-full transition-colors relative"
+    <Popover>
+      <PopoverTrigger asChild>
+        <button className="relative">
+          <Bell className="h-6 w-6" />
+          {unreadCount > 0 && (
+            <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+              {count}
+            </div>
+          )}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        className="max-h-[500px] w-[320px] overflow-y-auto"
       >
-        <svg
-          className="h-6 w-6 text-foreground"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-          />
-        </svg>
-        <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center">
-          3
-        </span>
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-popover rounded-[var(--radius)] shadow-xl py-2 border border-border animate-fadeIn">
-          <div className="px-4 py-2 text-popover-foreground border-b border-border">
-            Notifications
-          </div>
-          <div className="max-h-64 overflow-y-auto">
-            <div className="px-4 py-2 text-popover-foreground hover:bg-muted transition-colors">
-              New message received
-            </div>
-            <div className="px-4 py-2 text-popover-foreground hover:bg-muted transition-colors">
-              Friend request
-            </div>
-            <div className="px-4 py-2 text-popover-foreground hover:bg-muted transition-colors">
-              Post liked
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        <NotificationsList />
+      </PopoverContent>
+    </Popover>
   );
 };
-
-export default Notifications;
