@@ -19,6 +19,8 @@ export const NotificationsList = () => {
     return;
   }
 
+  const notifications = data?.findNotificationsByUserId ?? [];
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -28,15 +30,21 @@ export const NotificationsList = () => {
         <Loader className="size-6 animate-spin" />
       ) : (
         <div className="flex flex-col gap-2 mt-2">
-          {data?.findNotificationsByUserId.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              id={notification.id}
-              type={notification.type}
-              message={notification.message}
-              date={notification.createdAt}
-            />
-          ))}
+          {notifications.length > 0 ? (
+            notifications.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                id={notification.id}
+                type={notification.type}
+                message={notification.message}
+                date={notification.createdAt}
+              />
+            ))
+          ) : (
+            <div className="text-left pl-3 text-md text-muted-foreground">
+              У вас еще нет уведомлений
+            </div>
+          )}
         </div>
       )}
     </>

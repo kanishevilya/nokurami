@@ -4,6 +4,7 @@ import { Cron, CronExpression } from '@nestjs/schedule'
 import { PrismaService } from '@/src/core/prisma/prisma.service'
 import { TelegramService } from '../telegram/telegram.service'
 import { MailService } from '../mail/mail.service'
+import { NotificationService } from '../../notification/notification.service'
 
 @Injectable()
 export class CronService {
@@ -11,6 +12,7 @@ export class CronService {
 		private readonly prismaService: PrismaService,
 		private readonly mailService: MailService,
 		private readonly telegramService: TelegramService,
+		private readonly notificationService: NotificationService,
 	) { }
 
 	@Cron(CronExpression.EVERY_WEEK)
@@ -32,6 +34,11 @@ export class CronService {
 			if (user.email == "kanishevilya1@gmail.com") {
 				await this.mailService.sendEnable2FA(user.email)
 			}
+
+			if (user.notificationSettings.siteNotificationsEnable) {
+				await this.notificationService.createEnableTwoFactor(user.id)
+			}
+
 
 			if (
 				user.notificationSettings.telegramNotificationsEnable &&

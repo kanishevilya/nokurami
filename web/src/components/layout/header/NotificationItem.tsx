@@ -32,7 +32,9 @@ export const NotificationItem = ({
       <div className="flex items-start gap-3 rounded-lg bg-background-light p-3 group hover:bg-background-lighter">
         <div className="mt-1">{getNotificationIcon(type)}</div>
         <div className="flex flex-col gap-1">
-          <div className="text-sm text-foreground">{parse(message)}</div>
+          <div className="flex flex-col text-sm text-foreground gap-y-1">
+            {parse(message)}
+          </div>
           <span className="text-xs text-muted-foreground">
             {new Date(date).toLocaleDateString("ru-RU", {
               day: "numeric",

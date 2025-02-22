@@ -64,7 +64,7 @@ export class NotificationService {
     public async createStreamStart(userId: string, stream: Stream & { user: User }) {
         const notification = await this.prismaService.notification.create({
             data: {
-                message: `<b className='font-medium'>${stream.user.displayName} ведет трансляцию! </b>
+                message: `<b>${stream.user.displayName} ведет трансляцию! </b>
                 <p>${stream.title}</p>
 				<p>Чтобы поддержать и пообщаться с <a href='/${stream.user.username}' className='font-semibold'> присоединяйтесь к стриму!</a></p>`,
                 type: NotificationType.STREAM_START,
@@ -82,14 +82,28 @@ export class NotificationService {
     public async createNewFollower(userId: string, follower: User) {
         const notification = await this.prismaService.notification.create({
             data: {
-                message: `<b className='font-medium'>${follower.displayName} подписался на вас!</b>
-				<p>Загляните в профиль, чтобы поприветствовать нового подписчика! <a href='/${follower.username}' className='font-semibold'>Посмотреть профиль</a></p>`,
+                message: `<b>${follower.displayName} подписался на вас!</b>
+				<p>Загляните в профиль, чтобы поприветствовать нового подписчика!</p>
+                <a href='/${follower.username}' className='font-semibold'>Посмотреть профиль</a>`,
                 type: NotificationType.NEW_FOLLOWER,
                 user: {
                     connect: {
                         id: userId
                     }
                 }
+            }
+        })
+        this.publishNotification(notification as NotificationModel)
+        return notification
+    }
+
+    public async createEnableTwoFactor(userId: string) {
+        const notification = await this.prismaService.notification.create({
+            data: {
+                message: `<b>Обеспечьте свою безопасность!</b>
+				<p>Включите двухфакторную аутентификацию в настройках вашего аккаунта, чтобы повысить уровень защиты.</p>`,
+                type: NotificationType.ENABLE_TWO_FACTOR,
+                userId
             }
         })
         this.publishNotification(notification as NotificationModel)
