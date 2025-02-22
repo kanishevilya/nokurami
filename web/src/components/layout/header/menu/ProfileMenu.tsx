@@ -19,7 +19,7 @@ import { useLogoutUserMutation } from "@/graphql/generated/output";
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrent } from "@/hooks/useCurrent";
 import { ChannelAvatar } from "@/components/ui/items/ChannelAvatar";
-import { Notifications } from "@/components/layout/header/Notifications";
+import { Notifications } from "@/components/layout/header/notifications/Notifications";
 
 export function ProfileMenu() {
   const router = useRouter();

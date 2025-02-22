@@ -63,6 +63,17 @@ export class SessionService {
         return userSessions.filter(session => session.id !== req.session.id)
     }
 
+    public async getUserFromSession(session: string) {
+        if (!session) return null;
+
+        const sessionData = await this.redisService.get(`${this.configService.getOrThrow<string>("SESSION_FOLDER")}${session}`) || "";
+
+        const sessionParse = JSON.parse(sessionData)
+        console.log(sessionParse)
+        return sessionParse
+    }
+
+
     public async getCurrentSession(req: Request) {
         const sessionId = req.session.id
 

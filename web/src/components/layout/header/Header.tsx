@@ -1,7 +1,7 @@
 "use client";
-import HeaderLogo from "./HeaderLogo";
-import HeaderMenu from "./HeaderMenu";
-import SearchField from "./SearchField";
+import HeaderLogo from "./logo/HeaderLogo";
+import HeaderMenu from "./menu/HeaderMenu";
+import SearchField from "./nav/SearchField";
 
 export function Header() {
   return (

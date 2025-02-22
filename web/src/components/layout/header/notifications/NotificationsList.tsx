@@ -1,6 +1,6 @@
 import { useFindNotificationsByUserQuery } from "@/graphql/generated/output";
 import { toast } from "sonner";
-import { NotificationItem } from "@/components/layout/header/NotificationItem";
+import { NotificationItem } from "@/components/layout/header/notifications/NotificationItem";
 import { Loader } from "lucide-react";
 
 export const NotificationsList = () => {
