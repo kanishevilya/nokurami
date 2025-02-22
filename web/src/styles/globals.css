@@ -6,7 +6,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
 @layer base {
+
 	:root {
 		--background: 240, 7%, 97%;
 		--foreground: 240, 7%, 6%;
@@ -28,6 +30,15 @@ body {
 
 		--secondary: 260, 29%, 96%;
 		--secondary-foreground: 270 47.4% 11.2%;
+
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 240 5.3% 26.1%;
+		--sidebar-primary: 240 5.9% 10%;
+		--sidebar-primary-foreground: 0 0% 98%;
+		--sidebar-accent: 240 4.8% 95.9%;
+		--sidebar-accent-foreground: 240 5.9% 10%;
+		--sidebar-border: 220 13% 91%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
 
 		--border: 240 19% 91.4%;
 		--input: 240, 7%, 97%;
@@ -55,6 +66,15 @@ body {
 
 		--secondary: 270, 12%, 29%;
 		--secondary-foreground: 210 40% 98%;
+
+		--sidebar-background: 240 5.9% 10%;
+		--sidebar-foreground: 240 4.8% 95.9%;
+		--sidebar-primary: 224.3 76.3% 48%;
+		--sidebar-primary-foreground: 0 0% 100%;
+		--sidebar-accent: 240 3.7% 15.9%;
+		--sidebar-accent-foreground: 240 4.8% 95.9%;
+		--sidebar-border: 240 3.7% 15.9%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
 
 		--border: 265, 19%, 27%;
 		--input: 250, 13%, 14%;
