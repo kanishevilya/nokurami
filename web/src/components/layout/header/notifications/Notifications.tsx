@@ -5,7 +5,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/shadcn/Popover";
-import { Loader } from "lucide-react";
 import { Bell } from "lucide-react";
 import { useFindUnreadNotificationsCountQuery } from "@/graphql/generated/output";
 import { NotificationsList } from "./NotificationsList";

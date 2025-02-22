@@ -26,11 +26,11 @@ export function Hint({
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild={asChild}>{children}</TooltipTrigger>
         <TooltipContent
-          className="bg-[#1f2128] text-white dark:bg-white dark:text-[#1f2128]"
+          className="rounded-md bg-slate-400 px-3 py-1.5 text-sm text-white shadow-md dark:bg-gray-800 dark:text-zinc-200"
           side={side}
           align={aling}
         >
-          <p className="font-semibold">{label}</p>
+          <p className="font-medium">{label}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

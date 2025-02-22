@@ -1,0 +1,8 @@
+query FindSocialLinks {
+  findSocialLinks {
+    id
+    title
+    position
+    url
+  }
+}

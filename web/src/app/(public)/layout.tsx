@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { Header } from "@/components/layout/header/Header";
 import { Sidebar } from "@/components/layout/sidebar/Sidebar";
-import { MainLayout } from "./MainLayout";
+import { MainLayout } from "../../components/layout/MainLayout";
 
 export default function PublicLayout({ children }: PropsWithChildren<unknown>) {
   return (
