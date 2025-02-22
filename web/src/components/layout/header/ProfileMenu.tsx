@@ -24,7 +24,8 @@ export function ProfileMenu() {
   const router = useRouter();
 
   const { unauthenticate } = useAuth();
-  // const { user, isLoadingProfile } = useCurrent();
+  const { user, isLoadingProfile } = useCurrent();
+  console.log(user);
 
   const [logout] = useLogoutUserMutation({
     onCompleted() {

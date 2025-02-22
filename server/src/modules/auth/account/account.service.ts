@@ -32,7 +32,14 @@ export class AccountService {
             },
             include: {
                 socialLinks: true,
-                userSecurity: true
+                userSecurity: true,
+                notificationSettings: true,
+                stream: {
+                    include: {
+                        chatSettings: true
+                    }
+                },
+
             }
         })
         return user
@@ -69,7 +76,10 @@ export class AccountService {
                 displayName: username,
                 stream: {
                     create: {
-                        title: `Stream ${username}`
+                        title: `Stream ${username}`,
+                        chatSettings: {
+                            create: {}
+                        }
                     }
                 },
                 userSecurity: {

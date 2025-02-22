@@ -75,6 +75,17 @@ export type ChangeStreamInfoInput = {
   title: Scalars['String']['input'];
 };
 
+export type ChatSettingsModel = {
+  __typename?: 'ChatSettingsModel';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  isChatEnabled: Scalars['Boolean']['output'];
+  isChatFollowersOnly: Scalars['Boolean']['output'];
+  isChatSubscribersOnly: Scalars['Boolean']['output'];
+  streamId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type CreateUserInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -433,12 +444,10 @@ export type StreamModel = {
   __typename?: 'StreamModel';
   category: CategoryModel;
   categoryId: Scalars['String']['output'];
+  chatSettings: ChatSettingsModel;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   ingressId?: Maybe<Scalars['String']['output']>;
-  isChatEnabled: Scalars['Boolean']['output'];
-  isChatFollowersOnly: Scalars['Boolean']['output'];
-  isChatSubscribersOnly: Scalars['Boolean']['output'];
   isLive: Scalars['Boolean']['output'];
   previewUrl?: Maybe<Scalars['String']['output']>;
   serverUrl?: Maybe<Scalars['String']['output']>;
@@ -568,7 +577,7 @@ export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUs
 export type FindProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', serverUrl?: string | null, streamKey?: string | null, isChatEnabled: boolean, isChatFollowersOnly: boolean } } };
+export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', serverUrl?: string | null, streamKey?: string | null, chatSettings: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } } } };
 
 
 export const ClearSessionDocument = gql`
@@ -865,8 +874,10 @@ export const FindProfileDocument = gql`
     stream {
       serverUrl
       streamKey
-      isChatEnabled
-      isChatFollowersOnly
+      chatSettings {
+        isChatEnabled
+        isChatFollowersOnly
+      }
     }
   }
 }

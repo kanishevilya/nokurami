@@ -17,8 +17,10 @@ query FindProfile {
     stream {
       serverUrl
       streamKey
-      isChatEnabled
-      isChatFollowersOnly
+      chatSettings {
+        isChatEnabled
+        isChatFollowersOnly
+      }
     }
   }
 }
