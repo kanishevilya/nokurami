@@ -23,13 +23,15 @@ export function UserDashboardSettings() {
           <TabsTrigger value="sessions">Sessions</TabsTrigger>
           <TabsTrigger value="appearance">Appearance & Language</TabsTrigger>
         </TabsList>
-        <TabsContent value="profile">
-          <ProfileSettings />
-        </TabsContent>
-        <TabsContent value="security">Security</TabsContent>
-        <TabsContent value="notifications">Notifications</TabsContent>
-        <TabsContent value="sessions">Sessions</TabsContent>
-        <TabsContent value="appearance">Appearance & Language</TabsContent>
+        <div className="mt-10">
+          <TabsContent value="profile">
+            <ProfileSettings />
+          </TabsContent>
+          <TabsContent value="security">Security</TabsContent>
+          <TabsContent value="notifications">Notifications</TabsContent>
+          <TabsContent value="sessions">Sessions</TabsContent>
+          <TabsContent value="appearance">Appearance & Language</TabsContent>
+        </div>
       </Tabs>
     </div>
   );

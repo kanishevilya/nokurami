@@ -6,7 +6,7 @@ const httpLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_SERVER_URL,
     credentials: 'include',
     headers: {
-        "Apollo-Require-Preflight": "true"
+        "apollo-require-preflight": "true"
     }
 })
 

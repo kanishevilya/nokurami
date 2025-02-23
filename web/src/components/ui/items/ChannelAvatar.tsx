@@ -2,6 +2,8 @@ import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "../shadcn/Avatar";
 import { getMediaSource } from "@/utils/get-media-source";
+import { FindProfileQuery } from "@/graphql/generated/output";
+import { Loader2 } from "lucide-react";
 
 const avatarVariants = cva("relative rounded-full transition-all", {
   variants: {
@@ -25,10 +27,7 @@ const avatarVariants = cva("relative rounded-full transition-all", {
 });
 
 interface ChannelAvatarProps extends VariantProps<typeof avatarVariants> {
-  channel: {
-    username: string;
-    avatar?: string | null;
-  };
+  channel: Pick<FindProfileQuery["getProfile"], "username" | "avatar">;
   className?: string;
 }
 
@@ -38,13 +37,17 @@ export function ChannelAvatar({
   channel,
   className,
 }: ChannelAvatarProps) {
-  console.log(channel.avatar);
+  let avatar = null;
+
+  if (channel.avatar?.startsWith("blob:")) {
+    avatar = channel.avatar;
+  } else {
+    avatar = getMediaSource(channel.avatar);
+  }
+
   return (
     <Avatar className={cn(avatarVariants({ size, status }), className)}>
-      <AvatarImage
-        className="object-cover"
-        src={getMediaSource(channel.avatar)}
-      />
+      <AvatarImage className="object-cover" src={avatar} />
       <AvatarFallback
         className={cn(
           "bg-gradient-to-br from-neutral-700 to-neutral-900",
@@ -55,7 +58,11 @@ export function ChannelAvatar({
           size === "xs" && "text-xs"
         )}
       >
-        {channel.username[0].toUpperCase()}
+        {channel.username ? (
+          channel.username[0]
+        ) : (
+          <Loader2 className="animate-spin" />
+        )}
       </AvatarFallback>
     </Avatar>
   );
