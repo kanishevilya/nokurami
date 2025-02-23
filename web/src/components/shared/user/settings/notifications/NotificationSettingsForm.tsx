@@ -20,7 +20,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/shadcn/Dialog";
 import { FormWrapper } from "@/components/ui/items/FormWrapper";
@@ -30,12 +29,17 @@ import {
   notificationSettingsSchema,
   NotificationSettingsFormData,
 } from "@/schemas/notifications/notification-settings.schema";
+import {
+  useTelegramTokenStore,
+  getDecryptedToken,
+} from "@/storage/auth/telegram-token.storage";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 
 export function NotificationSettingsForm() {
   const { user, isLoadingProfile, refetch } = useCurrent();
-  const [telegramToken, setTelegramToken] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { telegramToken, setTelegramToken, clearTelegramToken } =
+    useTelegramTokenStore();
 
   const form = useForm<NotificationSettingsFormData>({
     resolver: zodResolver(notificationSettingsSchema),
@@ -51,30 +55,25 @@ export function NotificationSettingsForm() {
         refetch();
         toast.success("Notification settings updated");
 
-        // Если включены уведомления Telegram и вернулся токен, сохраняем его
         if (
           data.changeNotificationSettings.notificationSettings
             .telegramNotificationsEnable &&
           data.changeNotificationSettings.telegramToken
         ) {
-          setTelegramToken(data.changeNotificationSettings.telegramToken);
-          setIsModalOpen(true); // Открываем модальное окно
+          setTelegramToken(data.changeNotificationSettings.telegramToken); // Сохраняем зашифрованный токен
+          setIsModalOpen(true);
         } else {
-          setTelegramToken(null); // Сбрасываем токен, если уведомления отключены
+          clearTelegramToken(); // Удаляем токен из Zustand и localStorage
         }
       },
       onError(error) {
         toast.error(`Error: ${error.message}`);
-        // Если бэкенд отключил Telegram из-за конфликта, обновляем форму
-        if (error.message.includes("Telegram already linked")) {
-          form.setValue("telegramNotificationsEnable", false);
-          setTelegramToken(null);
-          setIsModalOpen(false);
-        }
+        form.setValue("telegramNotificationsEnable", false);
+        clearTelegramToken();
+        setIsModalOpen(false);
       },
     });
 
-  // Заполняем форму текущими настройками уведомлений
   useEffect(() => {
     if (user?.notificationSettings) {
       form.reset({
@@ -104,9 +103,12 @@ export function NotificationSettingsForm() {
   };
 
   const handleOpenTelegram = () => {
-    if (telegramToken) {
-      window.open(`https://t.me/nokurami_bot?start=${telegramToken}`, "_blank");
-      refetch(); // Перезагружаем данные после открытия Telegram
+    const decryptedToken = getDecryptedToken(telegramToken);
+    if (decryptedToken) {
+      window.open(
+        `https://t.me/nokurami_bot?start=${decryptedToken}`,
+        "_blank"
+      );
     }
   };
 
@@ -121,8 +123,42 @@ export function NotificationSettingsForm() {
       },
     });
     setIsModalOpen(false);
+    clearTelegramToken(); // Удаляем токен при отключении
   };
 
+  const handleCheckStatus = async () => {
+    const { data } = await refetch();
+    const isTelegramEnabled =
+      data?.getProfile.notificationSettings.telegramNotificationsEnable;
+    const chatId = data?.getProfile.telegramChatId;
+
+    if (chatId) {
+      // Успешная привязка
+      toast.success("Telegram notifications are active.");
+      clearTelegramToken();
+      setIsModalOpen(false);
+    } else if (isTelegramEnabled && telegramToken) {
+      // Уведомления включены, токен есть, но чата нет
+      toast.warning(
+        "Telegram linking incomplete. Please open Telegram with the token or generate a new one by toggling the switch off and on."
+      );
+      setIsModalOpen(true); // Оставляем модалку открытой для токена
+    } else if (!isTelegramEnabled && telegramToken) {
+      // Уведомления отключены, токен есть
+      toast.error(
+        "Telegram notifications were disabled. The token may have expired or the account is linked to another profile. Toggle the switch off and on to generate a new token."
+      );
+      form.setValue("telegramNotificationsEnable", false);
+      setIsModalOpen(true); // Показываем инструкцию
+      // Не очищаем токен сразу, чтобы пользователь видел его в модалке
+    } else if (!chatId && !isTelegramEnabled && !telegramToken) {
+      // Уведомления отключены, токена нет
+      toast.info(
+        "Telegram notifications are disabled. Enable them to generate a token."
+      );
+      setIsModalOpen(false);
+    }
+  };
   return (
     <FormWrapper
       heading="Notification Settings"
@@ -139,7 +175,7 @@ export function NotificationSettingsForm() {
               name="siteNotificationsEnable"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel className="text-lg">Site Notifications</FormLabel>
+                  <FormLabel>Site Notifications</FormLabel>
                   <FormControl>
                     <Switch
                       checked={field.value}
@@ -158,9 +194,7 @@ export function NotificationSettingsForm() {
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <FormLabel className="text-lg">
-                      Telegram Notifications
-                    </FormLabel>
+                    <FormLabel>Telegram Notifications</FormLabel>
                     {field.value && telegramToken && (
                       <Button
                         variant="ghost"
@@ -186,21 +220,29 @@ export function NotificationSettingsForm() {
             />
           </div>
 
-          {/* Модальное окно для Telegram */}
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Setup Telegram Notifications</DialogTitle>
               </DialogHeader>
               <div className="text-sm text-muted-foreground">
-                To enable Telegram notifications, follow these steps:
+                To enable Telegram notifications:
                 <ol className="list-decimal pl-5 mt-2">
-                  <li>Click "Open Telegram" below to start the bot.</li>
                   <li>
-                    Use the token provided:{" "}
-                    <strong>{telegramToken || "Loading..."}</strong>
+                    Click "Open Telegram" to start the bot with the token below.
                   </li>
+                  <li>
+                    Token:{" "}
+                    <strong>
+                      {getDecryptedToken(telegramToken) || "Loading..."}
+                    </strong>
+                  </li>
+                  <li>After linking, click "Check Status" to verify.</li>
                 </ol>
+                <p className="mt-2">
+                  Note: If this Telegram account is already linked to another
+                  profile, notifications will be disabled automatically.
+                </p>
               </div>
               <DialogFooter>
                 <Button
@@ -209,6 +251,13 @@ export function NotificationSettingsForm() {
                   disabled={isLoadingUpdate}
                 >
                   Disable Telegram
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleCheckStatus}
+                  disabled={isLoadingUpdate}
+                >
+                  Check Status
                 </Button>
                 <Button
                   onClick={handleOpenTelegram}
@@ -225,11 +274,11 @@ export function NotificationSettingsForm() {
   );
 }
 
-function NotificationSettingsSkeleton() {
+const NotificationSettingsSkeleton = () => {
   return (
     <div className="p-6 space-y-4">
       <Skeleton className="h-10 w-full bg-gray-300 rounded" />
       <Skeleton className="h-10 w-full bg-gray-300 rounded" />
     </div>
   );
-}
+};

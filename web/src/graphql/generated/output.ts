@@ -647,7 +647,7 @@ export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUs
 export type FindProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', serverUrl?: string | null, streamKey?: string | null, chatSettings?: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } | null } } };
+export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, telegramChatId?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', serverUrl?: string | null, streamKey?: string | null, chatSettings?: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } | null } } };
 
 
 export const ClearSessionDocument = gql`
@@ -1309,6 +1309,7 @@ export const FindProfileDocument = gql`
     email
     avatar
     information
+    telegramChatId
     userSecurity {
       isEmailVerified
       isTwoFAEnabled
