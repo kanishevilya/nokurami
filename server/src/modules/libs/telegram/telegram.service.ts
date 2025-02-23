@@ -47,7 +47,7 @@ export class TelegramService extends Telegraf {
                 return
             }
 
-            await this.connectToTelegram(telegramToken.userId, chatId)
+            const success = await this.connectToTelegram(telegramToken.userId, chatId)
 
             await this.prismaService.token.delete({
                 where: {
@@ -55,6 +55,12 @@ export class TelegramService extends Telegraf {
                     type: TokenType.TELEGRAM_AUTHENTICATION
                 }
             })
+
+            if (!success) {
+                await ctx.replyWithHTML("Этот чат уже используется другим пользователем ;(")
+                return
+            }
+
 
             await ctx.replyWithHTML(MESSAGES.authSuccess, BUTTONS.authSuccess)
         } else {
@@ -156,14 +162,38 @@ export class TelegramService extends Telegraf {
     }
 
     private async connectToTelegram(userId: string, chatId: string) {
-        await this.prismaService.user.update({
+        const user = await this.prismaService.user.findFirst({
             where: {
-                id: userId
-            },
-            data: {
                 telegramChatId: chatId
             }
         })
+
+        if (user) {
+            await this.prismaService.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    notificationSettings: {
+                        update: {
+                            telegramNotificationsEnable: false
+                        }
+                    }
+                }
+            })
+            return false
+        } else {
+
+            await this.prismaService.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    telegramChatId: chatId
+                }
+            })
+        }
+        return true
     }
 
     private async findUserByChatId(chatId: string) {

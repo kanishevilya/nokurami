@@ -6,6 +6,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/shadcn/Tabs";
 import { ProfileSettings } from "./profile/ProfileSettings";
+import { NotificationSettingsForm } from "./notifications/NotificationSettingsForm";
 
 export function UserDashboardSettings() {
   return (
@@ -28,7 +29,9 @@ export function UserDashboardSettings() {
             <ProfileSettings />
           </TabsContent>
           <TabsContent value="security">Security</TabsContent>
-          <TabsContent value="notifications">Notifications</TabsContent>
+          <TabsContent value="notifications">
+            <NotificationSettingsForm />
+          </TabsContent>
           <TabsContent value="sessions">Sessions</TabsContent>
           <TabsContent value="appearance">Appearance & Language</TabsContent>
         </div>

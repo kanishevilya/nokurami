@@ -1,0 +1,9 @@
+mutation ChangeNotificationSettings($data: ChangeNotificationsSettingsInput!) {
+  changeNotificationSettings(data: $data) {
+    notificationSettings {
+      siteNotificationsEnable
+      telegramNotificationsEnable
+    }
+    telegramToken
+  }
+}
