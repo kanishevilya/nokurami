@@ -1,5 +1,9 @@
 import { Heading } from "@/components/ui/items/Heading";
-import { ChangeAvatarForm } from "./AvatarChangeForm";
+import { Separator } from "@/components/ui/shadcn/Separator";
+import { Card, CardContent } from "@/components/ui/shadcn/Card";
+import { AvatarChangeForm } from "./avatar/AvatarChangeForm";
+import { ProfileInfoChangeForm } from "./information/ProfileInfoChangeForm";
+import { SocialLinksForm } from "./links/SocialLinkForm";
 
 export function ProfileSettings() {
   return (
@@ -9,7 +13,11 @@ export function ProfileSettings() {
         description="Manage your profile information"
         size="lg"
       />
-      <ChangeAvatarForm />
+      <AvatarChangeForm />
+      <Separator />
+      <ProfileInfoChangeForm />
+      <Separator />
+      <SocialLinksForm />
     </div>
   );
 }

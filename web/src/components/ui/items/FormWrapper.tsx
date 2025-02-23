@@ -73,7 +73,10 @@ export function FormWrapper({
                 {heading}
               </CardTitle>
               <CardDescription
-                className={cn("pl-8 text-sm w-96", classNameDescription)}
+                className={cn(
+                  "pl-8 text-sm w-96 text-left",
+                  classNameDescription
+                )}
               >
                 {description}
               </CardDescription>
