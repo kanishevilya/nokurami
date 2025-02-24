@@ -16,6 +16,17 @@ export function useCurrent() {
 	})
 	const [clear] = useClearSessionMutation()
 
+	const [user, setUser] = useState(
+		data?.getProfile
+	);
+
+	useEffect(() => {
+		if (data?.getProfile) {
+			setUser(data.getProfile);
+		} else if (!loading && !data && isAuthenticated) {
+			setUser(undefined);
+		}
+	}, [data, loading, isAuthenticated]);
 
 	useEffect(() => {
 		if (error) {
@@ -27,9 +38,15 @@ export function useCurrent() {
 	}, [isAuthenticated, unauthenticate, clear])
 
 
+
+	const updateUserAvatar = (newAvatar: string | null) => {
+		setUser((prev) => (prev ? { ...prev, avatar: newAvatar } : prev));
+	};
+
 	return {
-		user: data?.getProfile,
+		user: user,
 		isLoadingProfile: loading,
-		refetch
+		refetch,
+		updateUserAvatar
 	}
 }

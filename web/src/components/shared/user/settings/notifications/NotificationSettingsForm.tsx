@@ -166,6 +166,7 @@ export function NotificationSettingsForm() {
         heading="Notification Settings"
         id="notification-settings"
         description="Manage your notification preferences."
+        alwaysOpen={true}
       >
         {isLoadingProfile ? (
           <NotificationSettingsSkeleton />
@@ -177,7 +178,9 @@ export function NotificationSettingsForm() {
                 name="siteNotificationsEnable"
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between">
-                    <FormLabel>Site Notifications</FormLabel>
+                    <FormLabel className="text-lg">
+                      Site Notifications
+                    </FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -196,7 +199,9 @@ export function NotificationSettingsForm() {
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <FormLabel>Telegram Notifications</FormLabel>
+                      <FormLabel className="text-lg">
+                        Telegram Notifications
+                      </FormLabel>
                       {field.value && telegramToken && (
                         <Button
                           variant="ghost"

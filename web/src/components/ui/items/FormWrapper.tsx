@@ -25,14 +25,14 @@ interface FormWrapperProps {
   classNameHeader?: string;
   classNameCard?: string;
   classNameDescription?: string;
-  defaultOpen?: boolean;
+  alwaysOpen?: boolean;
 }
 
 export function FormWrapper({
   id,
   children,
   heading,
-  defaultOpen = false,
+  alwaysOpen = false,
   description = "",
   classNameHeader = "",
   classNameCard = "",
@@ -62,12 +62,12 @@ export function FormWrapper({
     <Accordion
       type="single"
       collapsible
-      defaultValue={zustandIsOpen ? id : undefined}
+      defaultValue={alwaysOpen ? id : zustandIsOpen ? id : undefined}
       value={zustandIsOpen ? id : undefined}
     >
       <AccordionItem value={id}>
         <Card>
-          <AccordionTrigger onClick={handleToggle}>
+          <AccordionTrigger alwaysOpen={alwaysOpen} onClick={handleToggle}>
             <CardHeader className="flex flex-row items-center">
               <CardTitle
                 className={cn("text-2xl font-semibold pl-6", classNameHeader)}
