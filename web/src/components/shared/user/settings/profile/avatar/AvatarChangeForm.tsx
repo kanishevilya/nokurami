@@ -76,6 +76,7 @@ export function AvatarChangeForm() {
       heading="Avatar"
       id="avatar"
       description="Change your avatar to a new image. You can upload a new image or remove your current avatar."
+      defaultOpen={true}
     >
       {isLoadingProfile ? (
         <ChangeAvatarFormSkeleton />

@@ -1,0 +1,18 @@
+query GetCurrentSession {
+  getCurrentSession {
+    id
+    userId
+    createdAt
+    metadata {
+      device {
+        browser
+        os
+        type
+      }
+      location {
+        city
+        country
+      }
+    }
+  }
+}

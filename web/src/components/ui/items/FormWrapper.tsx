@@ -25,12 +25,14 @@ interface FormWrapperProps {
   classNameHeader?: string;
   classNameCard?: string;
   classNameDescription?: string;
+  defaultOpen?: boolean;
 }
 
 export function FormWrapper({
   id,
   children,
   heading,
+  defaultOpen = false,
   description = "",
   classNameHeader = "",
   classNameCard = "",

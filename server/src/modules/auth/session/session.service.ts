@@ -87,7 +87,8 @@ export class SessionService {
         }
     }
 
-    public async clearSessions(req: Request) {
+    public async clearSession(req: Request) {
+        console.log("AGA")
         req.res.clearCookie(
             this.configService.getOrThrow<string>("SESSION_NAME")
         )

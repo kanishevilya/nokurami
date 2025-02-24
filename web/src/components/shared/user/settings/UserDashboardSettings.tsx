@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/shadcn/Tabs";
 import { ProfileSettings } from "./profile/ProfileSettings";
 import { NotificationSettingsForm } from "./notifications/NotificationSettingsForm";
+import { SessionSettings } from "./sessions/SessionSettings";
 
 export function UserDashboardSettings() {
   return (
@@ -32,7 +33,9 @@ export function UserDashboardSettings() {
           <TabsContent value="notifications">
             <NotificationSettingsForm />
           </TabsContent>
-          <TabsContent value="sessions">Sessions</TabsContent>
+          <TabsContent value="sessions">
+            <SessionSettings />
+          </TabsContent>
           <TabsContent value="appearance">Appearance & Language</TabsContent>
         </div>
       </Tabs>
