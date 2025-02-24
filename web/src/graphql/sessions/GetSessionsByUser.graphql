@@ -12,7 +12,10 @@ query GetSessionsByUser {
       location {
         city
         country
+        latitude
+        longitude
       }
+      ip
     }
   }
 }

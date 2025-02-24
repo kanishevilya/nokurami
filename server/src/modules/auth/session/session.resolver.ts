@@ -41,7 +41,6 @@ export class SessionResolver {
     return this.sessionService.logout(req)
   }
 
-  @Authorization()
   @Mutation(() => Boolean, { name: "clearSessionFromCookie" })
   public async clearSession(@Context() { req }: GraphqlContext) {
     return this.sessionService.clearSession(req)

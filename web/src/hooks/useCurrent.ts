@@ -6,6 +6,7 @@ import {
 } from '@/graphql/generated/output'
 
 import { useAuth } from './useAuth'
+import { redirect } from 'next/navigation'
 
 export function useCurrent() {
 	const { isAuthenticated, unauthenticate } = useAuth()
@@ -21,6 +22,7 @@ export function useCurrent() {
 			console.log(error)
 			clear()
 			unauthenticate()
+			return redirect("/account/login");
 		}
 	}, [isAuthenticated, unauthenticate, clear])
 

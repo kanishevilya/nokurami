@@ -12,7 +12,10 @@ query GetCurrentSession {
       location {
         city
         country
+        latitude
+        longitude
       }
+      ip
     }
   }
 }

@@ -605,12 +605,12 @@ export type ClearSessionMutation = { __typename?: 'Mutation', clearSessionFromCo
 export type GetCurrentSessionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentSessionQuery = { __typename?: 'Query', getCurrentSession: { __typename?: 'SessionModel', id: string, userId: string, createdAt: string, metadata: { __typename?: 'SessionMetadataModel', device: { __typename?: 'DeviceModel', browser: string, os: string, type: string }, location: { __typename?: 'LocationModel', city: string, country: string } } } };
+export type GetCurrentSessionQuery = { __typename?: 'Query', getCurrentSession: { __typename?: 'SessionModel', id: string, userId: string, createdAt: string, metadata: { __typename?: 'SessionMetadataModel', ip: string, device: { __typename?: 'DeviceModel', browser: string, os: string, type: string }, location: { __typename?: 'LocationModel', city: string, country: string, latitude: string, longitude: string } } } };
 
 export type GetSessionsByUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSessionsByUserQuery = { __typename?: 'Query', getSessionsByUser: Array<{ __typename?: 'SessionModel', id: string, userId: string, createdAt: string, metadata: { __typename?: 'SessionMetadataModel', device: { __typename?: 'DeviceModel', browser: string, os: string, type: string }, location: { __typename?: 'LocationModel', city: string, country: string } } }> };
+export type GetSessionsByUserQuery = { __typename?: 'Query', getSessionsByUser: Array<{ __typename?: 'SessionModel', id: string, userId: string, createdAt: string, metadata: { __typename?: 'SessionMetadataModel', ip: string, device: { __typename?: 'DeviceModel', browser: string, os: string, type: string }, location: { __typename?: 'LocationModel', city: string, country: string, latitude: string, longitude: string } } }> };
 
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
@@ -1149,7 +1149,10 @@ export const GetCurrentSessionDocument = gql`
       location {
         city
         country
+        latitude
+        longitude
       }
+      ip
     }
   }
 }
@@ -1201,7 +1204,10 @@ export const GetSessionsByUserDocument = gql`
       location {
         city
         country
+        latitude
+        longitude
       }
+      ip
     }
   }
 }
