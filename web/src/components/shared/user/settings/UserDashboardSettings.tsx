@@ -14,13 +14,19 @@ import AppearanceLanguageSettings from "./appearance_language/AppearanceLanguage
 import { SecuritySettings } from "./security/SecuritySettings";
 import { useClearAccordions } from "@/hooks/useAccordion";
 import { useCallback } from "react";
+import { useTabs } from "@/hooks/useTabs";
 
 export function UserDashboardSettings() {
   const { clearAccordions } = useClearAccordions();
+  const { settingsTab, setSettingsTab } = useTabs();
 
-  const handleTabChange = useCallback(() => {
-    clearAccordions();
-  }, [clearAccordions]);
+  const handleTabChange = useCallback(
+    (tab: string) => {
+      clearAccordions();
+      setSettingsTab(tab);
+    },
+    [clearAccordions, setSettingsTab]
+  );
 
   return (
     <div className="lg:px-10">
@@ -31,6 +37,7 @@ export function UserDashboardSettings() {
       />
       <Tabs
         onValueChange={handleTabChange}
+        value={settingsTab}
         defaultValue="profile"
         className="mt-3 w-full"
       >

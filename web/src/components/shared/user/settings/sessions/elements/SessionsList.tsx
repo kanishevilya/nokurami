@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/shadcn/Card";
-import { SessionItem } from "./SessionItem";
+import { SessionItem } from "../data/SessionItem";
 import { SessionSkeleton } from "./SessionSkeleton";
 
 type SessionsListProps = {
@@ -27,7 +27,7 @@ export function SessionsList({
   onTerminateAll,
 }: SessionsListProps) {
   return (
-    <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent shadow-lg rounded-xl border border-border">
+    <Card className="shadow-lg rounded-xl border border-border">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl font-semibold">Other Sessions</CardTitle>
         {sessions.length > 0 && (

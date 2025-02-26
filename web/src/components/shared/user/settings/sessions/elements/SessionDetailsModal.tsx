@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/shadcn/Dialog";
-import { getOSIcon, getBrowserIcon, getDeviceIcon } from "./SessionIcons";
+import { getOSIcon, getBrowserIcon, getDeviceIcon } from "../data/SessionIcons";
 
 type SessionDetailsModalProps = {
   session: any;
@@ -32,17 +32,6 @@ export function SessionDetailsModal({
   const { metadata, createdAt } = session;
   const { device, location, ip } = metadata || {};
 
-  console.log("Session:", session);
-
-  const isValidDate = (date: any) => {
-    const parsedDate = new Date(date);
-    return !isNaN(parsedDate.getTime());
-  };
-
-  const formattedCreatedAt =
-    createdAt && isValidDate(createdAt)
-      ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
-      : "Unknown";
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">

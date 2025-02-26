@@ -33,7 +33,7 @@ export function SessionItem({
             {device?.browser || "Unknown Browser"} on{" "}
             {device?.os || "Unknown OS"}
           </p>
-          <p className="text-sm text-muted-foreground group-hover:text-primary group-hover:opacity-80 transition-colors duration-200">
+          <p className="text-sm text-muted-foreground group-hover:text-primary  transition-colors duration-200">
             {location?.city && location?.country
               ? `${location.city}, ${location.country}`
               : "Unknown Location"}{" "}

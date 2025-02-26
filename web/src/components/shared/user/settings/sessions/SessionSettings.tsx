@@ -4,9 +4,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Heading } from "@/components/ui/items/Heading";
-import { CurrentSession } from "./CurrentSession";
-import { SessionsList } from "./SessionsList";
-import { SessionDetailsModal } from "./SessionDetailsModal";
+import { CurrentSession } from "./elements/CurrentSession";
+import { SessionsList } from "./elements/SessionsList";
+import { SessionDetailsModal } from "./elements/SessionDetailsModal";
 import {
   useGetCurrentSessionQuery,
   useGetSessionsByUserQuery,
@@ -14,6 +14,7 @@ import {
   useClearSessionMutation,
 } from "@/graphql/generated/output";
 import { useAuth } from "@/hooks/useAuth";
+import { Separator } from "@/components/ui/shadcn/Separator";
 
 export function SessionSettings() {
   const { data: currentSessionData, loading: currentLoading } =
@@ -93,6 +94,7 @@ export function SessionSettings() {
         isLoading={currentLoading}
         onShowDetails={handleShowDetails}
       />
+      <Separator />
       <SessionsList
         sessions={sessions}
         currentSessionId={currentSession?.id}

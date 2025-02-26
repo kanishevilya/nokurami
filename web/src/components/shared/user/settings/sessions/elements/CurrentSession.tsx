@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/shadcn/Card";
-import { SessionItem } from "./SessionItem";
+import { SessionItem } from "../data/SessionItem";
 import { SessionSkeleton } from "./SessionSkeleton";
 
 type CurrentSessionProps = {
@@ -18,10 +18,8 @@ export function CurrentSession({
   isLoading,
   onShowDetails,
 }: CurrentSessionProps) {
-  console.log("Current Session:", currentSession);
-
   return (
-    <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent shadow-lg rounded-xl border border-border">
+    <Card className="shadow-lg rounded-xl border border-border">
       <CardHeader>
         <CardTitle className="text-xl font-semibold">Current Session</CardTitle>
       </CardHeader>
