@@ -20,26 +20,26 @@ import {
     domain,
     token,
   }: ChangeEmailTemplateProps) {
-    const confirmationLink = `${domain}/account/change-email?token=${token}`;
+    const confirmationLink = `${domain}/account/change-email-confirm?token=${token}`;
   
     return (
       <Html>
         <Head />
-        <Preview>Подтвердите изменение вашей почты</Preview>
+        <Preview>Подтвердите запрос на изменение почты</Preview>
         <Tailwind>
           <Body className="max-w-2xl mx-auto p-6 bg-gradient-to-b from-gray-50 to-gray-100">
             <Section className="text-center mb-8 bg-white rounded-lg shadow-md p-6">
               <Heading className="text-3xl text-purple-600 font-bold">
-                Подтвердите изменение почты
+                Запрос на изменение почты
               </Heading>
               <Text className="text-base text-gray-700 mt-4">
-                Вы запросили изменение адреса электронной почты в нашем сервисе. Для завершения процесса и подтверждения нового адреса, пожалуйста, нажмите на кнопку ниже.
+                Мы получили запрос на изменение адреса электронной почты вашего аккаунта. Для продолжения процесса, пожалуйста, нажмите на кнопку ниже.
               </Text>
               <Link
                 href={confirmationLink}
                 className="mt-6 inline-block rounded-lg bg-purple-600 text-white px-6 py-3 text-sm font-semibold shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-300"
               >
-                Подтвердить изменение почты
+                Подтвердить запрос
               </Link>
             </Section>
   

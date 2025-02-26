@@ -7,6 +7,7 @@ import { SessionMetadata } from '@/src/shared/types/session-metada.types';
 import { ResetPasswordTemplate } from './templates/reset-password.template';
 import { ChangeEmailTemplate } from './templates/change-email.template';
 import { Enable2FATemplate } from './templates/enable-two-factor.template';
+import { ChangeEmailConfirmTemplate } from './templates/change-email-confirm.template';
 
 @Injectable()
 export class MailService {
@@ -48,6 +49,17 @@ export class MailService {
         return this.sendMail(email, 'Изменение Почты', html)
     }
 
+    public async sendMailChangeConfirmToken(
+        email: string,
+        token: string
+    ) {
+        const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
+        const html = await render(
+            ChangeEmailConfirmTemplate({ domain, token })
+        )
+
+        return this.sendMail(email, 'Изменение Почты', html)
+    }
 
     public async sendEnable2FA(email: string) {
         const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')

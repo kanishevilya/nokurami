@@ -9,6 +9,7 @@ import { ChangePasswordInput } from './inputs/change-password.input';
 import { GenerateToken } from '@/src/shared/utils/generate-token.util';
 import { Request } from 'express';
 import { MailService } from '../../libs/mail/mail.service';
+import { ConfirmChangedEmailInput } from './inputs/confirm-changed-email.input';
 
 @Injectable()
 export class AccountService {
@@ -110,13 +111,40 @@ export class AccountService {
         return true
     }
 
+    public async sendConfirmChangedEmail(req: Request, user: User, input: ConfirmChangedEmailInput) {
+        const { token, newEmail } = input
+
+        const existingToken = await this.prismaService.token.findUnique({
+            where: {
+                token: token,
+                type: TokenType.EMAIL_CHANGE
+            }
+        })
+
+        if (!existingToken) { throw new NotFoundException("Токен не найден") }
+
+        const hasExpired = new Date(existingToken.expiresIn) < new Date()
+
+        if (hasExpired) { throw new BadRequestException("Токен истек") }
+
+        const resetToken = await GenerateToken(this.prismaService, user.id, TokenType.EMAIL_CHANGE_CONFIRM)
+
+        await this.mailService.sendMailChangeConfirmToken(
+            newEmail,
+            resetToken.token
+        )
+
+        return true
+
+    }
+
     public async changeEmail(user: User, input: ChangeEmailInput) {
         const { token, email } = input
 
         const existingToken = await this.prismaService.token.findUnique({
             where: {
                 token: token,
-                type: TokenType.EMAIL_CHANGE
+                type: TokenType.EMAIL_CHANGE_CONFIRM
             }
         })
 
