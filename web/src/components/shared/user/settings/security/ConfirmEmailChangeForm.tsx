@@ -28,18 +28,22 @@ export function ConfirmEmailChangeForm() {
 
   const token = params.token;
 
+  console.log(params.token);
+
   const form = useForm<ConfirmChangedEmailFormData>({
     resolver: zodResolver(confirmChangedEmailSchema),
-    defaultValues: {
-      token: token || "",
+    values: {
+      token: token,
       newEmail: "",
     },
   });
 
+  const { isValid } = form.formState;
+
   const [confirmEmailChange, { loading }] = useConfirmChangedEmailMutation({
     onCompleted() {
       toast.success("Please check your new email for final confirmation");
-      router.push("/account/security");
+      router.push("/dashboard/settings");
     },
     onError(error) {
       toast.error(`Error confirming email change: ${error.message}`);
@@ -62,8 +66,16 @@ export function ConfirmEmailChangeForm() {
       heading="Confirm Email Change"
       id="confirm-email-change"
       description="Enter your new email address to continue the change process."
+      alwaysOpen={true}
     >
       <Form {...form}>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/dashboard/settings")}
+          className="mb-4 w-1/6"
+        >
+          Back to Dashboard
+        </Button>
         <FormField
           control={form.control}
           name="newEmail"
@@ -83,8 +95,9 @@ export function ConfirmEmailChangeForm() {
         />
         <Button
           type="submit"
-          disabled={loading}
+          disabled={loading || !isValid}
           onClick={() => onSubmit(form.getValues())}
+          className="mt-4 w-1/6"
         >
           {loading ? "Confirming..." : "Confirm Email Change"}
         </Button>

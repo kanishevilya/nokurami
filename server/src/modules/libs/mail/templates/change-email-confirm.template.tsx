@@ -20,7 +20,7 @@ export function ChangeEmailConfirmTemplate({
   domain,
   token,
 }: ChangeEmailConfirmTemplateProps) {
-  const confirmationLink = `${domain}/dashboard/change-email/token=${token}`;
+  const confirmationLink = `${domain}/dashboard/change-email/${token}`;
 
   return (
     <Html>

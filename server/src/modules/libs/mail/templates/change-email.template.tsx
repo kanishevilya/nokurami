@@ -20,7 +20,7 @@ import {
     domain,
     token,
   }: ChangeEmailTemplateProps) {
-    const confirmationLink = `${domain}/dashboard/change-email-confirm/token=${token}`;
+    const confirmationLink = `${domain}/dashboard/change-email-confirm/${token}`;
   
     return (
       <Html>

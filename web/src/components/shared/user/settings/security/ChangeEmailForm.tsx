@@ -35,7 +35,7 @@ export function ChangeEmailForm() {
       id="email-change"
       description="Change your email address. This will require verification of both your current and new email."
     >
-      <div className="p-6 space-y-4">
+      <div className="p-6 pb-0 space-y-4">
         <div className="flex flex-col space-y-2">
           <span className="text-sm font-medium">Current Email</span>
           <span className="text-sm text-muted-foreground">{user?.email}</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useChangeEmailMutation } from "@/graphql/generated/output";
 import { FormWrapper } from "@/components/ui/items/FormWrapper";
@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/shadcn/Button";
 
 export function FinalizeEmailChangeForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const params = useParams<{ token: string }>();
+
+  const token = params.token;
 
   const [changeEmail, { loading }] = useChangeEmailMutation({
     onCompleted() {
@@ -49,6 +50,7 @@ export function FinalizeEmailChangeForm() {
       heading="Finalize Email Change"
       id="finalize-email-change"
       description="Click confirm to complete your email change process."
+      alwaysOpen={true}
     >
       <div className="p-6 space-y-4">
         <Button onClick={handleConfirm} disabled={loading || !token}>

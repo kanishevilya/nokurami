@@ -9,6 +9,7 @@ export const accordionStore = create(
         (set) => ({
             openAccordions: [],
             setOpenAccordions: (accordions) => set({ openAccordions: accordions }),
+            clearAccordions: () => set({ openAccordions: [] }),
             toggleAccordion: (id) =>
                 set((state) => {
                     const isOpen = state.openAccordions.includes(id);

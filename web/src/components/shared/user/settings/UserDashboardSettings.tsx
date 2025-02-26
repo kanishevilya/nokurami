@@ -1,3 +1,5 @@
+"use client";
+
 import { Heading } from "@/components/ui/items/Heading";
 import {
   Tabs,
@@ -10,8 +12,16 @@ import { NotificationSettingsForm } from "./notifications/NotificationSettingsFo
 import { SessionSettings } from "./sessions/SessionSettings";
 import AppearanceLanguageSettings from "./appearance_language/AppearanceLanguageSettings";
 import { SecuritySettings } from "./security/SecuritySettings";
+import { useClearAccordions } from "@/hooks/useAccordion";
+import { useCallback } from "react";
 
 export function UserDashboardSettings() {
+  const { clearAccordions } = useClearAccordions();
+
+  const handleTabChange = useCallback(() => {
+    clearAccordions();
+  }, [clearAccordions]);
+
   return (
     <div className="lg:px-10">
       <Heading
@@ -19,7 +29,11 @@ export function UserDashboardSettings() {
         description={"Manage your account settings and preferences"}
         size="lg"
       />
-      <Tabs defaultValue="profile" className="mt-3 w-full">
+      <Tabs
+        onValueChange={handleTabChange}
+        defaultValue="profile"
+        className="mt-3 w-full"
+      >
         <TabsList className="grid grid-cols-5 w-full">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
