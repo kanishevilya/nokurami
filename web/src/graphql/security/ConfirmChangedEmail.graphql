@@ -1,0 +1,3 @@
+mutation ConfirmChangedEmail($data: ConfirmChangedEmailInput!) {
+  confirmChangedEmail(data: $data)
+}

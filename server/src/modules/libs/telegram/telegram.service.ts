@@ -6,7 +6,7 @@ import { Action, Command, Ctx, Start, Update } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
 import { FUNCTIONS, MESSAGES } from './messages';
 import { BUTTONS } from './buttons';
-import { SessionMetadata } from '@/src/shared/types/session-metada.types';
+import { SessionMetadata } from '@/src/shared/types/session-metadata.types';
 
 @Update()
 @Injectable()

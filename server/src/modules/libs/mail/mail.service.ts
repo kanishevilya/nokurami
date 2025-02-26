@@ -2,8 +2,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { render } from "@react-email/components"
-import { VerificationTemplate } from './templates/verefication.template';
-import { SessionMetadata } from '@/src/shared/types/session-metada.types';
+import { VerificationTemplate } from './templates/verification.template';
+import { SessionMetadata } from '@/src/shared/types/session-metadata.types';
 import { ResetPasswordTemplate } from './templates/reset-password.template';
 import { ChangeEmailTemplate } from './templates/change-email.template';
 import { Enable2FATemplate } from './templates/enable-two-factor.template';

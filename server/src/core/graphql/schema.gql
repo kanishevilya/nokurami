@@ -25,7 +25,6 @@ input ChangeChatSettingsInput {
 }
 
 input ChangeEmailInput {
-  email: String!
   token: String!
 }
 

@@ -208,6 +208,8 @@ model Token {
   type      TokenType
   expiresIn DateTime  @map("expires_in")
 
+  additionalData Json? @default("{}") @map("additional_data")
+
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @map("user_id")
 

@@ -127,19 +127,40 @@ export class AccountService {
 
         if (hasExpired) { throw new BadRequestException("Токен истек") }
 
-        const resetToken = await GenerateToken(this.prismaService, user.id, TokenType.EMAIL_CHANGE_CONFIRM)
+        const isEmailExists = await this.prismaService.user.findUnique({
+            where: {
+                email: newEmail
+            }
+        })
+
+        if (isEmailExists) {
+            throw new ConflictException('Этот email уже занят')
+        }
+
+        const additionalData = {
+            newEmail
+        }
+
+        const resetToken = await GenerateToken(this.prismaService, user.id, TokenType.EMAIL_CHANGE_CONFIRM, additionalData)
 
         await this.mailService.sendMailChangeConfirmToken(
             newEmail,
             resetToken.token
         )
 
+        await this.prismaService.token.delete({
+            where: {
+                id: existingToken.id,
+                type: TokenType.EMAIL_CHANGE
+            }
+        })
+
         return true
 
     }
 
     public async changeEmail(user: User, input: ChangeEmailInput) {
-        const { token, email } = input
+        const { token } = input
 
         const existingToken = await this.prismaService.token.findUnique({
             where: {
@@ -154,9 +175,13 @@ export class AccountService {
 
         if (hasExpired) { throw new BadRequestException("Токен истек") }
 
+        const additionalData = existingToken.additionalData as { newEmail: string }
+
+        if (!additionalData.newEmail) { throw new BadRequestException("Новый email не найден") }
+
         const isEmailExists = await this.prismaService.user.findUnique({
             where: {
-                email
+                email: additionalData.newEmail
             }
         })
 
@@ -169,7 +194,7 @@ export class AccountService {
                 id: user.id
             },
             data: {
-                email,
+                email: additionalData.newEmail,
                 userSecurity: {
                     update: {
                         isEmailVerified: false
@@ -182,7 +207,7 @@ export class AccountService {
         await this.prismaService.token.delete({
             where: {
                 id: existingToken.id,
-                type: TokenType.EMAIL_CHANGE
+                type: TokenType.EMAIL_CHANGE_CONFIRM
             }
         })
 

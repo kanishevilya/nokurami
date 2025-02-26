@@ -2,7 +2,7 @@ import { User } from "@/prisma/generated";
 import { InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
-import { SessionMetadata } from "../types/session-metada.types";
+import { SessionMetadata } from "../types/session-metadata.types";
 
 
 export function saveSession(req: Request, user: User, metadata: SessionMetadata) {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import { Request } from "express";
-import { SessionMetadata } from "../types/session-metada.types";
+import { SessionMetadata } from "../types/session-metadata.types";
 import { IS_DEV_ENV } from "./is-dev.util";
 import { lookup } from "geoip-lite";
 

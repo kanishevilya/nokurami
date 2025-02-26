@@ -7,7 +7,8 @@ import { ms } from "./ms.util";
 export async function GenerateToken(
     prismaService: PrismaService,
     userId: string,
-    type: TokenType
+    type: TokenType,
+    additionalData: any = {}
 ) {
     const token = v4()
 
@@ -33,6 +34,7 @@ export async function GenerateToken(
             token,
             expiresIn,
             type,
+            additionalData,
             user: {
                 connect: {
                     id: userId

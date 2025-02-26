@@ -1,4 +1,4 @@
-import { DeviceInfo, LocationInfo, SessionMetadata } from "@/src/shared/types/session-metada.types";
+import { DeviceInfo, LocationInfo, SessionMetadata } from "@/src/shared/types/session-metadata.types";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()

@@ -1,4 +1,4 @@
-import { SessionMetadata } from "@/src/shared/types/session-metada.types";
+import { SessionMetadata } from "@/src/shared/types/session-metadata.types";
 import {
     Body,
     Head,

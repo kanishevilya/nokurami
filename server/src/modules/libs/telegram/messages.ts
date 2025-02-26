@@ -1,5 +1,5 @@
 import { SocialLink, Stream, User, UserSecurity } from "@/prisma/generated";
-import { SessionMetadata } from "@/src/shared/types/session-metada.types";
+import { SessionMetadata } from "@/src/shared/types/session-metadata.types";
 
 export const MESSAGES = {
   welcome: `
