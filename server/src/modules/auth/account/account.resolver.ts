@@ -8,6 +8,7 @@ import { ChangeEmailInput } from './inputs/change-email.input';
 import { User } from '@/prisma/generated';
 import { ChangePasswordInput } from './inputs/change-password.input';
 import { GraphqlContext } from '@/src/shared/types/graphql.context.types';
+import { ConfirmChangedEmailInput } from './inputs/confirm-changed-email.input';
 
 @Resolver('Account')
 export class AccountResolver {
@@ -29,6 +30,13 @@ export class AccountResolver {
   public async requestToEmailChange(@Context() { req }: GraphqlContext, @Authorized() user: User) {
     return this.accountService.requestToEmailChange(req, user)
   }
+
+  @Authorization()
+  @Mutation(() => Boolean, { name: 'confirmChangedEmail' })
+  public async confirmChangedEmail(@Context() { req }: GraphqlContext, @Authorized() user: User, @Args({ name: 'data', type: () => ConfirmChangedEmailInput }) confirmChangedEmailInput: ConfirmChangedEmailInput) {
+    return this.accountService.sendConfirmChangedEmail(req, user, confirmChangedEmailInput)
+  }
+
 
   @Authorization()
   @Mutation(() => Boolean, { name: 'changeEmail' })
