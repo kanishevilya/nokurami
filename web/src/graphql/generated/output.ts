@@ -628,6 +628,23 @@ export type ConfirmChangedEmailMutationVariables = Exact<{
 
 export type ConfirmChangedEmailMutation = { __typename?: 'Mutation', confirmChangedEmail: boolean };
 
+export type Disable2FaMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type Disable2FaMutation = { __typename?: 'Mutation', disable2FA: boolean };
+
+export type Enable2FaMutationVariables = Exact<{
+  data: Enable2FaInput;
+}>;
+
+
+export type Enable2FaMutation = { __typename?: 'Mutation', enable2FA: boolean };
+
+export type GenerateTotpSecretQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateTotpSecretQuery = { __typename?: 'Query', generateTotpSecret: { __typename?: 'TotpModel', secret: string, qrcodeUrl: string } };
+
 export type RequestToEmailChangeMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1233,6 +1250,107 @@ export function useConfirmChangedEmailMutation(baseOptions?: Apollo.MutationHook
 export type ConfirmChangedEmailMutationHookResult = ReturnType<typeof useConfirmChangedEmailMutation>;
 export type ConfirmChangedEmailMutationResult = Apollo.MutationResult<ConfirmChangedEmailMutation>;
 export type ConfirmChangedEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmChangedEmailMutation, ConfirmChangedEmailMutationVariables>;
+export const Disable2FaDocument = gql`
+    mutation Disable2FA {
+  disable2FA
+}
+    `;
+export type Disable2FaMutationFn = Apollo.MutationFunction<Disable2FaMutation, Disable2FaMutationVariables>;
+
+/**
+ * __useDisable2FaMutation__
+ *
+ * To run a mutation, you first call `useDisable2FaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisable2FaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disable2FaMutation, { data, loading, error }] = useDisable2FaMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDisable2FaMutation(baseOptions?: Apollo.MutationHookOptions<Disable2FaMutation, Disable2FaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Disable2FaMutation, Disable2FaMutationVariables>(Disable2FaDocument, options);
+      }
+export type Disable2FaMutationHookResult = ReturnType<typeof useDisable2FaMutation>;
+export type Disable2FaMutationResult = Apollo.MutationResult<Disable2FaMutation>;
+export type Disable2FaMutationOptions = Apollo.BaseMutationOptions<Disable2FaMutation, Disable2FaMutationVariables>;
+export const Enable2FaDocument = gql`
+    mutation Enable2FA($data: Enable2FAInput!) {
+  enable2FA(data: $data)
+}
+    `;
+export type Enable2FaMutationFn = Apollo.MutationFunction<Enable2FaMutation, Enable2FaMutationVariables>;
+
+/**
+ * __useEnable2FaMutation__
+ *
+ * To run a mutation, you first call `useEnable2FaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEnable2FaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [enable2FaMutation, { data, loading, error }] = useEnable2FaMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEnable2FaMutation(baseOptions?: Apollo.MutationHookOptions<Enable2FaMutation, Enable2FaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Enable2FaMutation, Enable2FaMutationVariables>(Enable2FaDocument, options);
+      }
+export type Enable2FaMutationHookResult = ReturnType<typeof useEnable2FaMutation>;
+export type Enable2FaMutationResult = Apollo.MutationResult<Enable2FaMutation>;
+export type Enable2FaMutationOptions = Apollo.BaseMutationOptions<Enable2FaMutation, Enable2FaMutationVariables>;
+export const GenerateTotpSecretDocument = gql`
+    query GenerateTotpSecret {
+  generateTotpSecret {
+    secret
+    qrcodeUrl
+  }
+}
+    `;
+
+/**
+ * __useGenerateTotpSecretQuery__
+ *
+ * To run a query within a React component, call `useGenerateTotpSecretQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenerateTotpSecretQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenerateTotpSecretQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenerateTotpSecretQuery(baseOptions?: Apollo.QueryHookOptions<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>(GenerateTotpSecretDocument, options);
+      }
+export function useGenerateTotpSecretLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>(GenerateTotpSecretDocument, options);
+        }
+export function useGenerateTotpSecretSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>(GenerateTotpSecretDocument, options);
+        }
+export type GenerateTotpSecretQueryHookResult = ReturnType<typeof useGenerateTotpSecretQuery>;
+export type GenerateTotpSecretLazyQueryHookResult = ReturnType<typeof useGenerateTotpSecretLazyQuery>;
+export type GenerateTotpSecretSuspenseQueryHookResult = ReturnType<typeof useGenerateTotpSecretSuspenseQuery>;
+export type GenerateTotpSecretQueryResult = Apollo.QueryResult<GenerateTotpSecretQuery, GenerateTotpSecretQueryVariables>;
 export const RequestToEmailChangeDocument = gql`
     mutation RequestToEmailChange {
   requestToEmailChange

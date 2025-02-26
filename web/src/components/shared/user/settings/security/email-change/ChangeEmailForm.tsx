@@ -37,7 +37,7 @@ export function ChangeEmailForm() {
     >
       <div className="p-6 pb-0 space-y-4">
         <div className="flex flex-col space-y-2">
-          <span className="text-sm font-medium">Current Email</span>
+          <span className="text-lg font-medium">Current Email: </span>
           <span className="text-sm text-muted-foreground">{user?.email}</span>
         </div>
         <Button onClick={handleEmailChangeRequest} disabled={isRequesting}>

@@ -1,0 +1,3 @@
+mutation Enable2FA($data: Enable2FAInput!) {
+  enable2FA(data: $data)
+}

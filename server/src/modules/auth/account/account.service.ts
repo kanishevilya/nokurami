@@ -195,11 +195,6 @@ export class AccountService {
             },
             data: {
                 email: additionalData.newEmail,
-                userSecurity: {
-                    update: {
-                        isEmailVerified: false
-                    }
-                }
             }
         })
 
@@ -211,7 +206,6 @@ export class AccountService {
             }
         })
 
-        await this.verificationService.sendVerificationToken(user)
 
         return true;
     }

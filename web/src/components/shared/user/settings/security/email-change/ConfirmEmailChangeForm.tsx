@@ -19,7 +19,7 @@ import { FormWrapper } from "@/components/ui/items/FormWrapper";
 import {
   confirmChangedEmailSchema,
   ConfirmChangedEmailFormData,
-} from "@/schemas/dashboard/security/change-emai.schema";
+} from "@/schemas/dashboard/security/change-email.schema";
 import { useConfirmChangedEmailMutation } from "@/graphql/generated/output";
 
 export function ConfirmEmailChangeForm() {
