@@ -22,7 +22,7 @@ import {
 import {
   socialLinkSchema,
   SocialLinkFormData,
-} from "@/schemas/profile/social-link.schema";
+} from "@/schemas/dashboard/profile/social-link.schema";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { SocialLinksList } from "./SocialLinksList";
 import { Heading } from "@/components/ui/items/Heading";

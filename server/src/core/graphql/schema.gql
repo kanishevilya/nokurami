@@ -65,6 +65,11 @@ type ChatSettingsModel {
   updatedAt: DateTime!
 }
 
+input ConfirmChangedEmailInput {
+  newEmail: String!
+  token: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -146,6 +151,7 @@ type Mutation {
   changeStreamInfo(data: ChangeStreamInfoInput!): Boolean!
   changeStreamPreview(thumbnail: Upload!): Boolean!
   clearSessionFromCookie: Boolean!
+  confirmChangedEmail(data: ConfirmChangedEmailInput!): Boolean!
   createIngress(ingressType: Float!): Boolean!
   createSocialLink(data: SocialLinkInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!

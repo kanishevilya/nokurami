@@ -24,7 +24,7 @@ import {
 import {
   socialLinkSchema,
   SocialLinkFormData,
-} from "@/schemas/profile/social-link.schema";
+} from "@/schemas/dashboard/profile/social-link.schema";
 
 interface SocialLinkItemProps {
   link: { id: string; title: string; url: string; position: number };

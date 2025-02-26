@@ -28,7 +28,7 @@ import { useChangeNotificationSettingsMutation } from "@/graphql/generated/outpu
 import {
   notificationSettingsSchema,
   NotificationSettingsFormData,
-} from "@/schemas/notifications/notification-settings.schema";
+} from "@/schemas/dashboard/notifications/notification-settings.schema";
 import {
   useTelegramTokenStore,
   getDecryptedToken,

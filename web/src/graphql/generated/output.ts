@@ -86,6 +86,11 @@ export type ChatSettingsModel = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type ConfirmChangedEmailInput = {
+  newEmail: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
 export type CreateUserInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -168,6 +173,7 @@ export type Mutation = {
   changeStreamInfo: Scalars['Boolean']['output'];
   changeStreamPreview: Scalars['Boolean']['output'];
   clearSessionFromCookie: Scalars['Boolean']['output'];
+  confirmChangedEmail: Scalars['Boolean']['output'];
   createIngress: Scalars['Boolean']['output'];
   createSocialLink: Scalars['Boolean']['output'];
   createUser: Scalars['Boolean']['output'];
@@ -229,6 +235,11 @@ export type MutationChangeStreamInfoArgs = {
 
 export type MutationChangeStreamPreviewArgs = {
   thumbnail: Scalars['Upload']['input'];
+};
+
+
+export type MutationConfirmChangedEmailArgs = {
+  data: ConfirmChangedEmailInput;
 };
 
 
@@ -596,6 +607,13 @@ export type UpdateSocialLinkMutationVariables = Exact<{
 
 
 export type UpdateSocialLinkMutation = { __typename?: 'Mutation', updateSocialLink: boolean };
+
+export type ChangePasswordMutationVariables = Exact<{
+  data: ChangePasswordInput;
+}>;
+
+
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: boolean };
 
 export type ClearSessionMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1104,6 +1122,37 @@ export function useUpdateSocialLinkMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateSocialLinkMutationHookResult = ReturnType<typeof useUpdateSocialLinkMutation>;
 export type UpdateSocialLinkMutationResult = Apollo.MutationResult<UpdateSocialLinkMutation>;
 export type UpdateSocialLinkMutationOptions = Apollo.BaseMutationOptions<UpdateSocialLinkMutation, UpdateSocialLinkMutationVariables>;
+export const ChangePasswordDocument = gql`
+    mutation ChangePassword($data: ChangePasswordInput!) {
+  changePassword(data: $data)
+}
+    `;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const ClearSessionDocument = gql`
     mutation ClearSession {
   clearSessionFromCookie

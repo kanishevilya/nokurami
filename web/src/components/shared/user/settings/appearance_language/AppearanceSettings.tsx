@@ -13,7 +13,7 @@ import { Form, FormField } from "@/components/ui/shadcn/Form";
 import {
   appearanceSettingsSchema,
   type AppearanceSettingsFormData,
-} from "@/schemas/settings/appearance-settings.schema";
+} from "@/schemas/dashboard/settings/appearance-settings.schema";
 import { Switch } from "@/components/ui/shadcn/Switch";
 import { Label } from "@/components/ui/shadcn/Label";
 

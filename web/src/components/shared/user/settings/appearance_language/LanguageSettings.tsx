@@ -25,7 +25,7 @@ import { Globe } from "lucide-react";
 import {
   LanguageSettingsFormData,
   languageSettingsSchema,
-} from "@/schemas/settings/language-settings.schema";
+} from "@/schemas/dashboard/settings/language-settings.schema";
 
 const languages = {
   en: "English",

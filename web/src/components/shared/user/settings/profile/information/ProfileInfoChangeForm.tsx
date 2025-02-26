@@ -24,7 +24,7 @@ import { useChangeProfileInformationMutation } from "@/graphql/generated/output"
 import {
   changeProfileInfoSchema,
   ChangeProfileInfoFormData,
-} from "@/schemas/profile/change-profile-info.schema";
+} from "@/schemas/dashboard/profile/change-profile-info.schema";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { TooltipContent } from "@/components/ui/shadcn/Tooltip";
 import { Tooltip, TooltipTrigger } from "@/components/ui/shadcn/Tooltip";

@@ -9,6 +9,7 @@ import { ProfileSettings } from "./profile/ProfileSettings";
 import { NotificationSettingsForm } from "./notifications/NotificationSettingsForm";
 import { SessionSettings } from "./sessions/SessionSettings";
 import AppearanceLanguageSettings from "./appearance_language/AppearanceLanguageSettings";
+import { SecuritySettings } from "./security/SecuritySettings";
 
 export function UserDashboardSettings() {
   return (
@@ -30,7 +31,9 @@ export function UserDashboardSettings() {
           <TabsContent value="profile">
             <ProfileSettings />
           </TabsContent>
-          <TabsContent value="security">Security</TabsContent>
+          <TabsContent value="security">
+            <SecuritySettings />
+          </TabsContent>
           <TabsContent value="notifications">
             <NotificationSettingsForm />
           </TabsContent>

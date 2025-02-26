@@ -23,7 +23,7 @@ import { useCurrent } from "@/hooks/useCurrent";
 import {
   type TypeUploadFileSchema,
   uploadFileSchema,
-} from "@/schemas/profile/upload-file.schema";
+} from "@/schemas/dashboard/profile/upload-file.schema";
 
 export function AvatarChangeForm() {
   const { user, isLoadingProfile, refetch, updateUserAvatar } = useCurrent();
