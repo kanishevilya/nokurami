@@ -1,6 +1,6 @@
 "use client";
 
-import { Key, LayoutDashboard, Settings } from "lucide-react";
+import { Key, LayoutDashboard, MessageCircle, Settings } from "lucide-react";
 import { SidebarMenu } from "@/components/ui/shadcn/Sidebar";
 import { Route } from "./types/Route";
 import { SidebarItem } from "./SidebarItem";
@@ -16,6 +16,11 @@ export function DashboardNav() {
       label: "Stream Keys",
       href: "/dashboard/stream-keys",
       icon: Key,
+    },
+    {
+      label: "Chat",
+      href: "/dashboard/chat",
+      icon: MessageCircle,
     },
   ];
   return (

@@ -21,7 +21,6 @@ type CategoryModel {
 input ChangeChatSettingsInput {
   isChatEnabled: Boolean!
   isChatFollowersOnly: Boolean!
-  isChatSubscribersOnly: Boolean!
 }
 
 input ChangeEmailInput {

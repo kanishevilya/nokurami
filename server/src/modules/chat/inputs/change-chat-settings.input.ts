@@ -11,7 +11,4 @@ export class ChangeChatSettingsInput {
 	@IsBoolean()
 	public isChatFollowersOnly: boolean
 
-	@Field(() => Boolean)
-	@IsBoolean()
-	public isChatSubscribersOnly: boolean
 }

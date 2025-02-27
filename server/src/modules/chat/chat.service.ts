@@ -67,8 +67,7 @@ export class ChatService {
     public async changeSettings(user: User, input: ChangeChatSettingsInput) {
         const {
             isChatEnabled,
-            isChatFollowersOnly,
-            isChatSubscribersOnly
+            isChatFollowersOnly
         } = input
 
         await this.prismaService.stream.update({
@@ -79,8 +78,7 @@ export class ChatService {
                 chatSettings: {
                     update: {
                         isChatEnabled,
-                        isChatFollowersOnly,
-                        isChatSubscribersOnly
+                        isChatFollowersOnly
                     }
                 }
             }
