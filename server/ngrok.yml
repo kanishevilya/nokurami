@@ -1,0 +1,8 @@
+version: 2
+tunnels:
+    rtmp:
+        proto: tcp
+        addr: 1935
+    http:
+        proto: http
+        addr: 7881

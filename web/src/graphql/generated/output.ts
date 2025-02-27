@@ -684,6 +684,13 @@ export type RemoveSessionMutationVariables = Exact<{
 
 export type RemoveSessionMutation = { __typename?: 'Mutation', removeSession: boolean };
 
+export type CreateIngressMutationVariables = Exact<{
+  ingressType: Scalars['Float']['input'];
+}>;
+
+
+export type CreateIngressMutation = { __typename?: 'Mutation', createIngress: boolean };
+
 export type CreateUserMutationVariables = Exact<{
   data: CreateUserInput;
 }>;
@@ -1620,6 +1627,37 @@ export function useRemoveSessionMutation(baseOptions?: Apollo.MutationHookOption
 export type RemoveSessionMutationHookResult = ReturnType<typeof useRemoveSessionMutation>;
 export type RemoveSessionMutationResult = Apollo.MutationResult<RemoveSessionMutation>;
 export type RemoveSessionMutationOptions = Apollo.BaseMutationOptions<RemoveSessionMutation, RemoveSessionMutationVariables>;
+export const CreateIngressDocument = gql`
+    mutation CreateIngress($ingressType: Float!) {
+  createIngress(ingressType: $ingressType)
+}
+    `;
+export type CreateIngressMutationFn = Apollo.MutationFunction<CreateIngressMutation, CreateIngressMutationVariables>;
+
+/**
+ * __useCreateIngressMutation__
+ *
+ * To run a mutation, you first call `useCreateIngressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateIngressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createIngressMutation, { data, loading, error }] = useCreateIngressMutation({
+ *   variables: {
+ *      ingressType: // value for 'ingressType'
+ *   },
+ * });
+ */
+export function useCreateIngressMutation(baseOptions?: Apollo.MutationHookOptions<CreateIngressMutation, CreateIngressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateIngressMutation, CreateIngressMutationVariables>(CreateIngressDocument, options);
+      }
+export type CreateIngressMutationHookResult = ReturnType<typeof useCreateIngressMutation>;
+export type CreateIngressMutationResult = Apollo.MutationResult<CreateIngressMutation>;
+export type CreateIngressMutationOptions = Apollo.BaseMutationOptions<CreateIngressMutation, CreateIngressMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: CreateUserInput!) {
   createUser(data: $data)

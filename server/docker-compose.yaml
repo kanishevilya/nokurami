@@ -54,6 +54,49 @@ services:
             MINIO_ROOT_USER: ${MINIO_ROOT_USER}
             MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
 
+    # ngrok:
+    #     image: ngrok/ngrok:latest
+    #     container_name: ngrok
+    #     command: start --all --config /ngrok.yml
+    #     volumes:
+    #         - ./ngrok.yml:/ngrok.yml
+    #     environment:
+    #         - NGROK_AUTH_TOKEN=${NGROK_AUTH_TOKEN}
+    #     depends_on:
+    #         - livekit
+    #         - ingress
+    #     networks:
+    #         - streaming-backend
+
+    # livekit:
+    #     image: livekit/livekit-server:latest
+    #     container_name: livekit
+    #     command: --config /etc/livekit.yaml
+    #     ports:
+    #         - '7880:7880' # WebSocket
+    #         - '7881:7881' # HTTP
+    #         - '10000-10100:10000-10100/udp' # WebRTC
+    #     volumes:
+    #         - ./livekit.yaml:/etc/livekit.yaml
+    #     depends_on:
+    #         - redis
+    #     networks:
+    #         - streaming-backend
+
+    # ingress:
+    # image: livekit/ingress:latest
+    # container_name: ingress
+    # command: --config /etc/ingress.yaml
+    # ports:
+    #     - '1935:1935' # RTMP
+    #     - '8081:8081' # WHIP (переназначен с 8080)
+    # volumes:
+    #     - ./ingress.yaml:/etc/ingress.yaml
+    # depends_on:
+    #     - redis
+    #     - livekit
+    # networks:
+    #     - streaming-backend
 volumes:
     postgres_data:
     redis_data:
