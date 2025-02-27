@@ -1,0 +1,9 @@
+query FindMyFollowers {
+  findMyFollowers {
+    createdAt
+    follower {
+      username
+      avatar
+    }
+  }
+}
