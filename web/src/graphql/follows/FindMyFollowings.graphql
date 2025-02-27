@@ -1,10 +1,13 @@
-query FindMyFollowings {
-  findMyFollowings {
-    createdAt
-    followingId
-    following {
-      avatar
-      username
+query FindMyFollowings($data: FindFollowersInput!) {
+  findMyFollowings(data: $data) {
+    followings {
+      createdAt
+      followingId
+      following {
+        username
+        avatar
+      }
     }
+    totalCount
   }
 }

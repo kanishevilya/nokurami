@@ -96,6 +96,13 @@ input FiltersInput {
   take: Float
 }
 
+input FindFollowersInput {
+  orderBy: FollowOrderByInput
+  search: String
+  skip: Int
+  take: Int
+}
+
 type FollowModel {
   createdAt: DateTime!
   follower: UserModel!
@@ -104,6 +111,21 @@ type FollowModel {
   followingId: String!
   id: ID!
   updatedAt: DateTime!
+}
+
+input FollowOrderByInput {
+  createdAt: SortOrder
+  username: SortOrder
+}
+
+type FollowersResponse {
+  followers: [FollowModel!]!
+  totalCount: Int!
+}
+
+type FollowingsResponse {
+  followings: [FollowModel!]!
+  totalCount: Int!
 }
 
 input GenerateStreamTokenInput {
@@ -213,8 +235,8 @@ type Query {
   findChannelByUsername(username: String!): UserModel!
   findFollowersCountByChannel(channelId: String!): Float!
   findMessagesByStream(streamId: String!): [MessageModel!]!
-  findMyFollowers: [FollowModel!]!
-  findMyFollowings: [FollowModel!]!
+  findMyFollowers(data: FindFollowersInput): FollowersResponse!
+  findMyFollowings(data: FindFollowersInput): FollowingsResponse!
   findNotificationsByUserId: [NotificationModel!]!
   findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
@@ -268,6 +290,12 @@ type SocialLinkModel {
 input SocialLinkOrderInput {
   id: String!
   position: Float!
+}
+
+"""Order direction (ascending or descending)"""
+enum SortOrder {
+  asc
+  desc
 }
 
 type StreamModel {

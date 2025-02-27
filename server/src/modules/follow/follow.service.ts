@@ -2,6 +2,7 @@ import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { NotificationService } from '../notification/notification.service';
 import { TelegramService } from '../libs/telegram/telegram.service';
+import { FindFollowersInput } from './inputs/find-followers.input';
 
 @Injectable()
 export class FollowService {
@@ -11,36 +12,106 @@ export class FollowService {
         private readonly telegramService: TelegramService
     ) { }
 
-    public async findFollowersByUserId(userId: string) {
+    public async findFollowersByUserId(userId: string, input: FindFollowersInput = {}) {
+        const { search, skip, take, orderBy } = input;
+
+        const orderByOptions: any[] = [];
+        if (orderBy?.username) {
+            orderByOptions.push({ follower: { username: orderBy.username } });
+        }
+        if (orderBy?.createdAt) {
+            orderByOptions.push({ createdAt: orderBy.createdAt });
+        }
+        if (orderByOptions.length === 0) {
+            orderByOptions.push({ createdAt: 'desc' });
+        }
+
         const followers = await this.prismaService.follow.findMany({
             where: {
-                followingId: userId
+                followingId: userId,
+                ...(search && {
+                    follower: {
+                        username: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                }),
             },
-            orderBy: {
-                createdAt: 'desc'
-            },
+            orderBy: orderByOptions,
+            skip: skip ?? 0,
+            take: take ?? 10,
             include: {
-                follower: true
-            }
-        })
+                follower: true,
+            },
+        });
 
-        return followers
+        const totalCount = await this.prismaService.follow.count({
+            where: {
+                followingId: userId,
+                ...(search && {
+                    follower: {
+                        username: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                }),
+            },
+        });
+
+        return { followers, totalCount };
     }
 
-    public async findFollowingsByUserId(userId: string) {
+    public async findFollowingsByUserId(userId: string, input: FindFollowersInput = {}) {
+        const { search, skip, take, orderBy } = input;
+
+        const orderByOptions: any[] = [];
+        if (orderBy?.username) {
+            orderByOptions.push({ following: { username: orderBy.username } });
+        }
+        if (orderBy?.createdAt) {
+            orderByOptions.push({ createdAt: orderBy.createdAt });
+        }
+        if (orderByOptions.length === 0) {
+            orderByOptions.push({ createdAt: 'desc' });
+        }
+
         const followings = await this.prismaService.follow.findMany({
             where: {
-                followerId: userId
+                followerId: userId,
+                ...(search && {
+                    following: {
+                        username: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                }),
             },
-            orderBy: {
-                createdAt: 'desc'
-            },
+            orderBy: orderByOptions,
+            skip: skip ?? 0,
+            take: take ?? 10,
             include: {
-                following: true
-            }
-        })
+                following: true,
+            },
+        });
 
-        return followings
+        const totalCount = await this.prismaService.follow.count({
+            where: {
+                followerId: userId,
+                ...(search && {
+                    following: {
+                        username: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                }),
+            },
+        });
+
+        return { followings, totalCount };
     }
 
     public async follow(userId: string, channelId: string) {

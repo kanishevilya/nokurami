@@ -1,9 +1,12 @@
-query FindMyFollowers {
-  findMyFollowers {
-    createdAt
-    follower {
-      username
-      avatar
+query FindMyFollowers($data: FindFollowersInput!) {
+  findMyFollowers(data: $data) {
+    followers {
+      createdAt
+      follower {
+        username
+        avatar
+      }
     }
+    totalCount
   }
 }

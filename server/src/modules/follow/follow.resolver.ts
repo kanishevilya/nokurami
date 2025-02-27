@@ -1,23 +1,31 @@
 import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
 import { FollowService } from './follow.service';
-import { FollowModel } from './models/follow.model';
 import { Authorization } from '@/src/shared/decorators/auth.decorator';
 import { Authorized } from '@/src/shared/decorators/authorized.decorator';
+import { FindFollowersInput } from './inputs/find-followers.input';
+import { FollowersResponse } from './models/followers-response.model';
+import { FollowingsResponse } from './models/followings-response.model';
 
 @Resolver('Follow')
 export class FollowResolver {
   constructor(private readonly followService: FollowService) { }
 
   @Authorization()
-  @Query(() => [FollowModel], { name: 'findMyFollowers' })
-  public async findMyFollowers(@Authorized("id") userId: string) {
-    return this.followService.findFollowersByUserId(userId)
+  @Query(() => FollowersResponse, { name: 'findMyFollowers' })
+  public async findMyFollowers(
+    @Authorized('id') userId: string,
+    @Args('data', { nullable: true }) input: FindFollowersInput = {}
+  ) {
+    return this.followService.findFollowersByUserId(userId, input);
   }
 
   @Authorization()
-  @Query(() => [FollowModel], { name: 'findMyFollowings' })
-  public async findMyFollowings(@Authorized("id") userId: string) {
-    return this.followService.findFollowingsByUserId(userId)
+  @Query(() => FollowingsResponse, { name: 'findMyFollowings' })
+  public async findMyFollowings(
+    @Authorized('id') userId: string,
+    @Args('data', { nullable: true }) input: FindFollowersInput = {}
+  ) {
+    return this.followService.findFollowingsByUserId(userId, input);
   }
 
   @Authorization()
