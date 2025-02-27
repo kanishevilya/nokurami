@@ -39,6 +39,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/shadcn/Pagination";
+import { FollowsSkeleton } from "./FollowsSkeleton";
+import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+} from "@/components/ui/shadcn/Select";
 
 export function FollowingsTable() {
   const [search, setSearch] = useState("");
@@ -46,7 +55,7 @@ export function FollowingsTable() {
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState<"username" | "createdAt">("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -108,19 +117,10 @@ export function FollowingsTable() {
     });
   };
 
-  if (loading && !data) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Followings</CardTitle>
-          <CardDescription>Loading your followings...</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-64 w-full" />
-        </CardContent>
-      </Card>
-    );
-  }
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(Number(value));
+    setPage(1);
+  };
 
   return (
     <Card>
@@ -129,79 +129,102 @@ export function FollowingsTable() {
         <CardDescription>View users you follow</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <Input
-          ref={inputRef}
-          placeholder="Search by username..."
-          value={search}
-          onChange={handleSearchChange}
-          className="max-w-sm"
-        />
+        <div className="flex items-center gap-2">
+          <Input
+            ref={inputRef}
+            placeholder="Search by username..."
+            value={search}
+            onChange={handleSearchChange}
+            className="max-w-sm"
+          />
+          <Select
+            value={itemsPerPage.toString()}
+            onValueChange={handleItemsPerPageChange}
+          >
+            <SelectTrigger className="w-[100px]">
+              <SelectValue placeholder="Items per page" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="3">3</SelectItem>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="25">25</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Avatar</TableHead>
+              <TableHead className="select-none">Avatar</TableHead>
               <TableHead
                 onClick={() => handleSort("username")}
-                className="cursor-pointer"
+                className="cursor-pointer select-none"
               >
                 Username{" "}
                 {sortBy === "username" && (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
               <TableHead
                 onClick={() => handleSort("createdAt")}
-                className="cursor-pointer"
+                className="cursor-pointer select-none"
               >
                 Following Since{" "}
                 {sortBy === "createdAt" && (sortOrder === "asc" ? "↑" : "↓")}
               </TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="select-none">Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {followings.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="text-center text-muted-foreground"
-                >
-                  No followings found
-                </TableCell>
-              </TableRow>
-            ) : (
-              followings.map((following) => (
-                <TableRow key={following.followingId}>
-                  <TableCell>
-                    <Avatar>
-                      <AvatarImage src={following.following.avatar || ""} />
-                      <AvatarFallback>
-                        {following.following.username[0].toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </TableCell>
-                  <TableCell>{following.following.username}</TableCell>
-                  <TableCell>
-                    {new Date(following.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className="space-x-2">
-                    <Button variant="outline" size="default" asChild>
-                      <a href={`/channel/${following.following.username}`}>
-                        View Channel
-                      </a>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="bg-red-500"
-                      size="default"
-                      onClick={() => handleUnfollow(following.followingId)}
-                      disabled={unfollowing}
-                    >
-                      {unfollowing ? "Unfollowing..." : "Unfollow"}
-                    </Button>
+          {loading || !data ? (
+            <>
+              <FollowsSkeleton itemsPerPage={itemsPerPage} />
+            </>
+          ) : (
+            <TableBody>
+              {followings.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="text-center text-muted-foreground"
+                  >
+                    No followings found
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
+              ) : (
+                followings.map((following) => (
+                  <TableRow key={following.followingId}>
+                    <TableCell>
+                      <Avatar>
+                        <AvatarImage src={following.following.avatar || ""} />
+                        <AvatarFallback>
+                          {following.following.username[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TableCell>
+                    <TableCell>{following.following.username}</TableCell>
+                    <TableCell>
+                      {new Date(following.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="space-x-2">
+                      <Button variant="outline" size="default" asChild>
+                        <a href={`/channel/${following.following.username}`}>
+                          View Channel
+                        </a>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="bg-red-500"
+                        size="default"
+                        onClick={() => handleUnfollow(following.followingId)}
+                        disabled={unfollowing}
+                      >
+                        {unfollowing ? "Unfollowing..." : "Unfollow"}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          )}
         </Table>
         {totalPages > 1 && (
           <Pagination>
