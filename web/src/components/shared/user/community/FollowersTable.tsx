@@ -43,6 +43,8 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/shadcn/Select";
+import { UserTable } from "./UserTable";
+import { ActionDropdown } from "@/components/ui/shadcn/ActionDropdown";
 
 export function FollowersTable() {
   const [search, setSearch] = useState("");
@@ -97,144 +99,54 @@ export function FollowersTable() {
     }
   };
 
-  const handleItemsPerPageChange = (value: string) => {
-    setItemsPerPage(Number(value));
+  const handleItemsPerPageChange = (value: number) => {
+    setItemsPerPage(value);
     setPage(1);
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Followers</CardTitle>
-        <CardDescription>View users who follow you</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="flex items-center gap-2">
-          <Input
-            ref={inputRef}
-            placeholder="Search by username..."
-            value={search}
-            onChange={handleSearchChange}
-            className="max-w-sm"
-          />
-          <Select
-            value={itemsPerPage.toString()}
-            onValueChange={handleItemsPerPageChange}
-          >
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Items per page" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="3">3</SelectItem>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="25">25</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="select-none">Avatar</TableHead>
-              <TableHead
-                onClick={() => handleSort("username")}
-                className="cursor-pointer select-none"
-              >
-                Username{" "}
-                {sortBy === "username" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("createdAt")}
-                className="cursor-pointer select-none"
-              >
-                Followed Since{" "}
-                {sortBy === "createdAt" && (sortOrder === "asc" ? "↑" : "↓")}
-              </TableHead>
-              <TableHead className="select-none">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          {loading || !data ? (
-            <>
-              <FollowsSkeleton itemsPerPage={itemsPerPage} />
-            </>
-          ) : (
-            <TableBody>
-              {followers.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center text-muted-foreground"
-                  >
-                    No followers found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                followers.map((follower) => (
-                  <TableRow key={follower.follower.username}>
-                    <TableCell>
-                      <Avatar>
-                        <AvatarImage src={follower.follower.avatar || ""} />
-                        <AvatarFallback>
-                          {follower.follower.username[0].toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </TableCell>
-                    <TableCell>{follower.follower.username}</TableCell>
-                    <TableCell>
-                      {new Date(follower.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="default" asChild>
-                        <a href={`/channel/${follower.follower.username}`}>
-                          View Channel
-                        </a>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          )}
-        </Table>
-        {totalPages > 1 && (
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className={
-                    page === 1
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <PaginationItem key={p}>
-                  <PaginationLink
-                    onClick={() => setPage(p)}
-                    isActive={page === p}
-                    className="cursor-pointer"
-                  >
-                    {p}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  className={
-                    page === totalPages
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
-      </CardContent>
-    </Card>
+    <UserTable
+      title="Followers"
+      description="View users who follow you"
+      data={followers}
+      loading={loading}
+      totalCount={totalCount}
+      itemsPerPage={itemsPerPage}
+      page={page}
+      onSearchChange={(value) => {
+        setDebouncedSearch(value);
+        setPage(1);
+      }}
+      onSort={(column) => handleSort(column as "username" | "createdAt")}
+      onPageChange={setPage}
+      onItemsPerPageChange={handleItemsPerPageChange}
+      renderRow={(follower) => (
+        <TableRow key={follower.follower.username}>
+          <TableCell>
+            <Avatar>
+              <AvatarImage src={follower.follower.avatar || ""} />
+              <AvatarFallback>
+                {follower.follower.username[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </TableCell>
+          <TableCell>{follower.follower.username}</TableCell>
+          <TableCell>
+            {new Date(follower.createdAt).toLocaleDateString()}
+          </TableCell>
+          <TableCell>
+            <ActionDropdown
+              actions={[
+                {
+                  label: "View Channel",
+                  onClick: () =>
+                    (window.location.href = `/${follower.follower.username}`),
+                },
+              ]}
+            />
+          </TableCell>
+        </TableRow>
+      )}
+    />
   );
 }
