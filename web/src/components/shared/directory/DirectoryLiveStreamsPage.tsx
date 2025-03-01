@@ -1,10 +1,13 @@
 "use client";
 
-import { useFindAllLiveStreamsQuery } from "@/graphql/generated/output";
+import {
+  FindAllLiveStreamsQuery,
+  useFindAllLiveStreamsQuery,
+} from "@/graphql/generated/output";
 import { Heading } from "@/components/ui/items/Heading";
-import { StreamCard } from "@/components/shared/stream/StreamCard";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useState, useEffect } from "react";
 import { LiveStreamsList } from "./streams/LiveStreamsList";
 
 export default function DirectoryLiveStreamsPage() {
@@ -16,35 +19,45 @@ export default function DirectoryLiveStreamsPage() {
         searchKey: "",
       },
     },
-    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
   });
 
-  const streamList = data?.findAllLiveStreams || [];
-  const hasMore = streamList.length === 12;
+  const [streamList, setStreamList] = useState<
+    FindAllLiveStreamsQuery["findAllLiveStreams"]
+  >([]);
+  const [hasMore, setHasMore] = useState(true);
 
-  const fetchMoreStreams = async () => {
-    if (!loading && hasMore) {
-      await fetchMore({
+  useEffect(() => {
+    if (!loading && data?.findAllLiveStreams) {
+      setStreamList(data.findAllLiveStreams);
+      setHasMore(data.findAllLiveStreams.length === 12);
+    }
+  }, [data, loading]);
+
+  async function fetchMoreStreams() {
+    if (!hasMore || loading) return;
+
+    setTimeout(async () => {
+      const { data: newData } = await fetchMore({
         variables: {
           filters: {
+            searchKey: "",
             take: 12,
             skip: streamList.length,
-            searchKey: "",
           },
         },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          return {
-            ...prev,
-            findAllLiveStreams: [
-              ...prev.findAllLiveStreams,
-              ...fetchMoreResult.findAllLiveStreams,
-            ],
-          };
-        },
       });
-    }
-  };
+
+      if (newData?.findAllLiveStreams) {
+        if (newData.findAllLiveStreams.length > 0) {
+          setStreamList((prev) => [...prev, ...newData.findAllLiveStreams]);
+          setHasMore(newData.findAllLiveStreams.length === 12);
+        } else {
+          setHasMore(false);
+        }
+      }
+    }, 400);
+  }
 
   return (
     <div className="space-y-8 w-full">
@@ -57,7 +70,7 @@ export default function DirectoryLiveStreamsPage() {
         next={fetchMoreStreams}
         hasMore={hasMore}
         loader={
-          <div className="mt-6 flex flex-wrap gap-12 justify-center max-w-[1440px]">
+          <div className="mt-12 flex flex-wrap gap-12">
             {Array.from({ length: 12 }).map((_, index) => (
               <Skeleton
                 key={index}
@@ -67,7 +80,7 @@ export default function DirectoryLiveStreamsPage() {
           </div>
         }
       >
-        {loading && !streamList.length ? (
+        {loading && streamList.length === 0 ? (
           <StreamsSkeleton />
         ) : (
           <LiveStreamsList streamList={streamList} />
@@ -79,7 +92,7 @@ export default function DirectoryLiveStreamsPage() {
 
 function StreamsSkeleton() {
   return (
-    <div className="flex flex-wrap gap-12 justify-center max-w-[1440px]">
+    <div className="flex flex-wrap gap-12">
       {[...Array(12)].map((_, index) => (
         <Skeleton key={index} className="h-[200px] w-[480px] rounded-lg" />
       ))}

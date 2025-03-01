@@ -169,7 +169,7 @@ type Mutation {
   changeProfileAvatar(avatar: Upload!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
   changeStreamInfo(data: ChangeStreamInfoInput!): Boolean!
-  changeStreamPreview(thumbnail: Upload!): Boolean!
+  changeStreamPreview(preview: Upload!): Boolean!
   clearSessionFromCookie: Boolean!
   confirmChangedEmail(data: ConfirmChangedEmailInput!): Boolean!
   createIngress(ingressType: Float!): Boolean!

@@ -6,8 +6,17 @@ query FindMyFollowingsChannels($data: FindFollowersInput!) {
         username
         avatar
         stream {
+          previewUrl
           title
           isLive
+          user {
+            username
+            avatar
+          }
+          category {
+            title
+            slug
+          }
         }
       }
     }

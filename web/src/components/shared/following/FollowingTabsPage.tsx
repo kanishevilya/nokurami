@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/shadcn/Tabs";
 import { StreamsList } from "../directory/category/information/StreamsList";
 import FollowingChannelsPage from "./FollowingChannelsPage";
+import FollowingStreamsPage from "./FollowingStreamsPage";
 
 export default function FollowingTabsPage() {
   return (
@@ -18,7 +19,7 @@ export default function FollowingTabsPage() {
         <FollowingChannelsPage />
       </TabsContent>
       <TabsContent className="mt-6" value="streams">
-        {/* <StreamsList /> */}
+        <FollowingStreamsPage />
       </TabsContent>
     </Tabs>
   );

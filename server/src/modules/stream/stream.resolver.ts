@@ -30,10 +30,10 @@ export class StreamResolver {
   @Mutation(() => Boolean, { name: 'changeStreamPreview' })
   public async changePreview(
     @Authorized() user: User,
-    @Args('thumbnail', { type: () => GraphQLUpload }, FileValidationPipe)
-    thumbnail: Upload
+    @Args('preview', { type: () => GraphQLUpload }, FileValidationPipe)
+    preview: Upload
   ) {
-    return this.streamService.changePreview(user, thumbnail)
+    return this.streamService.changePreview(user, preview)
   }
 
   @Authorization()

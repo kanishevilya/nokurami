@@ -606,7 +606,7 @@ export type FindMyFollowingsChannelsQueryVariables = Exact<{
 }>;
 
 
-export type FindMyFollowingsChannelsQuery = { __typename?: 'Query', findMyFollowings: { __typename?: 'FollowingsResponse', totalCount: number, followings: Array<{ __typename?: 'FollowModel', following: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', title: string, isLive: boolean } } }> } };
+export type FindMyFollowingsChannelsQuery = { __typename?: 'Query', findMyFollowings: { __typename?: 'FollowingsResponse', totalCount: number, followings: Array<{ __typename?: 'FollowModel', following: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', previewUrl?: string | null, title: string, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } } } }> } };
 
 export type FindMyFollowersQueryVariables = Exact<{
   data: FindFollowersInput;
@@ -1062,8 +1062,17 @@ export const FindMyFollowingsChannelsDocument = gql`
         username
         avatar
         stream {
+          previewUrl
           title
           isLive
+          user {
+            username
+            avatar
+          }
+          category {
+            title
+            slug
+          }
         }
       }
     }

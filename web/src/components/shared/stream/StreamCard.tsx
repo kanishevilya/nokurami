@@ -34,18 +34,26 @@ export function StreamCard({ stream }: StreamCardProps) {
           fill
           className="object-cover rounded-t-lg z-0"
         />
-
+        {!isLive && (
+          <div className="absolute inset-0 transition-opacity duration-400 bg-gray-800/70 rounded-lg" />
+        )}
         <div className="absolute inset-0 z-10 overflow-hidden rounded-t-lg">
           <div className="absolute inset-y-0 left-0 bg-primary text-transparent flex items-center justify-center w-0 group-hover:w-full group-hover:text-primary-foreground transition-all duration-150 ease-out">
-            <span className="text-md font-semibold">Перейти на стрим</span>
+            <span className="text-md font-semibold">
+              {isLive ? "Перейти на стрим" : "Перейти на канал"}
+            </span>
           </div>
         </div>
-        {isLive && (
+        {isLive ? (
           <div className="absolute top-2 left-2 flex items-center gap-1 z-20">
             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
             <span className="px-2 py-1 text-xs font-semibold bg-primary transition-colors text-white rounded-full shadow-sm">
               LIVE
             </span>
+          </div>
+        ) : (
+          <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-muted text-muted-foreground rounded-full z-20">
+            Оффлайн
           </div>
         )}
       </div>
@@ -72,12 +80,6 @@ export function StreamCard({ stream }: StreamCardProps) {
           </p>
         </div>
       </div>
-
-      {!isLive && (
-        <div className="absolute bottom-2 right-2 px-2 py-1 text-xs font-medium bg-muted text-muted-foreground rounded-full z-20">
-          Оффлайн
-        </div>
-      )}
 
       <div className="absolute inset-0 rounded-lg pointer-events-none z-10">
         <div
