@@ -1,5 +1,5 @@
-import DirectoryCategoryPage from "@/components/shared/category/directory/DirectoryCategoryPage";
+import { DirectoryTabsPage } from "@/components/shared/directory/DirectoryTabsPage";
 
 export default function Directory() {
-  return <DirectoryCategoryPage />;
+  return <DirectoryTabsPage />;
 }

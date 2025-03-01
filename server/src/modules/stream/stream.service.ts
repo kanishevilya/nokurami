@@ -41,6 +41,32 @@ export class StreamService {
         return streams
     }
 
+    public async findAllLive(input: FiltersInput = {}) {
+        const { take, skip, searchKey } = input
+
+        const whereClause = searchKey ? this.findBySearchKeyFilter(searchKey) : undefined
+
+        const streams = await this.prismaService.stream.findMany({
+            take: take ?? 15,
+            skip: skip ?? 0,
+            where: {
+                ...whereClause,
+                isLive: true
+            },
+            include: {
+                user: true,
+                chatSettings: true,
+                category: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+
+        return streams
+    }
+
+
     public async findRandom() {
         const total = await this.prismaService.stream.count()
         if (total <= 4) return await this.prismaService.stream.findMany()

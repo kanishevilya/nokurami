@@ -21,6 +21,11 @@ export class StreamResolver {
     return this.streamService.findAll(input)
   }
 
+  @Query(() => [StreamModel], { name: "findAllLiveStreams" })
+  public async findAllLive(@Args('filters') input: FiltersInput) {
+    return this.streamService.findAllLive(input)
+  }
+
   @Authorization()
   @Mutation(() => Boolean, { name: 'changeStreamPreview' })
   public async changePreview(

@@ -1,0 +1,15 @@
+query FindAllStreams($filters: FiltersInput!) {
+  findAllStreams(filters: $filters) {
+    title
+    previewUrl
+    isLive
+    user {
+      username
+      avatar
+    }
+    category {
+      title
+      slug
+    }
+  }
+}

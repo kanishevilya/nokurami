@@ -383,6 +383,7 @@ export enum NotificationType {
 export type Query = {
   __typename?: 'Query';
   findAllCategories: Array<CategoryModel>;
+  findAllLiveStreams: Array<StreamModel>;
   findAllStreams: Array<StreamModel>;
   findCategoryBySlug: CategoryModel;
   findChannelByUsername: UserModel;
@@ -401,6 +402,11 @@ export type Query = {
   getCurrentSession: SessionModel;
   getProfile: UserModel;
   getSessionsByUser: Array<SessionModel>;
+};
+
+
+export type QueryFindAllLiveStreamsArgs = {
+  filters: FiltersInput;
 };
 
 
@@ -774,6 +780,25 @@ export type CreateIngressMutationVariables = Exact<{
 
 
 export type CreateIngressMutation = { __typename?: 'Mutation', createIngress: boolean };
+
+export type FindAllLiveStreamsQueryVariables = Exact<{
+  filters: FiltersInput;
+}>;
+
+
+export type FindAllLiveStreamsQuery = { __typename?: 'Query', findAllLiveStreams: Array<{ __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> };
+
+export type FindAllStreamsQueryVariables = Exact<{
+  filters: FiltersInput;
+}>;
+
+
+export type FindAllStreamsQuery = { __typename?: 'Query', findAllStreams: Array<{ __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> };
+
+export type FindRandomStreamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindRandomStreamsQuery = { __typename?: 'Query', findRandomStreams: Array<{ __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> };
 
 export type ChangeChatSettingsMutationVariables = Exact<{
   data: ChangeChatSettingsInput;
@@ -2083,6 +2108,155 @@ export function useCreateIngressMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateIngressMutationHookResult = ReturnType<typeof useCreateIngressMutation>;
 export type CreateIngressMutationResult = Apollo.MutationResult<CreateIngressMutation>;
 export type CreateIngressMutationOptions = Apollo.BaseMutationOptions<CreateIngressMutation, CreateIngressMutationVariables>;
+export const FindAllLiveStreamsDocument = gql`
+    query FindAllLiveStreams($filters: FiltersInput!) {
+  findAllLiveStreams(filters: $filters) {
+    title
+    previewUrl
+    isLive
+    user {
+      username
+      avatar
+    }
+    category {
+      title
+      slug
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAllLiveStreamsQuery__
+ *
+ * To run a query within a React component, call `useFindAllLiveStreamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllLiveStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllLiveStreamsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useFindAllLiveStreamsQuery(baseOptions: Apollo.QueryHookOptions<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables> & ({ variables: FindAllLiveStreamsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables>(FindAllLiveStreamsDocument, options);
+      }
+export function useFindAllLiveStreamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables>(FindAllLiveStreamsDocument, options);
+        }
+export function useFindAllLiveStreamsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables>(FindAllLiveStreamsDocument, options);
+        }
+export type FindAllLiveStreamsQueryHookResult = ReturnType<typeof useFindAllLiveStreamsQuery>;
+export type FindAllLiveStreamsLazyQueryHookResult = ReturnType<typeof useFindAllLiveStreamsLazyQuery>;
+export type FindAllLiveStreamsSuspenseQueryHookResult = ReturnType<typeof useFindAllLiveStreamsSuspenseQuery>;
+export type FindAllLiveStreamsQueryResult = Apollo.QueryResult<FindAllLiveStreamsQuery, FindAllLiveStreamsQueryVariables>;
+export const FindAllStreamsDocument = gql`
+    query FindAllStreams($filters: FiltersInput!) {
+  findAllStreams(filters: $filters) {
+    title
+    previewUrl
+    isLive
+    user {
+      username
+      avatar
+    }
+    category {
+      title
+      slug
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAllStreamsQuery__
+ *
+ * To run a query within a React component, call `useFindAllStreamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllStreamsQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useFindAllStreamsQuery(baseOptions: Apollo.QueryHookOptions<FindAllStreamsQuery, FindAllStreamsQueryVariables> & ({ variables: FindAllStreamsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllStreamsQuery, FindAllStreamsQueryVariables>(FindAllStreamsDocument, options);
+      }
+export function useFindAllStreamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllStreamsQuery, FindAllStreamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllStreamsQuery, FindAllStreamsQueryVariables>(FindAllStreamsDocument, options);
+        }
+export function useFindAllStreamsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindAllStreamsQuery, FindAllStreamsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindAllStreamsQuery, FindAllStreamsQueryVariables>(FindAllStreamsDocument, options);
+        }
+export type FindAllStreamsQueryHookResult = ReturnType<typeof useFindAllStreamsQuery>;
+export type FindAllStreamsLazyQueryHookResult = ReturnType<typeof useFindAllStreamsLazyQuery>;
+export type FindAllStreamsSuspenseQueryHookResult = ReturnType<typeof useFindAllStreamsSuspenseQuery>;
+export type FindAllStreamsQueryResult = Apollo.QueryResult<FindAllStreamsQuery, FindAllStreamsQueryVariables>;
+export const FindRandomStreamsDocument = gql`
+    query FindRandomStreams {
+  findRandomStreams {
+    title
+    previewUrl
+    isLive
+    user {
+      username
+      avatar
+    }
+    category {
+      title
+      slug
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindRandomStreamsQuery__
+ *
+ * To run a query within a React component, call `useFindRandomStreamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindRandomStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindRandomStreamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindRandomStreamsQuery(baseOptions?: Apollo.QueryHookOptions<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>(FindRandomStreamsDocument, options);
+      }
+export function useFindRandomStreamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>(FindRandomStreamsDocument, options);
+        }
+export function useFindRandomStreamsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>(FindRandomStreamsDocument, options);
+        }
+export type FindRandomStreamsQueryHookResult = ReturnType<typeof useFindRandomStreamsQuery>;
+export type FindRandomStreamsLazyQueryHookResult = ReturnType<typeof useFindRandomStreamsLazyQuery>;
+export type FindRandomStreamsSuspenseQueryHookResult = ReturnType<typeof useFindRandomStreamsSuspenseQuery>;
+export type FindRandomStreamsQueryResult = Apollo.QueryResult<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>;
 export const ChangeChatSettingsDocument = gql`
     mutation ChangeChatSettings($data: ChangeChatSettingsInput!) {
   changeChatSettings(data: $data)

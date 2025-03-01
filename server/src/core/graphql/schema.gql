@@ -230,6 +230,7 @@ enum NotificationType {
 
 type Query {
   findAllCategories: [CategoryModel!]!
+  findAllLiveStreams(filters: FiltersInput!): [StreamModel!]!
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
   findCategoryBySlug(slug: String!): CategoryModel!
   findChannelByUsername(username: String!): UserModel!

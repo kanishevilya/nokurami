@@ -1,4 +1,4 @@
-import { CategoryInfo } from "@/components/shared/category/information/CategoryInfo";
+import { CategoryInfo } from "@/components/shared/directory/category/information/CategoryInfo";
 
 export default function CategoryPage() {
   return <CategoryInfo />;
