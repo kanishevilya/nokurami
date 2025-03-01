@@ -1,17 +1,25 @@
 "use client";
 
-import { Home, Settings, Users } from "lucide-react";
+import { Home, List, Loader2, Settings, Users } from "lucide-react";
 import { SidebarMenu } from "@/components/ui/shadcn/Sidebar";
 import { SidebarItem } from "./SidebarItem";
 import { Route } from "./types/Route";
 import { TrackedChannels } from "./TrackedChannels";
+import { MyChannelItem } from "./MyChannelItem";
+import { useCurrent } from "@/hooks/useCurrent";
 
 export function PrimaryNav() {
+  const { user, isLoadingProfile } = useCurrent();
   const routes: Route[] = [
     {
       label: "Home",
       href: "/",
       icon: Home,
+    },
+    {
+      label: "Categories",
+      href: "/directory",
+      icon: List,
     },
   ];
 
@@ -20,7 +28,16 @@ export function PrimaryNav() {
       {routes.map((route, index) => (
         <SidebarItem key={index} route={route} />
       ))}
-      {/* <TrackedChannels /> */}
+      {isLoadingProfile || !user ? (
+        <Loader2 className="size-5 animate-spin relative top-4 left-5" />
+      ) : (
+        <MyChannelItem
+          href={`/${user?.username}`}
+          user={user}
+          label={user?.username}
+          stream={user?.stream}
+        />
+      )}
     </div>
   );
 }

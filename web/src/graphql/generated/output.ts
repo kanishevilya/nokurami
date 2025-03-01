@@ -256,7 +256,7 @@ export type MutationChangeStreamInfoArgs = {
 
 
 export type MutationChangeStreamPreviewArgs = {
-  thumbnail: Scalars['Upload']['input'];
+  preview: Scalars['Upload']['input'];
 };
 
 
@@ -663,7 +663,7 @@ export type ChangeProfileInformationMutation = { __typename?: 'Mutation', change
 export type FindProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, telegramChatId?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', serverUrl?: string | null, streamKey?: string | null, chatSettings?: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } | null } } };
+export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, telegramChatId?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', title: string, isLive: boolean, serverUrl?: string | null, streamKey?: string | null, chatSettings?: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } | null } } };
 
 export type ChangeProfileAvatarMutationVariables = Exact<{
   avatar: Scalars['Upload']['input'];
@@ -1437,6 +1437,8 @@ export const FindProfileDocument = gql`
       telegramNotificationsEnable
     }
     stream {
+      title
+      isLive
       serverUrl
       streamKey
       chatSettings {

@@ -34,7 +34,7 @@ export class StreamService {
                 category: true
             },
             orderBy: {
-                createdAt: 'desc'
+                isLive: 'desc',
             }
         })
 
@@ -59,7 +59,7 @@ export class StreamService {
                 category: true
             },
             orderBy: {
-                createdAt: 'desc'
+                isLive: 'desc',
             }
         })
 

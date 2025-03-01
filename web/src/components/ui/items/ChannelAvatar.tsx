@@ -16,9 +16,9 @@ const avatarVariants = cva("relative rounded-full transition-all", {
       xl: "size-36",
     },
     status: {
-      online: "ring-2 ring-emerald-500 ring-offset-2",
-      offline: "ring-2 ring-gray-200 ring-offset-2 opacity-75",
-      live: "ring-2 ring-red-500 ring-offset-2 animate-pulse",
+      online: "ring-2 ring-primary",
+      offline: "ring-2 ring-gray-200 opacity-75",
+      live: "ring-2 ring-red-500 animate-pulse",
     },
   },
   defaultVariants: {

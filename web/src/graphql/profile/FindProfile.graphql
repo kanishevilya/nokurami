@@ -16,6 +16,8 @@ query FindProfile {
       telegramNotificationsEnable
     }
     stream {
+      title
+      isLive
       serverUrl
       streamKey
       chatSettings {
