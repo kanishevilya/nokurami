@@ -20,7 +20,7 @@ export function PrimaryNav() {
       {routes.map((route, index) => (
         <SidebarItem key={index} route={route} />
       ))}
-      <TrackedChannels />
+      {/* <TrackedChannels /> */}
     </div>
   );
 }

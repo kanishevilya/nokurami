@@ -6,7 +6,7 @@ export function Nav() {
   const routes: Route[] = [
     {
       label: "Following",
-      href: "/following",
+      href: "/directory/following",
       icon: Users,
     },
     {

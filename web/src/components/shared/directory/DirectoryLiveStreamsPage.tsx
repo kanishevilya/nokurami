@@ -2,20 +2,21 @@
 
 import { useFindAllLiveStreamsQuery } from "@/graphql/generated/output";
 import { Heading } from "@/components/ui/items/Heading";
-import { StreamCard } from "@/components/shared/directory/streams/StreamCard";
+import { StreamCard } from "@/components/shared/stream/StreamCard";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { LiveStreamsList } from "./streams/LiveStreamsList";
 
 export default function DirectoryLiveStreamsPage() {
   const { data, loading, fetchMore } = useFindAllLiveStreamsQuery({
     variables: {
       filters: {
-        take: 12, // Загружаем по 12 стримов за раз
-        skip: 0, // Начальный отступ
+        take: 12,
+        skip: 0,
         searchKey: "",
       },
     },
-    notifyOnNetworkStatusChange: true, // Обновляет loading при fetchMore
+    notifyOnNetworkStatusChange: true,
   });
 
   const streamList = data?.findAllLiveStreams || [];
@@ -27,7 +28,7 @@ export default function DirectoryLiveStreamsPage() {
         variables: {
           filters: {
             take: 12,
-            skip: streamList.length, // Сдвиг на основе текущего количества
+            skip: streamList.length,
             searchKey: "",
           },
         },
@@ -46,19 +47,22 @@ export default function DirectoryLiveStreamsPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full">
       <Heading
         title="Трансляции"
         description="Активные трансляции на платформе"
       />
       <InfiniteScroll
-        dataLength={streamList.length} // Текущая длина списка
-        next={fetchMoreStreams} // Функция подгрузки
-        hasMore={hasMore} // Есть ли ещё данные
+        dataLength={streamList.length}
+        next={fetchMoreStreams}
+        hasMore={hasMore}
         loader={
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-6 flex flex-wrap gap-12 justify-center max-w-[1440px]">
             {Array.from({ length: 12 }).map((_, index) => (
-              <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+              <Skeleton
+                key={index}
+                className="h-[200px] w-[480px] rounded-lg"
+              />
             ))}
           </div>
         }
@@ -66,11 +70,7 @@ export default function DirectoryLiveStreamsPage() {
         {loading && !streamList.length ? (
           <StreamsSkeleton />
         ) : (
-          <div className="flex flex-wrap gap-12">
-            {streamList.map((stream) => (
-              <StreamCard key={stream.user.username} stream={stream} />
-            ))}
-          </div>
+          <LiveStreamsList streamList={streamList} />
         )}
       </InfiniteScroll>
     </div>
@@ -79,9 +79,9 @@ export default function DirectoryLiveStreamsPage() {
 
 function StreamsSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="flex flex-wrap gap-12 justify-center max-w-[1440px]">
       {[...Array(12)].map((_, index) => (
-        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+        <Skeleton key={index} className="h-[200px] w-[480px] rounded-lg" />
       ))}
     </div>
   );

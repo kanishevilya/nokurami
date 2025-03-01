@@ -1,0 +1,3 @@
+query FindFollowersCountByChannel($channelId: String!) {
+  findFollowersCountByChannel(channelId: $channelId)
+}

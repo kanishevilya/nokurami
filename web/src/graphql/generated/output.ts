@@ -594,12 +594,19 @@ export type FindRandomCategoriesQueryVariables = Exact<{ [key: string]: never; }
 
 export type FindRandomCategoriesQuery = { __typename?: 'Query', findRandomCategories: Array<{ __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, createdAt: any, updatedAt: any }> };
 
+export type FindFollowersCountByChannelQueryVariables = Exact<{
+  channelId: Scalars['String']['input'];
+}>;
+
+
+export type FindFollowersCountByChannelQuery = { __typename?: 'Query', findFollowersCountByChannel: number };
+
 export type FindMyFollowingsChannelsQueryVariables = Exact<{
   data: FindFollowersInput;
 }>;
 
 
-export type FindMyFollowingsChannelsQuery = { __typename?: 'Query', findMyFollowings: { __typename?: 'FollowingsResponse', totalCount: number, followings: Array<{ __typename?: 'FollowModel', following: { __typename?: 'UserModel', username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', title: string, isLive: boolean } } }> } };
+export type FindMyFollowingsChannelsQuery = { __typename?: 'Query', findMyFollowings: { __typename?: 'FollowingsResponse', totalCount: number, followings: Array<{ __typename?: 'FollowModel', following: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', title: string, isLive: boolean } } }> } };
 
 export type FindMyFollowersQueryVariables = Exact<{
   data: FindFollowersInput;
@@ -614,6 +621,13 @@ export type FindMyFollowingsQueryVariables = Exact<{
 
 
 export type FindMyFollowingsQuery = { __typename?: 'Query', findMyFollowings: { __typename?: 'FollowingsResponse', totalCount: number, followings: Array<{ __typename?: 'FollowModel', createdAt: any, followingId: string, following: { __typename?: 'UserModel', username: string, avatar?: string | null } }> } };
+
+export type FollowToChannelMutationVariables = Exact<{
+  channelId: Scalars['String']['input'];
+}>;
+
+
+export type FollowToChannelMutation = { __typename?: 'Mutation', followToChannel: boolean };
 
 export type UnfollowFromChannelMutationVariables = Exact<{
   channelId: Scalars['String']['input'];
@@ -1001,11 +1015,50 @@ export type FindRandomCategoriesQueryHookResult = ReturnType<typeof useFindRando
 export type FindRandomCategoriesLazyQueryHookResult = ReturnType<typeof useFindRandomCategoriesLazyQuery>;
 export type FindRandomCategoriesSuspenseQueryHookResult = ReturnType<typeof useFindRandomCategoriesSuspenseQuery>;
 export type FindRandomCategoriesQueryResult = Apollo.QueryResult<FindRandomCategoriesQuery, FindRandomCategoriesQueryVariables>;
+export const FindFollowersCountByChannelDocument = gql`
+    query FindFollowersCountByChannel($channelId: String!) {
+  findFollowersCountByChannel(channelId: $channelId)
+}
+    `;
+
+/**
+ * __useFindFollowersCountByChannelQuery__
+ *
+ * To run a query within a React component, call `useFindFollowersCountByChannelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindFollowersCountByChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindFollowersCountByChannelQuery({
+ *   variables: {
+ *      channelId: // value for 'channelId'
+ *   },
+ * });
+ */
+export function useFindFollowersCountByChannelQuery(baseOptions: Apollo.QueryHookOptions<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables> & ({ variables: FindFollowersCountByChannelQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>(FindFollowersCountByChannelDocument, options);
+      }
+export function useFindFollowersCountByChannelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>(FindFollowersCountByChannelDocument, options);
+        }
+export function useFindFollowersCountByChannelSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>(FindFollowersCountByChannelDocument, options);
+        }
+export type FindFollowersCountByChannelQueryHookResult = ReturnType<typeof useFindFollowersCountByChannelQuery>;
+export type FindFollowersCountByChannelLazyQueryHookResult = ReturnType<typeof useFindFollowersCountByChannelLazyQuery>;
+export type FindFollowersCountByChannelSuspenseQueryHookResult = ReturnType<typeof useFindFollowersCountByChannelSuspenseQuery>;
+export type FindFollowersCountByChannelQueryResult = Apollo.QueryResult<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>;
 export const FindMyFollowingsChannelsDocument = gql`
     query FindMyFollowingsChannels($data: FindFollowersInput!) {
   findMyFollowings(data: $data) {
     followings {
       following {
+        id
         username
         avatar
         stream {
@@ -1146,6 +1199,37 @@ export type FindMyFollowingsQueryHookResult = ReturnType<typeof useFindMyFollowi
 export type FindMyFollowingsLazyQueryHookResult = ReturnType<typeof useFindMyFollowingsLazyQuery>;
 export type FindMyFollowingsSuspenseQueryHookResult = ReturnType<typeof useFindMyFollowingsSuspenseQuery>;
 export type FindMyFollowingsQueryResult = Apollo.QueryResult<FindMyFollowingsQuery, FindMyFollowingsQueryVariables>;
+export const FollowToChannelDocument = gql`
+    mutation FollowToChannel($channelId: String!) {
+  followToChannel(channelId: $channelId)
+}
+    `;
+export type FollowToChannelMutationFn = Apollo.MutationFunction<FollowToChannelMutation, FollowToChannelMutationVariables>;
+
+/**
+ * __useFollowToChannelMutation__
+ *
+ * To run a mutation, you first call `useFollowToChannelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFollowToChannelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [followToChannelMutation, { data, loading, error }] = useFollowToChannelMutation({
+ *   variables: {
+ *      channelId: // value for 'channelId'
+ *   },
+ * });
+ */
+export function useFollowToChannelMutation(baseOptions?: Apollo.MutationHookOptions<FollowToChannelMutation, FollowToChannelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FollowToChannelMutation, FollowToChannelMutationVariables>(FollowToChannelDocument, options);
+      }
+export type FollowToChannelMutationHookResult = ReturnType<typeof useFollowToChannelMutation>;
+export type FollowToChannelMutationResult = Apollo.MutationResult<FollowToChannelMutation>;
+export type FollowToChannelMutationOptions = Apollo.BaseMutationOptions<FollowToChannelMutation, FollowToChannelMutationVariables>;
 export const UnfollowFromChannelDocument = gql`
     mutation UnfollowFromChannel($channelId: String!) {
   unfollowFromChannel(channelId: $channelId)

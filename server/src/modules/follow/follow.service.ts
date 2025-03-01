@@ -93,7 +93,11 @@ export class FollowService {
             skip: skip ?? 0,
             take: take ?? 10,
             include: {
-                following: true,
+                following: {
+                    include: {
+                        stream: true
+                    }
+                },
             },
         });
 

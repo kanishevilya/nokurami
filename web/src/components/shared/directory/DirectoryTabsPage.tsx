@@ -14,10 +14,10 @@ export function DirectoryTabsPage() {
         <TabsTrigger value="categories">Categories</TabsTrigger>
         <TabsTrigger value="live">Live Streams</TabsTrigger>
       </TabsList>
-      <TabsContent value="categories">
+      <TabsContent className="pt-4" value="categories">
         <DirectoryCategoryPage />
       </TabsContent>
-      <TabsContent value="live">
+      <TabsContent className="pt-4" value="live">
         <DirectoryLiveStreamsPage />
       </TabsContent>
     </Tabs>

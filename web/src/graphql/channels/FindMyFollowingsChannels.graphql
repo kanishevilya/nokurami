@@ -2,6 +2,7 @@ query FindMyFollowingsChannels($data: FindFollowersInput!) {
   findMyFollowings(data: $data) {
     followings {
       following {
+        id
         username
         avatar
         stream {

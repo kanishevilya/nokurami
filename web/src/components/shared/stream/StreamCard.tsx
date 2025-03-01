@@ -25,9 +25,8 @@ export function StreamCard({ stream }: StreamCardProps) {
   return (
     <Link
       href={`/${user.username}`}
-      className="group relative block w-full max-w-[300px] rounded-lg shadow-md bg-card overflow-hidden"
+      className="group relative block w-full max-w-[480px] rounded-lg shadow-md bg-card overflow-hidden"
     >
-      {/* Превью */}
       <div className="relative w-full h-[200px]">
         <Image
           src={getMediaSource(previewUrl)}
@@ -35,13 +34,12 @@ export function StreamCard({ stream }: StreamCardProps) {
           fill
           className="object-cover rounded-t-lg z-0"
         />
-        {/* Шторка для превью с текстом */}
+
         <div className="absolute inset-0 z-10 overflow-hidden rounded-t-lg">
           <div className="absolute inset-y-0 left-0 bg-primary text-transparent flex items-center justify-center w-0 group-hover:w-full group-hover:text-primary-foreground transition-all duration-150 ease-out">
             <span className="text-md font-semibold">Перейти на стрим</span>
           </div>
         </div>
-        {/* Статус */}
         {isLive && (
           <div className="absolute top-2 left-2 flex items-center gap-1 z-20">
             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -52,7 +50,6 @@ export function StreamCard({ stream }: StreamCardProps) {
         )}
       </div>
 
-      {/* Информация */}
       <div className="p-4 space-y-2 bg-card rounded-b-lg z-10">
         <h3 className="text-md font-semibold text-foreground line-clamp-1">
           {title}
@@ -64,7 +61,7 @@ export function StreamCard({ stream }: StreamCardProps) {
                 className="rounded-full"
                 src={getMediaSource(user.avatar || "")}
               />
-              <AvatarFallback className="flex items-center justify-center bg-muted text-foreground rounded-full text-sm font-medium">
+              <AvatarFallback className="flex w-8 h-8 items-center justify-center bg-muted text-foreground rounded-full text-sm font-medium">
                 {user.username[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -76,14 +73,12 @@ export function StreamCard({ stream }: StreamCardProps) {
         </div>
       </div>
 
-      {/* Оффлайн-статус */}
       {!isLive && (
         <div className="absolute bottom-2 right-2 px-2 py-1 text-xs font-medium bg-muted text-muted-foreground rounded-full z-20">
           Оффлайн
         </div>
       )}
 
-      {/* Волновая обводка слева направо */}
       <div className="absolute inset-0 rounded-lg pointer-events-none z-10">
         <div
           className="absolute inset-0 w-0 border-2 border-transparent group-hover:border-primary group-hover:w-full transition-all duration-150 ease-out rounded-lg"
