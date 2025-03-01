@@ -4,6 +4,7 @@ import { Home, Settings, Users } from "lucide-react";
 import { SidebarMenu } from "@/components/ui/shadcn/Sidebar";
 import { SidebarItem } from "./SidebarItem";
 import { Route } from "./types/Route";
+import { TrackedChannels } from "./TrackedChannels";
 
 export function PrimaryNav() {
   const routes: Route[] = [
@@ -12,11 +13,6 @@ export function PrimaryNav() {
       href: "/",
       icon: Home,
     },
-    {
-      label: "Community",
-      href: "/community",
-      icon: Users,
-    },
   ];
 
   return (
@@ -24,6 +20,7 @@ export function PrimaryNav() {
       {routes.map((route, index) => (
         <SidebarItem key={index} route={route} />
       ))}
+      <TrackedChannels />
     </div>
   );
 }

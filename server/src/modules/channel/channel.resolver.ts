@@ -11,6 +11,7 @@ export class ChannelResolver {
     return this.channelService.findRecommended()
   }
 
+
   @Query(() => UserModel, { name: 'findChannelByUsername' })
   public async findByUsername(@Args('username') username: string) {
     return this.channelService.findByUsername(username)

@@ -1,0 +1,15 @@
+query FindMyFollowingsChannels($data: FindFollowersInput!) {
+  findMyFollowings(data: $data) {
+    followings {
+      following {
+        username
+        avatar
+        stream {
+          title
+          isLive
+        }
+      }
+    }
+    totalCount
+  }
+}

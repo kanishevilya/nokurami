@@ -1,0 +1,11 @@
+query FindRandomCategories {
+  findRandomCategories {
+    id
+    title
+    slug
+    description
+    previewUrl
+    createdAt
+    updatedAt
+  }
+}

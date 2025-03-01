@@ -21,6 +21,7 @@ export class ChannelService {
         return channles
     }
 
+
     public async findByUsername(username: string) {
         const channel = await this.prismaService.user.findUnique({
             where: {

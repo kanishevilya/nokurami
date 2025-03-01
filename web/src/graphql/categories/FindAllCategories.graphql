@@ -1,0 +1,11 @@
+query FindAllCategories {
+  findAllCategories {
+    id
+    title
+    slug
+    description
+    previewUrl
+    createdAt
+    updatedAt
+  }
+}
