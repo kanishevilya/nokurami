@@ -7,9 +7,10 @@ import { Route } from "./types/Route";
 import { TrackedChannels } from "./TrackedChannels";
 import { MyChannelItem } from "./MyChannelItem";
 import { useCurrent } from "@/hooks/useCurrent";
-
+import { useAuth } from "@/hooks/useAuth";
 export function PrimaryNav() {
   const { user, isLoadingProfile } = useCurrent();
+  const { isAuthenticated } = useAuth();
   const routes: Route[] = [
     {
       label: "Home",
@@ -29,7 +30,9 @@ export function PrimaryNav() {
         <SidebarItem key={index} route={route} />
       ))}
       {isLoadingProfile || !user ? (
-        <Loader2 className="size-5 animate-spin relative top-4 left-5" />
+        isAuthenticated && (
+          <Loader2 className="size-5 animate-spin relative top-4 left-5" />
+        )
       ) : (
         <MyChannelItem
           href={`/${user?.username}`}

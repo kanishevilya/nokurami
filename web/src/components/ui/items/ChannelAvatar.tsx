@@ -50,7 +50,7 @@ export function ChannelAvatar({
       <AvatarImage className="object-cover" src={avatar} />
       <AvatarFallback
         className={cn(
-          "bg-gradient-to-br from-neutral-700 to-neutral-900",
+          "bg-gradient-to-br from-neutral-100 to-neutral-300 dark:from-neutral-900 dark:to-neutral-700",
           size === "xl" && "text-4xl",
           size === "lg" && "text-2xl",
           size === "md" && "text-xl",
