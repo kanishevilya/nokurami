@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import Image from "next/image";
 import { getMediaSource } from "@/utils/get-media-source";
 import { Heading } from "@/components/ui/items/Heading";
+import { StreamsList } from "./StreamsList";
 
 export function CategoryInfo() {
   const router = useRouter();
@@ -46,17 +47,7 @@ export function CategoryInfo() {
         />
       </div>
 
-      <div className="flex flex-col gap-4">
-        <h2 className="text-2xl font-semibold">Streams</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((index) => (
-            <div
-              key={index}
-              className="aspect-video rounded-lg bg-gray-100 dark:bg-gray-800"
-            />
-          ))}
-        </div>
-      </div>
+      <StreamsList streams={data.findCategoryBySlug.streams} />
     </div>
   );
 }

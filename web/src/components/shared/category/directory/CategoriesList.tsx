@@ -7,7 +7,7 @@ interface CategoriesListProps {
 
 export function CategoriesList({ categories }: CategoriesListProps) {
   return (
-    <div className="flex flex-wrap gap-10">
+    <div className="flex flex-wrap gap-12">
       {categories.map((category) => (
         <CategoryCard key={category.id} category={category} />
       ))}

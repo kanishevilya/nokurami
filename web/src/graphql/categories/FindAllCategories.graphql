@@ -5,7 +5,18 @@ query FindAllCategories {
     slug
     description
     previewUrl
-    createdAt
-    updatedAt
+    streams {
+      title
+      previewUrl
+      isLive
+      user {
+        username
+        avatar
+      }
+      category {
+        title
+        slug
+      }
+    }
   }
 }

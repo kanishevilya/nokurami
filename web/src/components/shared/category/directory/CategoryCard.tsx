@@ -9,21 +9,21 @@ interface CategoryCardProps {
 
 export function CategoryCard({ category }: CategoryCardProps) {
   return (
-    <div className="relative group w-full max-w-[192px] perspective-[1000px]">
-      <div className="absolute inset-0 bg-primary rounded-lg shadow-lg h-[256px] z-0 flex flex-col items-start justify-end">
+    <div className="relative group w-full max-w-[240px] perspective-[1000px]">
+      <div className="absolute inset-0 bg-primary rounded-lg shadow-lg h-[320px] z-0 flex flex-col items-start justify-end">
         <span className="px-4 py-2 text-primary-foreground text-md font-mono">
           Show more
         </span>
       </div>
       <Link href={`/categories/${category.slug}`}>
         <div
-          className="cursor-pointer relative w-full h-[256px] transition-transform duration-200 rounded-lg z-10"
+          className="cursor-pointer relative w-full h-[320px] transition-transform duration-200 rounded-lg z-10"
           style={{
             transformStyle: "preserve-3d",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform =
-              "translateY(-30px) rotateX(20deg) rotateY(15deg)";
+              "translateY(-40px) rotateX(20deg) rotateY(15deg)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform =

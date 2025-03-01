@@ -574,14 +574,14 @@ export type VerificationInput = {
 export type FindAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindAllCategoriesQuery = { __typename?: 'Query', findAllCategories: Array<{ __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, createdAt: any, updatedAt: any }> };
+export type FindAllCategoriesQuery = { __typename?: 'Query', findAllCategories: Array<{ __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, streams: Array<{ __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> }> };
 
 export type FindCategoryBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type FindCategoryBySlugQuery = { __typename?: 'Query', findCategoryBySlug: { __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, createdAt: any, updatedAt: any } };
+export type FindCategoryBySlugQuery = { __typename?: 'Query', findCategoryBySlug: { __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, streams: Array<{ __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> } };
 
 export type FindRandomCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -826,8 +826,19 @@ export const FindAllCategoriesDocument = gql`
     slug
     description
     previewUrl
-    createdAt
-    updatedAt
+    streams {
+      title
+      previewUrl
+      isLive
+      user {
+        username
+        avatar
+      }
+      category {
+        title
+        slug
+      }
+    }
   }
 }
     `;
@@ -871,8 +882,19 @@ export const FindCategoryBySlugDocument = gql`
     slug
     description
     previewUrl
-    createdAt
-    updatedAt
+    streams {
+      title
+      previewUrl
+      isLive
+      user {
+        username
+        avatar
+      }
+      category {
+        title
+        slug
+      }
+    }
   }
 }
     `;
