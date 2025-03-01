@@ -5,6 +5,8 @@ import { useStreamToken } from "@/hooks/useStreamToken";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { LiveKitRoom } from "@livekit/components-react";
 import { StreamVideo } from "./StreamVideo";
+import { StreamInfo } from "./StreamInfo";
+import { AboutChannel } from "./AboutChannel";
 
 interface ChannelOverviewProps {
   channel: FindChannelByUsernameQuery["findChannelByUsername"];
@@ -21,13 +23,12 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
       <LiveKitRoom
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WSS_URL}
+        className="grid max-w-screen-xl grid-cols-1 gap-6 lg:grid-cols-7"
       >
         <div className="order-1 col-span-1 flex flex-col lg:col-span-5">
           <StreamVideo channel={channel} />
-          info
-          <br />
-          about
-          <br />
+          <StreamInfo channel={channel} />
+          <AboutChannel channel={channel} />
         </div>
         <div className="order-2 col-span-1 flex h-80 flex-col space-y-6 lg:col-span-2">
           Chat

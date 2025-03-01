@@ -4,9 +4,11 @@ query FindChannelByUsername($username: String!) {
     username
     avatar
     displayName
+    information
     stream {
       title
       previewUrl
+      isLive
     }
   }
 }

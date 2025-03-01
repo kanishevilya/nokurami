@@ -599,7 +599,7 @@ export type FindChannelByUsernameQueryVariables = Exact<{
 }>;
 
 
-export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, displayName: string, stream: { __typename?: 'StreamModel', title: string, previewUrl?: string | null } } };
+export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, displayName: string, information?: string | null, stream: { __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean } } };
 
 export type FindFollowersCountByChannelQueryVariables = Exact<{
   channelId: Scalars['String']['input'];
@@ -1029,9 +1029,11 @@ export const FindChannelByUsernameDocument = gql`
     username
     avatar
     displayName
+    information
     stream {
       title
       previewUrl
+      isLive
     }
   }
 }
