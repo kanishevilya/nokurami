@@ -592,7 +592,7 @@ export type FindCategoryBySlugQuery = { __typename?: 'Query', findCategoryBySlug
 export type FindRandomCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindRandomCategoriesQuery = { __typename?: 'Query', findRandomCategories: Array<{ __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, createdAt: any, updatedAt: any }> };
+export type FindRandomCategoriesQuery = { __typename?: 'Query', findRandomCategories: Array<{ __typename?: 'CategoryModel', id: string, title: string, slug: string, description: string, previewUrl: string, streams: Array<{ __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> }> };
 
 export type FindChannelByUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
@@ -614,6 +614,11 @@ export type FindMyFollowingsChannelsQueryVariables = Exact<{
 
 
 export type FindMyFollowingsChannelsQuery = { __typename?: 'Query', findMyFollowings: { __typename?: 'FollowingsResponse', totalCount: number, followings: Array<{ __typename?: 'FollowModel', following: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', previewUrl?: string | null, title: string, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } } } }> } };
+
+export type FindRecommendedChannelsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindRecommendedChannelsQuery = { __typename?: 'Query', findRecommendedChannels: Array<{ __typename?: 'UserModel', id: string, username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', previewUrl?: string | null, title: string, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } } }> };
 
 export type FindMyFollowersQueryVariables = Exact<{
   data: FindFollowersInput;
@@ -985,8 +990,19 @@ export const FindRandomCategoriesDocument = gql`
     slug
     description
     previewUrl
-    createdAt
-    updatedAt
+    streams {
+      title
+      previewUrl
+      isLive
+      user {
+        username
+        avatar
+      }
+      category {
+        title
+        slug
+      }
+    }
   }
 }
     `;
@@ -1169,6 +1185,60 @@ export type FindMyFollowingsChannelsQueryHookResult = ReturnType<typeof useFindM
 export type FindMyFollowingsChannelsLazyQueryHookResult = ReturnType<typeof useFindMyFollowingsChannelsLazyQuery>;
 export type FindMyFollowingsChannelsSuspenseQueryHookResult = ReturnType<typeof useFindMyFollowingsChannelsSuspenseQuery>;
 export type FindMyFollowingsChannelsQueryResult = Apollo.QueryResult<FindMyFollowingsChannelsQuery, FindMyFollowingsChannelsQueryVariables>;
+export const FindRecommendedChannelsDocument = gql`
+    query FindRecommendedChannels {
+  findRecommendedChannels {
+    id
+    username
+    avatar
+    stream {
+      previewUrl
+      title
+      isLive
+      user {
+        username
+        avatar
+      }
+      category {
+        title
+        slug
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindRecommendedChannelsQuery__
+ *
+ * To run a query within a React component, call `useFindRecommendedChannelsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindRecommendedChannelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindRecommendedChannelsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindRecommendedChannelsQuery(baseOptions?: Apollo.QueryHookOptions<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>(FindRecommendedChannelsDocument, options);
+      }
+export function useFindRecommendedChannelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>(FindRecommendedChannelsDocument, options);
+        }
+export function useFindRecommendedChannelsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>(FindRecommendedChannelsDocument, options);
+        }
+export type FindRecommendedChannelsQueryHookResult = ReturnType<typeof useFindRecommendedChannelsQuery>;
+export type FindRecommendedChannelsLazyQueryHookResult = ReturnType<typeof useFindRecommendedChannelsLazyQuery>;
+export type FindRecommendedChannelsSuspenseQueryHookResult = ReturnType<typeof useFindRecommendedChannelsSuspenseQuery>;
+export type FindRecommendedChannelsQueryResult = Apollo.QueryResult<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>;
 export const FindMyFollowersDocument = gql`
     query FindMyFollowers($data: FindFollowersInput!) {
   findMyFollowers(data: $data) {

@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  FindAllLiveStreamsQuery,
-  useFindAllLiveStreamsQuery,
+  FindAllStreamsQuery,
+  useFindAllStreamsQuery,
 } from "@/graphql/generated/output";
 import { Heading } from "@/components/ui/items/Heading";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useState, useEffect } from "react";
-import { LiveStreamsList } from "./streams/LiveStreamsList";
+import { StreamsList } from "../directory/streams/StreamsList";
 
-export default function DirectoryLiveStreamsPage() {
-  const { data, loading, fetchMore } = useFindAllLiveStreamsQuery({
+export default function StreamsPage() {
+  const { data, loading, fetchMore } = useFindAllStreamsQuery({
     variables: {
       filters: {
         take: 12,
@@ -23,21 +23,21 @@ export default function DirectoryLiveStreamsPage() {
   });
 
   const [streamList, setStreamList] = useState<
-    FindAllLiveStreamsQuery["findAllLiveStreams"]
+    FindAllStreamsQuery["findAllStreams"]
   >([]);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    if (!loading && data?.findAllLiveStreams) {
-      setStreamList(data.findAllLiveStreams);
-      setHasMore(data.findAllLiveStreams.length === 12);
+    if (!loading && data?.findAllStreams) {
+      setStreamList(data.findAllStreams);
+      setHasMore(data.findAllStreams.length === 12);
     }
   }, [data, loading]);
 
   async function fetchMoreStreams() {
     if (!hasMore || loading) return;
 
-    const skip = streamList.length; // Фиксируем текущую длину перед запросом
+    const skip = streamList.length;
     const { data: newData } = await fetchMore({
       variables: {
         filters: {
@@ -48,15 +48,15 @@ export default function DirectoryLiveStreamsPage() {
       },
     });
 
-    if (newData?.findAllLiveStreams) {
-      const newStreams = newData.findAllLiveStreams.filter(
+    if (newData?.findAllStreams) {
+      const newStreams = newData.findAllStreams.filter(
         (newStream) =>
           !streamList.some(
             (existingStream) =>
               existingStream.title === newStream.title &&
               existingStream.user.username === newStream.user.username
           )
-      ); // Фильтруем дубликаты по title и username
+      );
 
       if (newStreams.length > 0) {
         setStreamList((prev) => [...prev, ...newStreams]);
@@ -71,10 +71,7 @@ export default function DirectoryLiveStreamsPage() {
 
   return (
     <div className="space-y-8 w-full">
-      <Heading
-        title="Live Streams"
-        description="Active streams on the platform"
-      />
+      <Heading title="Стримы" description="Стримы на платформе" />
       <InfiniteScroll
         dataLength={streamList.length}
         next={fetchMoreStreams}
@@ -93,7 +90,7 @@ export default function DirectoryLiveStreamsPage() {
         {loading && streamList.length === 0 ? (
           <StreamsSkeleton />
         ) : (
-          <LiveStreamsList streamList={streamList} />
+          <StreamsList streamList={streamList} />
         )}
       </InfiniteScroll>
     </div>

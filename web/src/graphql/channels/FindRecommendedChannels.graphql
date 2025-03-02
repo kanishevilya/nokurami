@@ -1,13 +1,11 @@
-query FindRandomCategories {
-  findRandomCategories {
+query FindRecommendedChannels {
+  findRecommendedChannels {
     id
-    title
-    slug
-    description
-    previewUrl
-    streams {
-      title
+    username
+    avatar
+    stream {
       previewUrl
+      title
       isLive
       user {
         username

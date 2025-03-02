@@ -1,15 +1,18 @@
-import { FindAllLiveStreamsQuery } from "@/graphql/generated/output";
+import {
+  FindAllLiveStreamsQuery,
+  FindAllStreamsQuery,
+} from "@/graphql/generated/output";
 import { StreamCard } from "../../stream/StreamCard";
 
-interface LiveStreamsListProps {
+interface StreamsListProps {
   message?: string;
-  streamList: FindAllLiveStreamsQuery["findAllLiveStreams"];
+  streamList: FindAllStreamsQuery["findAllStreams"];
 }
 
-export function LiveStreamsList({
+export function StreamsList({
   streamList,
-  message = "No active streams",
-}: LiveStreamsListProps) {
+  message = "No streams",
+}: StreamsListProps) {
   return (
     <div className="flex flex-wrap gap-12 ">
       {streamList.length === 0 ? (
