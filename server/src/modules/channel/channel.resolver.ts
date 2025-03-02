@@ -23,4 +23,11 @@ export class ChannelResolver {
   ) {
     return this.channelService.findFollowersCountByChannel(channelId)
   }
+
+  @Query(() => Number, { name: 'findFollowingsCountByChannel' })
+  public async findFollowingsCountByChannel(
+    @Args('channelId') channelId: string
+  ) {
+    return this.channelService.findFollowingsCountByChannel(channelId)
+  }
 }

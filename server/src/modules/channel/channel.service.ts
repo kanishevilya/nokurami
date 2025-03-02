@@ -65,4 +65,16 @@ export class ChannelService {
 
         return count
     }
+
+    public async findFollowingsCountByChannel(channelId: string) {
+        const count = await this.prismaService.follow.count({
+            where: {
+                follower: {
+                    id: channelId
+                }
+            }
+        })
+
+        return count
+    }
 }

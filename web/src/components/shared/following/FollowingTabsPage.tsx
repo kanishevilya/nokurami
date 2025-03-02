@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Tabs,
   TabsContent,
@@ -7,8 +9,15 @@ import {
 import { StreamsList } from "../directory/category/information/StreamsList";
 import FollowingChannelsPage from "./FollowingChannelsPage";
 import FollowingStreamsPage from "./FollowingStreamsPage";
+import { useCurrent } from "@/hooks/useCurrent";
+import { Skeleton } from "@/components/ui/shadcn/Skeleton";
+import { FindProfileQuery } from "@/graphql/generated/output";
 
 export default function FollowingTabsPage() {
+  const { user, isLoadingProfile } = useCurrent();
+
+  console.log(user);
+
   return (
     <Tabs defaultValue="channels">
       <TabsList>
@@ -16,10 +25,20 @@ export default function FollowingTabsPage() {
         <TabsTrigger value="streams">Streams</TabsTrigger>
       </TabsList>
       <TabsContent className="mt-6" value="channels">
-        <FollowingChannelsPage />
+        {isLoadingProfile ? (
+          <Skeleton className="h-11 w-full rounded-lg" />
+        ) : (
+          <FollowingChannelsPage
+            user={user as FindProfileQuery["getProfile"]}
+          />
+        )}
       </TabsContent>
       <TabsContent className="mt-6" value="streams">
-        <FollowingStreamsPage />
+        {isLoadingProfile ? (
+          <Skeleton className="h-11 w-full rounded-lg" />
+        ) : (
+          <FollowingStreamsPage user={user as FindProfileQuery["getProfile"]} />
+        )}
       </TabsContent>
     </Tabs>
   );

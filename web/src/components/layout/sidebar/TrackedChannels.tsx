@@ -10,6 +10,7 @@ export function TrackedChannels() {
   const { data, loading } = useFindMyFollowingsChannelsQuery({
     variables: {
       data: {
+        take: 10,
         skip: 0,
       },
     },

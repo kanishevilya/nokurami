@@ -235,6 +235,7 @@ type Query {
   findCategoryBySlug(slug: String!): CategoryModel!
   findChannelByUsername(username: String!): UserModel!
   findFollowersCountByChannel(channelId: String!): Float!
+  findFollowingsCountByChannel(channelId: String!): Float!
   findMessagesByStream(streamId: String!): [MessageModel!]!
   findMyFollowers(data: FindFollowersInput): FollowersResponse!
   findMyFollowings(data: FindFollowersInput): FollowingsResponse!

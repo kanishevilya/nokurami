@@ -3,25 +3,34 @@
 import {
   useFindFollowersCountByChannelQuery,
   useFindMyFollowingsChannelsQuery,
+  FindProfileQuery,
 } from "@/graphql/generated/output";
 import { Heading } from "@/components/ui/items/Heading";
 import FollowingCardWithFollowers from "./components/FollowingCardWithFollowers";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
-import { useCurrent } from "@/hooks/useCurrent";
+import { useFindFollowingsCountByChannelQuery } from "@/graphql/generated/output";
 
-export default function FollowingChannelsPage() {
-  const { user } = useCurrent();
+interface FollowingChannelsPageProps {
+  user: FindProfileQuery["getProfile"];
+}
 
-  const { data: followersCount } = useFindFollowersCountByChannelQuery({
+export default function FollowingChannelsPage({
+  user,
+}: FollowingChannelsPageProps) {
+  console.log(user);
+
+  const { data: followingsCount } = useFindFollowingsCountByChannelQuery({
     variables: {
       channelId: user?.id!,
     },
   });
 
+  console.log(followingsCount);
+
   const { data, loading } = useFindMyFollowingsChannelsQuery({
     variables: {
       data: {
-        take: followersCount?.findFollowersCountByChannel,
+        take: followingsCount?.findFollowingsCountByChannel,
         skip: 0,
       },
     },

@@ -388,6 +388,7 @@ export type Query = {
   findCategoryBySlug: CategoryModel;
   findChannelByUsername: UserModel;
   findFollowersCountByChannel: Scalars['Float']['output'];
+  findFollowingsCountByChannel: Scalars['Float']['output'];
   findMessagesByStream: Array<MessageModel>;
   findMyFollowers: FollowersResponse;
   findMyFollowings: FollowingsResponse;
@@ -426,6 +427,11 @@ export type QueryFindChannelByUsernameArgs = {
 
 
 export type QueryFindFollowersCountByChannelArgs = {
+  channelId: Scalars['String']['input'];
+};
+
+
+export type QueryFindFollowingsCountByChannelArgs = {
   channelId: Scalars['String']['input'];
 };
 
@@ -607,6 +613,13 @@ export type FindFollowersCountByChannelQueryVariables = Exact<{
 
 
 export type FindFollowersCountByChannelQuery = { __typename?: 'Query', findFollowersCountByChannel: number };
+
+export type FindFollowingsCountByChannelQueryVariables = Exact<{
+  channelId: Scalars['String']['input'];
+}>;
+
+
+export type FindFollowingsCountByChannelQuery = { __typename?: 'Query', findFollowingsCountByChannel: number };
 
 export type FindMyFollowingsChannelsQueryVariables = Exact<{
   data: FindFollowersInput;
@@ -1125,6 +1138,44 @@ export type FindFollowersCountByChannelQueryHookResult = ReturnType<typeof useFi
 export type FindFollowersCountByChannelLazyQueryHookResult = ReturnType<typeof useFindFollowersCountByChannelLazyQuery>;
 export type FindFollowersCountByChannelSuspenseQueryHookResult = ReturnType<typeof useFindFollowersCountByChannelSuspenseQuery>;
 export type FindFollowersCountByChannelQueryResult = Apollo.QueryResult<FindFollowersCountByChannelQuery, FindFollowersCountByChannelQueryVariables>;
+export const FindFollowingsCountByChannelDocument = gql`
+    query FindFollowingsCountByChannel($channelId: String!) {
+  findFollowingsCountByChannel(channelId: $channelId)
+}
+    `;
+
+/**
+ * __useFindFollowingsCountByChannelQuery__
+ *
+ * To run a query within a React component, call `useFindFollowingsCountByChannelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindFollowingsCountByChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindFollowingsCountByChannelQuery({
+ *   variables: {
+ *      channelId: // value for 'channelId'
+ *   },
+ * });
+ */
+export function useFindFollowingsCountByChannelQuery(baseOptions: Apollo.QueryHookOptions<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables> & ({ variables: FindFollowingsCountByChannelQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables>(FindFollowingsCountByChannelDocument, options);
+      }
+export function useFindFollowingsCountByChannelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables>(FindFollowingsCountByChannelDocument, options);
+        }
+export function useFindFollowingsCountByChannelSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables>(FindFollowingsCountByChannelDocument, options);
+        }
+export type FindFollowingsCountByChannelQueryHookResult = ReturnType<typeof useFindFollowingsCountByChannelQuery>;
+export type FindFollowingsCountByChannelLazyQueryHookResult = ReturnType<typeof useFindFollowingsCountByChannelLazyQuery>;
+export type FindFollowingsCountByChannelSuspenseQueryHookResult = ReturnType<typeof useFindFollowingsCountByChannelSuspenseQuery>;
+export type FindFollowingsCountByChannelQueryResult = Apollo.QueryResult<FindFollowingsCountByChannelQuery, FindFollowingsCountByChannelQueryVariables>;
 export const FindMyFollowingsChannelsDocument = gql`
     query FindMyFollowingsChannels($data: FindFollowersInput!) {
   findMyFollowings(data: $data) {

@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/shadcn/Select";
 import { UserTable } from "./UserTable";
 import { ActionDropdown } from "@/components/ui/shadcn/ActionDropdown";
+import { getMediaSource } from "@/utils/get-media-source";
 
 export function FollowersTable() {
   const [search, setSearch] = useState("");
@@ -124,7 +125,9 @@ export function FollowersTable() {
         <TableRow key={follower.follower.username}>
           <TableCell>
             <Avatar>
-              <AvatarImage src={follower.follower.avatar || ""} />
+              <AvatarImage
+                src={getMediaSource(follower.follower.avatar) || ""}
+              />
               <AvatarFallback>
                 {follower.follower.username[0].toUpperCase()}
               </AvatarFallback>

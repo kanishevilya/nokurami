@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/shadcn/Button";
 import { TableCell } from "@/components/ui/shadcn/Table";
 import { TableRow } from "@/components/ui/shadcn/Table";
 import { ActionDropdown } from "@/components/ui/shadcn/ActionDropdown";
+import { getMediaSource } from "@/utils/get-media-source";
 
 export function FollowingsTable() {
   const [search, setSearch] = useState("");
@@ -111,7 +112,9 @@ export function FollowingsTable() {
         <TableRow key={following.followingId}>
           <TableCell>
             <Avatar>
-              <AvatarImage src={following.following.avatar || ""} />
+              <AvatarImage
+                src={getMediaSource(following.following.avatar) || ""}
+              />
               <AvatarFallback>
                 {following.following.username[0].toUpperCase()}
               </AvatarFallback>

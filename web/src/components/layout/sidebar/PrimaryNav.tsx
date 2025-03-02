@@ -8,6 +8,7 @@ import { TrackedChannels } from "./TrackedChannels";
 import { MyChannelItem } from "./MyChannelItem";
 import { useCurrent } from "@/hooks/useCurrent";
 import { useAuth } from "@/hooks/useAuth";
+import { FollowedChannels } from "./FollowedChannels";
 export function PrimaryNav() {
   const { user, isLoadingProfile } = useCurrent();
   const { isAuthenticated } = useAuth();
@@ -34,12 +35,15 @@ export function PrimaryNav() {
           <Loader2 className="size-5 animate-spin relative top-4 left-5" />
         )
       ) : (
-        <MyChannelItem
-          href={`/${user?.username}`}
-          user={user}
-          label={user?.username}
-          stream={user?.stream}
-        />
+        <div className="space-y-2">
+          <MyChannelItem
+            href={`/${user?.username}`}
+            user={user}
+            label={user?.username}
+            stream={user?.stream}
+          />
+          <FollowedChannels />
+        </div>
       )}
     </div>
   );
