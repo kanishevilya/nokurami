@@ -41,7 +41,7 @@ export default function FollowUnfollowButton({
 
   return (
     <Button
-      className="w-10 h-8 relative p-0"
+      className="w-10 h-[30px] relative p-0"
       onClick={isFollowing ? handleUnfollow : handleFollow}
     >
       <div className="absolute inset-0 flex items-center justify-center">
