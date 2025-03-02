@@ -101,7 +101,7 @@ export function LoginAccountForm() {
                     </InputOTP>
                   </FormControl>
                   <FormDescription>
-                    Введите 6-значный код, отправленный на ваш email
+                    Введите 6-значный код из вашего приложения 2FA
                   </FormDescription>
                 </FormItem>
               )}

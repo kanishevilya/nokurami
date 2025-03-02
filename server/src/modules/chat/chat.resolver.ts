@@ -33,16 +33,20 @@ export class ChatResolver {
     const message = await this.chatService.sendMessage(userId, input)
 
     this.pubSub.publish('NEW_MESSAGE_ADDED', { newMessageAdded: message })
+    console.log('NEW_MESSAGE_ADDED ' + JSON.stringify(message))
 
     return message
   }
 
   @Subscription(() => MessageModel, {
     name: 'newMessageAdded',
-    filter: (payload, variables) =>
-      payload.newMessageAdded.streamId === variables.streamId
+    filter: (payload, variables) => {
+      console.log("Filter payload:", payload, "variables:", variables);
+      return payload.newMessageAdded && payload.newMessageAdded.stream && payload.newMessageAdded.stream.id === variables.streamId
+    }
   })
   public newMessageAdded(@Args('streamId') streamId: string) {
+    console.log('newMessageAdded ' + streamId)
     return this.pubSub.asyncIterableIterator('NEW_MESSAGE_ADDED')
   }
 

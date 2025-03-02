@@ -13,11 +13,11 @@ interface NotificationItemProps {
 const getNotificationIcon = (type: NotificationType) => {
   switch (type) {
     case "STREAM_START":
-      return <Video className="size-6 text-white" />;
+      return <Video className="size-6 text-foreground" />;
     case "NEW_FOLLOWER":
-      return <UserPlus className="size-6 text-white" />;
+      return <UserPlus className="size-6 text-foreground " />;
     case "ENABLE_TWO_FACTOR":
-      return <Lock className="size-6 text-white" />;
+      return <Lock className="size-6 text-foreground" />;
   }
 };
 

@@ -1,0 +1,12 @@
+query FindMessagesByStream($streamId: String!) {
+  findMessagesByStream(streamId: $streamId) {
+    id
+    text
+    createdAt
+    user {
+      id
+      username
+      displayName
+    }
+  }
+}

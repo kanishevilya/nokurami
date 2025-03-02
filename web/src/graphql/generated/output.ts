@@ -605,7 +605,7 @@ export type FindChannelByUsernameQueryVariables = Exact<{
 }>;
 
 
-export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, displayName: string, information?: string | null, stream: { __typename?: 'StreamModel', title: string, previewUrl?: string | null, isLive: boolean } } };
+export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, displayName: string, information?: string | null, stream: { __typename?: 'StreamModel', id: string, title: string, previewUrl?: string | null, isLive: boolean }, socialLinks: Array<{ __typename?: 'SocialLinkModel', id: string, url: string, title: string, userId: string, position: number }> } };
 
 export type FindFollowersCountByChannelQueryVariables = Exact<{
   channelId: Scalars['String']['input'];
@@ -632,6 +632,27 @@ export type FindRecommendedChannelsQueryVariables = Exact<{ [key: string]: never
 
 
 export type FindRecommendedChannelsQuery = { __typename?: 'Query', findRecommendedChannels: Array<{ __typename?: 'UserModel', id: string, username: string, avatar?: string | null, stream: { __typename?: 'StreamModel', previewUrl?: string | null, title: string, isLive: boolean, user: { __typename?: 'UserModel', username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } } }> };
+
+export type FindMessagesByStreamQueryVariables = Exact<{
+  streamId: Scalars['String']['input'];
+}>;
+
+
+export type FindMessagesByStreamQuery = { __typename?: 'Query', findMessagesByStream: Array<{ __typename?: 'MessageModel', id: string, text: string, createdAt: any, user: { __typename?: 'UserModel', id: string, username: string, displayName: string } }> };
+
+export type NewMessageAddedSubscriptionVariables = Exact<{
+  streamId: Scalars['String']['input'];
+}>;
+
+
+export type NewMessageAddedSubscription = { __typename?: 'Subscription', newMessageAdded: { __typename?: 'MessageModel', text: string, createdAt: any, user: { __typename?: 'UserModel', username: string } } };
+
+export type SendMessageMutationVariables = Exact<{
+  data: SendMessageInput;
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'MessageModel', id: string, text: string, createdAt: any, user: { __typename?: 'UserModel', id: string, username: string, displayName: string } } };
 
 export type FindMyFollowersQueryVariables = Exact<{
   data: FindFollowersInput;
@@ -1060,9 +1081,17 @@ export const FindChannelByUsernameDocument = gql`
     displayName
     information
     stream {
+      id
       title
       previewUrl
       isLive
+    }
+    socialLinks {
+      id
+      url
+      title
+      userId
+      position
     }
   }
 }
@@ -1290,6 +1319,127 @@ export type FindRecommendedChannelsQueryHookResult = ReturnType<typeof useFindRe
 export type FindRecommendedChannelsLazyQueryHookResult = ReturnType<typeof useFindRecommendedChannelsLazyQuery>;
 export type FindRecommendedChannelsSuspenseQueryHookResult = ReturnType<typeof useFindRecommendedChannelsSuspenseQuery>;
 export type FindRecommendedChannelsQueryResult = Apollo.QueryResult<FindRecommendedChannelsQuery, FindRecommendedChannelsQueryVariables>;
+export const FindMessagesByStreamDocument = gql`
+    query FindMessagesByStream($streamId: String!) {
+  findMessagesByStream(streamId: $streamId) {
+    id
+    text
+    createdAt
+    user {
+      id
+      username
+      displayName
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindMessagesByStreamQuery__
+ *
+ * To run a query within a React component, call `useFindMessagesByStreamQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindMessagesByStreamQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindMessagesByStreamQuery({
+ *   variables: {
+ *      streamId: // value for 'streamId'
+ *   },
+ * });
+ */
+export function useFindMessagesByStreamQuery(baseOptions: Apollo.QueryHookOptions<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables> & ({ variables: FindMessagesByStreamQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables>(FindMessagesByStreamDocument, options);
+      }
+export function useFindMessagesByStreamLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables>(FindMessagesByStreamDocument, options);
+        }
+export function useFindMessagesByStreamSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables>(FindMessagesByStreamDocument, options);
+        }
+export type FindMessagesByStreamQueryHookResult = ReturnType<typeof useFindMessagesByStreamQuery>;
+export type FindMessagesByStreamLazyQueryHookResult = ReturnType<typeof useFindMessagesByStreamLazyQuery>;
+export type FindMessagesByStreamSuspenseQueryHookResult = ReturnType<typeof useFindMessagesByStreamSuspenseQuery>;
+export type FindMessagesByStreamQueryResult = Apollo.QueryResult<FindMessagesByStreamQuery, FindMessagesByStreamQueryVariables>;
+export const NewMessageAddedDocument = gql`
+    subscription NewMessageAdded($streamId: String!) {
+  newMessageAdded(streamId: $streamId) {
+    text
+    createdAt
+    user {
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewMessageAddedSubscription__
+ *
+ * To run a query within a React component, call `useNewMessageAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewMessageAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewMessageAddedSubscription({
+ *   variables: {
+ *      streamId: // value for 'streamId'
+ *   },
+ * });
+ */
+export function useNewMessageAddedSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewMessageAddedSubscription, NewMessageAddedSubscriptionVariables> & ({ variables: NewMessageAddedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewMessageAddedSubscription, NewMessageAddedSubscriptionVariables>(NewMessageAddedDocument, options);
+      }
+export type NewMessageAddedSubscriptionHookResult = ReturnType<typeof useNewMessageAddedSubscription>;
+export type NewMessageAddedSubscriptionResult = Apollo.SubscriptionResult<NewMessageAddedSubscription>;
+export const SendMessageDocument = gql`
+    mutation SendMessage($data: SendMessageInput!) {
+  sendMessage(data: $data) {
+    id
+    text
+    createdAt
+    user {
+      id
+      username
+      displayName
+    }
+  }
+}
+    `;
+export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
+
+/**
+ * __useSendMessageMutation__
+ *
+ * To run a mutation, you first call `useSendMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
+      }
+export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
+export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
+export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
 export const FindMyFollowersDocument = gql`
     query FindMyFollowers($data: FindFollowersInput!) {
   findMyFollowers(data: $data) {

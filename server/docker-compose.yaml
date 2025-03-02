@@ -75,7 +75,7 @@ services:
     #     ports:
     #         - '7880:7880' # WebSocket
     #         - '7881:7881' # HTTP
-    #         - '10000-10100:10000-10100/udp' # WebRTC
+    #         - '10000-20000:10000-20000/udp' # WebRTC
     #     volumes:
     #         - ./livekit.yaml:/etc/livekit.yaml
     #     depends_on:

@@ -6,9 +6,17 @@ query FindChannelByUsername($username: String!) {
     displayName
     information
     stream {
+      id
       title
       previewUrl
       isLive
+    }
+    socialLinks {
+      id
+      url
+      title
+      userId
+      position
     }
   }
 }
