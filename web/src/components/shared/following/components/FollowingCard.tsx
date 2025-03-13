@@ -19,7 +19,7 @@ export default function FollowingCard({ following }: FollowingCardProps) {
 
   return (
     <div className="group relative block w-full max-w-[400px] rounded-lg shadow-md bg-card overflow-hidden">
-      <Link href={`/${username}`}>
+      <Link href={`/profile/${username}`}>
         <div className="relative flex flex-col items-center justify-center w-full h-[200px] dark:bg-zinc-800 light:bg-zinc-100 rounded-t-lg">
           <ChannelAvatar
             channel={following}

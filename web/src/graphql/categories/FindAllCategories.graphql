@@ -3,20 +3,6 @@ query FindAllCategories {
     id
     title
     slug
-    description
     previewUrl
-    streams {
-      title
-      previewUrl
-      isLive
-      user {
-        username
-        avatar
-      }
-      category {
-        title
-        slug
-      }
-    }
   }
 }

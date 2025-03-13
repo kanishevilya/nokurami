@@ -1,0 +1,6 @@
+mutation MarkMessagesAsRead($input: MarkMessagesAsReadInput!) {
+  markMessagesAsRead(input: $input) {
+    success
+    count
+  }
+}

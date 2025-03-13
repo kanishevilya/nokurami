@@ -1,0 +1,36 @@
+subscription PostCreated {
+  postCreated {
+    id
+    content
+    imageUrl
+    isPublic
+    createdAt
+    updatedAt
+    author {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}
+
+subscription CommentCreated {
+  commentCreated {
+    id
+    content
+    createdAt
+    updatedAt
+    author {
+      id
+      username
+      displayName
+      avatar
+    }
+    postId
+    post {
+      id
+      content
+    }
+  }
+}

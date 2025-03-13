@@ -1,0 +1,20 @@
+mutation RequestChat($input: RequestChatInput!) {
+  requestChat(input: $input) {
+    id
+    status
+    creatorId
+    recipientId
+    creator {
+      id
+      username
+      displayName
+      avatar
+    }
+    recipient {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}

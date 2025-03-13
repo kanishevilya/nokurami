@@ -1,0 +1,36 @@
+query GetPrivateChat($id: ID!) {
+  privateChat(id: $id) {
+    id
+    creatorId
+    recipientId
+    status
+    createdAt
+    updatedAt
+    unreadCount
+    creator {
+      id
+      username
+      displayName
+      avatar
+    }
+    recipient {
+      id
+      username
+      displayName
+      avatar
+    }
+    messages {
+      id
+      content
+      senderId
+      isRead
+      createdAt
+      sender {
+        id
+        username
+        displayName
+        avatar
+      }
+    }
+  }
+}

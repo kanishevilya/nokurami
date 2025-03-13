@@ -1,0 +1,30 @@
+query FindUserByUsername($username: String!) {
+  findUserByUsername(username: $username) {
+    id
+    username
+    displayName
+    avatar
+    information
+    followers {
+      id
+      followerId
+      followingId
+    }
+    followings {
+      id
+      followerId
+      followingId
+    }
+    socialLinks {
+      id
+      url
+      title
+      position
+    }
+    stream {
+      id
+      title
+      isLive
+    }
+  }
+}

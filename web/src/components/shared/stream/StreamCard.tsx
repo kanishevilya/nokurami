@@ -24,7 +24,7 @@ export function StreamCard({ stream }: StreamCardProps) {
 
   return (
     <Link
-      href={`/${user.username}`}
+      href={`/profile/${user.username}`}
       className="group relative block w-full max-w-[480px] rounded-lg shadow-md bg-card overflow-hidden"
     >
       <div className="relative w-full h-[200px]">

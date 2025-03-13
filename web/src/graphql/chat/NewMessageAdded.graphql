@@ -1,8 +1,10 @@
 subscription NewMessageAdded($streamId: String!) {
   newMessageAdded(streamId: $streamId) {
+    id
     text
     createdAt
     user {
+      id
       username
     }
   }

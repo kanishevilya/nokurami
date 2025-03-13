@@ -1,0 +1,31 @@
+query FindPostById($id: ID!) {
+  post(id: $id) {
+    id
+    content
+    imageUrl
+    isPublic
+    createdAt
+    updatedAt
+    likeCount
+    commentCount
+    author {
+      id
+      username
+      displayName
+      avatar
+    }
+    comments {
+      id
+      content
+      createdAt
+      updatedAt
+      likeCount
+      author {
+        id
+        username
+        displayName
+        avatar
+      }
+    }
+  }
+}

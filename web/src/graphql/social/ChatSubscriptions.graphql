@@ -1,0 +1,63 @@
+subscription ChatRequested {
+  chatRequested {
+    id
+    status
+    creatorId
+    recipientId
+    creator {
+      id
+      username
+      displayName
+      avatar
+    }
+    recipient {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}
+
+subscription ChatStatusUpdated {
+  chatStatusUpdated {
+    id
+    status
+    creatorId
+    recipientId
+  }
+}
+
+subscription PrivateMessageSent {
+  privateMessageSent {
+    id
+    content
+    chatId
+    senderId
+    isRead
+    createdAt
+    sender {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}
+
+subscription OnChatMessage($chatId: ID!) {
+  onChatMessage(chatId: $chatId) {
+    id
+    content
+    chatId
+    senderId
+    isRead
+    createdAt
+    sender {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}

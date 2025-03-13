@@ -37,6 +37,13 @@ model User {
   followers  Follow[] @relation(name: "followers")
   followings Follow[] @relation(name: "followings")
 
+  posts           Post[]
+  comments        Comment[]
+  likes           Like[]
+  createdChats    PrivateChat[]    @relation("ChatCreator")
+  receivedChats   PrivateChat[]    @relation("ChatRecipient")
+  privateMessages PrivateMessage[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -219,6 +226,99 @@ model Token {
   @@map("tokens")
 }
 
+model Post {
+  id       String  @id @default(uuid())
+  content  String
+  imageUrl String? @map("image_url")
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String @map("author_id")
+
+  likes    Like[]
+  comments Comment[]
+
+  isPublic Boolean @default(true) @map("is_public")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("posts")
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  content String
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id")
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String @map("author_id")
+
+  likes Like[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("comments")
+}
+
+model Like {
+  id String @id @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String? @map("post_id")
+
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?  @map("comment_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+  @@map("likes")
+}
+
+model PrivateChat {
+  id String @id @default(uuid())
+
+  creator   User   @relation("ChatCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId String @map("creator_id")
+
+  recipient   User   @relation("ChatRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  recipientId String @map("recipient_id")
+
+  messages PrivateMessage[]
+
+  status ChatStatus @default(PENDING)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("private_chats")
+}
+
+model PrivateMessage {
+  id      String @id @default(uuid())
+  content String
+
+  chat   PrivateChat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId String      @map("chat_id")
+
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId String @map("sender_id")
+
+  isRead Boolean @default(false) @map("is_read")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("private_messages")
+}
+
 enum UserRole {
   REGULAR
   ADMIN
@@ -240,4 +340,10 @@ enum TokenType {
   TELEGRAM_AUTHENTICATION
 
   @@map("token_types")
+}
+
+enum ChatStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

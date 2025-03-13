@@ -232,6 +232,52 @@ exports.Prisma.TokenScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PostScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  authorId: 'authorId',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  postId: 'postId',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId',
+  commentId: 'commentId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PrivateChatScalarFieldEnum = {
+  id: 'id',
+  creatorId: 'creatorId',
+  recipientId: 'recipientId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PrivateMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  chatId: 'chatId',
+  senderId: 'senderId',
+  isRead: 'isRead',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -276,6 +322,12 @@ exports.TokenType = exports.$Enums.TokenType = {
   TELEGRAM_AUTHENTICATION: 'TELEGRAM_AUTHENTICATION'
 };
 
+exports.ChatStatus = exports.$Enums.ChatStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserSecurity: 'UserSecurity',
@@ -287,7 +339,12 @@ exports.Prisma.ModelName = {
   Message: 'Message',
   Follow: 'Follow',
   Category: 'Category',
-  Token: 'Token'
+  Token: 'Token',
+  Post: 'Post',
+  Comment: 'Comment',
+  Like: 'Like',
+  PrivateChat: 'PrivateChat',
+  PrivateMessage: 'PrivateMessage'
 };
 
 /**

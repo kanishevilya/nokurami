@@ -58,7 +58,7 @@ export function TrackedChannels() {
           {channels.map((channel) => (
             <a
               key={channel.username}
-              href={`/${channel.username}`}
+              href={`/profile/${channel.username}`}
               className="flex items-start gap-2 rounded-lg p-2 hover:bg-accent"
             >
               <div className="relative flex-shrink-0">

@@ -1,0 +1,23 @@
+query FindPosts(
+  $filters: PostFiltersInput
+  $sort: PostSortInput
+  $skip: Int
+  $take: Int
+) {
+  posts(filters: $filters, sort: $sort, skip: $skip, take: $take) {
+    id
+    content
+    imageUrl
+    isPublic
+    createdAt
+    updatedAt
+    likeCount
+    commentCount
+    author {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}

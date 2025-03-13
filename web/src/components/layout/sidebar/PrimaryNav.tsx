@@ -1,6 +1,14 @@
 "use client";
 
-import { Home, List, Loader2, Settings, Users } from "lucide-react";
+import {
+  Home,
+  List,
+  Loader2,
+  Settings,
+  Users,
+  MessageSquare,
+  Mail,
+} from "lucide-react";
 import { SidebarMenu } from "@/components/ui/shadcn/Sidebar";
 import { SidebarItem } from "./SidebarItem";
 import { Route } from "./types/Route";
@@ -23,6 +31,11 @@ export function PrimaryNav() {
       href: "/directory",
       icon: List,
     },
+    {
+      label: "Community",
+      href: "/community",
+      icon: MessageSquare,
+    },
   ];
 
   return (
@@ -30,6 +43,17 @@ export function PrimaryNav() {
       {routes.map((route, index) => (
         <SidebarItem key={index} route={route} />
       ))}
+
+      {isAuthenticated && (
+        <SidebarItem
+          route={{
+            label: "Messages",
+            href: "/messages",
+            icon: Mail,
+          }}
+        />
+      )}
+
       {isLoadingProfile || !user ? (
         isAuthenticated && (
           <Loader2 className="size-5 animate-spin relative top-4 left-5" />
@@ -37,7 +61,7 @@ export function PrimaryNav() {
       ) : (
         <div className="space-y-2">
           <MyChannelItem
-            href={`/${user?.username}`}
+            href={`/profile/${user?.username}`}
             user={user}
             label={user?.username}
             stream={user?.stream}

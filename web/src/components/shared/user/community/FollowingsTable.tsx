@@ -130,7 +130,7 @@ export function FollowingsTable() {
                 {
                   label: "View Channel",
                   onClick: () =>
-                    (window.location.href = `/${following.following.username}`),
+                    (window.location.href = `/profile/${following.following.username}`),
                 },
                 {
                   label: "Unfollow",

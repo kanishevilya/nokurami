@@ -1,0 +1,8 @@
+mutation UpdateChatStatus($input: UpdateChatStatusInput!) {
+  updateChatStatus(input: $input) {
+    id
+    status
+    creatorId
+    recipientId
+  }
+}

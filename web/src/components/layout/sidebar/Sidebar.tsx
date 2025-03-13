@@ -6,6 +6,8 @@ import { DashboardNav } from "./DashboardNav";
 import { cn } from "@/utils/cn";
 import { useSidebar } from "@/hooks/useSidebar";
 import { SidebarHeader } from "./SidebarHeader";
+import { RecommendedChannelsSidebar } from "./RecommendedChannelsSidebar";
+
 export function Sidebar() {
   const { isCollapsed } = useSidebar();
 
@@ -22,6 +24,13 @@ export function Sidebar() {
     >
       <SidebarHeader />
       {isDashboard ? <DashboardNav /> : <PrimaryNav />}
+
+      {!isDashboard && (
+        <>
+          <div className="my-2 border-t border-border" />
+          <RecommendedChannelsSidebar />
+        </>
+      )}
     </aside>
   );
 }

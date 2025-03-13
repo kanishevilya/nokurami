@@ -1,19 +1,27 @@
-import type { CodegenConfig } from '@graphql-codegen/cli'
-import 'dotenv/config'
+import type { IGraphQLConfig } from 'graphql-config';
 
-const config: CodegenConfig = {
-    schema: process.env.NEXT_PUBLIC_SERVER_URL,
+const config: IGraphQLConfig = {
+    schema: ['http://127.0.0.1:4000/graphql'],
     documents: ['./src/graphql/**/*.graphql'],
-    generates: {
-        './src/graphql/generated/output.ts': {
-            plugins: [
-                'typescript',
-                'typescript-operations',
-                'typescript-react-apollo'
-            ]
-        }
+    extensions: {
+        codegen: {
+            generates: {
+                './src/graphql/generated/output.ts': {
+                    plugins: [
+                        'typescript',
+                        'typescript-operations',
+                        'typescript-react-apollo',
+                    ],
+                    config: {
+                        skipTypename: false,
+                        withHooks: true,
+                        withHOC: false,
+                        withComponent: false,
+                    },
+                },
+            },
+        },
     },
-    ignoreNoDocuments: true
-}
+};
 
-export default config
+export default config;

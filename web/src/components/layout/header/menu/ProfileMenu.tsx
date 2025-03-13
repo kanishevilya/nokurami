@@ -59,7 +59,7 @@ export function ProfileMenu() {
             <h2 className="font-medium text-foreground">{user.username}</h2>
           </div>
           <DropdownMenuSeparator />
-          <Link href={`/${user.username}`}>
+          <Link href={`/profile/${user.username}`}>
             <DropdownMenuItem>
               <User className="mr-2 size-2" />
               Профиль

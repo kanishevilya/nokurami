@@ -22,23 +22,32 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
   if (!token || !name || !identity) {
     return <ChannelOverviewSkeleton />;
   }
+
   return (
-    <div>
+    <div className="container mx-auto px-4 py-6">
       <LiveKitRoom
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WSS_URL}
-        className="grid max-w-screen-xl grid-cols-1 gap-6 lg:grid-cols-7"
       >
-        <div className="order-1 col-span-1 flex h-full flex-col lg:col-span-5">
-          <div className="flex h-full gap-6">
-            <StreamVideo channel={channel} />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          {/* Main content - Video and Info */}
+          <div className="order-1 col-span-1 flex flex-col space-y-6 lg:col-span-8">
+            <div className="overflow-hidden rounded-lg bg-card shadow-md">
+              <StreamVideo channel={channel} />
+            </div>
+
+            <StreamInfo channel={channel} isCurrentUser={isCurrentUser} />
+
+            <AboutChannel channel={channel} />
+          </div>
+
+          {/* Chat sidebar */}
+          <div className="order-2 col-span-1 lg:col-span-4">
             <Chat
               streamId={channel.stream?.id}
-              isLive={channel.stream?.isLive}
+              isLive={Boolean(channel.stream?.isLive)}
             />
           </div>
-          <StreamInfo channel={channel} isCurrentUser={isCurrentUser} />
-          <AboutChannel channel={channel} />
         </div>
       </LiveKitRoom>
     </div>
@@ -47,10 +56,17 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
 
 export function ChannelOverviewSkeleton() {
   return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-10 w-10 rounded-full" />
-      <Skeleton className="h-4 w-40" />
-      <Skeleton className="h-4 w-32" />
+    <div className="container mx-auto px-4 py-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="col-span-1 space-y-6 lg:col-span-8">
+          <Skeleton className="aspect-video w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-64 w-full rounded-lg" />
+        </div>
+        <div className="col-span-1 lg:col-span-4">
+          <Skeleton className="h-[600px] w-full rounded-lg" />
+        </div>
+      </div>
     </div>
   );
 }

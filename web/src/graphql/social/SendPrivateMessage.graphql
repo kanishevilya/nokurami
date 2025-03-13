@@ -1,0 +1,16 @@
+mutation SendPrivateMessage($input: SendPrivateMessageInput!) {
+  sendPrivateMessage(input: $input) {
+    id
+    content
+    chatId
+    senderId
+    isRead
+    createdAt
+    sender {
+      id
+      username
+      displayName
+      avatar
+    }
+  }
+}
