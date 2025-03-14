@@ -32,7 +32,7 @@ import {
   useFindFollowersCountByChannelQuery,
   useFindFollowingsCountByChannelQuery,
 } from "@/graphql/generated/output";
-import { getMediaSource } from "@/lib/utils";
+import { getMediaSource } from "@/utils/get-media-source";
 
 export default function UserProfilePage() {
   const params = useParams();

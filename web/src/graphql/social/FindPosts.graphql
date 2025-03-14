@@ -1,10 +1,10 @@
 query FindPosts(
   $filters: PostFiltersInput
   $sort: PostSortInput
-  $skip: Int
-  $take: Int
+  $skip: Float
+  $take: Float
 ) {
-  posts(filters: $filters, sort: $sort, skip: $skip, take: $take) {
+  findPosts(filters: $filters, sort: $sort, skip: $skip, take: $take) {
     id
     content
     imageUrl

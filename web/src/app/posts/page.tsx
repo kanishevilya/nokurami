@@ -101,7 +101,7 @@ export default function CommunityPage() {
   };
 
   // Рендер поста
-  const renderPost = (post) => (
+  const renderPost = (post: any) => (
     <Card key={post.id} className="mb-4 overflow-hidden">
       <CardContent className="p-4">
         <div className="flex items-center mb-3">
@@ -156,12 +156,12 @@ export default function CommunityPage() {
 
       <div className="flex mb-4 gap-4">
         <div className="flex-1">
+          <Search className="w-4 h-4 mr-2 text-muted-foreground" />
           <Input
             placeholder="Search posts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full"
-            prefix={<Search className="w-4 h-4 mr-2 text-muted-foreground" />}
           />
         </div>
         <Button variant="outline" size="sm" className="gap-1">

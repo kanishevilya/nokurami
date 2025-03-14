@@ -36,7 +36,11 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
               <StreamVideo channel={channel} />
             </div>
 
-            <StreamInfo channel={channel} isCurrentUser={isCurrentUser} />
+            <StreamInfo
+              channel={channel}
+              isCurrentUser={isCurrentUser}
+              myId={user?.id!}
+            />
 
             <AboutChannel channel={channel} />
           </div>

@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, InputType, registerEnumType } from '@nestjs/graphql';
-import { UserModel } from '../../modules/auth/account/models/user.model';
+import { UserModel } from '../../auth/account/models/user.model';
 
 @ObjectType()
 export class PostModel {

@@ -1,7 +1,7 @@
-import { Resolver, Query, Mutation, Args, Context, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../../shared/guards/gql-auth.guard';
-import { Authorized } from '../../shared/decorators/authorized.decorator';
+import { GqlAuthGuard } from '../../../shared/guards/gql-auth.guard';
+import { Authorized } from '../../../shared/decorators/authorized.decorator';
 import { User } from '@prisma/generated';
 import { SocialService } from '../services/social.service';
 import {
@@ -22,13 +22,14 @@ import {
     PostFiltersInput,
     PostSortInput,
 } from '../types/social.types';
+import { Authorization } from '@/src/shared/decorators/auth.decorator';
 
 @Resolver(() => PostModel)
 export class SocialResolver {
     constructor(private socialService: SocialService) { }
 
     // Запросы для постов
-    @Query(() => [PostModel])
+    @Query(() => [PostModel], { name: 'findPosts' })
     @UseGuards(GqlAuthGuard)
     async posts(
         @Args('filters', { nullable: true }) filters?: PostFiltersInput,
@@ -39,14 +40,14 @@ export class SocialResolver {
         return this.socialService.getPosts(filters, sort, skip, take);
     }
 
-    @Query(() => PostModel)
-    @UseGuards(GqlAuthGuard)
+    @Query(() => PostModel, { name: 'findPostById' })
+    @Authorization()
     async post(@Args('id') id: string) {
         return this.socialService.getPostById(id);
     }
 
-    @Mutation(() => PostModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => PostModel, { name: 'createPost' })
+    @Authorization()
     async createPost(
         @Authorized() user: User,
         @Args('input') input: CreatePostInput,
@@ -54,8 +55,8 @@ export class SocialResolver {
         return this.socialService.createPost(user.id, input);
     }
 
-    @Mutation(() => PostModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => PostModel, { name: 'updatePost' })
+    @Authorization()
     async updatePost(
         @Authorized() user: User,
         @Args('input') input: UpdatePostInput,
@@ -63,8 +64,8 @@ export class SocialResolver {
         return this.socialService.updatePost(user.id, input);
     }
 
-    @Mutation(() => Boolean)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean, { name: 'deletePost' })
+    @Authorization()
     async deletePost(
         @Authorized() user: User,
         @Args('id') id: string,
@@ -73,8 +74,8 @@ export class SocialResolver {
     }
 
     // Запросы для комментариев
-    @Mutation(() => CommentModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => CommentModel, { name: 'createComment' })
+    @Authorization()
     async createComment(
         @Authorized() user: User,
         @Args('input') input: CreateCommentInput,
@@ -82,8 +83,8 @@ export class SocialResolver {
         return this.socialService.createComment(user.id, input);
     }
 
-    @Mutation(() => CommentModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => CommentModel, { name: 'updateComment' })
+    @Authorization()
     async updateComment(
         @Authorized() user: User,
         @Args('input') input: UpdateCommentInput,
@@ -92,7 +93,7 @@ export class SocialResolver {
     }
 
     @Mutation(() => Boolean)
-    @UseGuards(GqlAuthGuard)
+    @Authorization()
     async deleteComment(
         @Authorized() user: User,
         @Args('id') id: string,
@@ -101,8 +102,8 @@ export class SocialResolver {
     }
 
     // Запросы для лайков
-    @Mutation(() => Boolean)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean, { name: 'toggleLike' })
+    @Authorization()
     async toggleLike(
         @Authorized() user: User,
         @Args('input') input: ToggleLikeInput,
@@ -112,14 +113,14 @@ export class SocialResolver {
     }
 
     // Запросы для приватных чатов
-    @Query(() => [PrivateChatModel])
-    @UseGuards(GqlAuthGuard)
+    @Query(() => [PrivateChatModel], { name: 'privateChats' })
+    @Authorization()
     async privateChats(@Authorized() user: User) {
         return this.socialService.getPrivateChats(user.id);
     }
 
-    @Query(() => PrivateChatModel)
-    @UseGuards(GqlAuthGuard)
+    @Query(() => PrivateChatModel, { name: 'privateChat' })
+    @Authorization()
     async privateChat(
         @Authorized() user: User,
         @Args('id') id: string,
@@ -127,8 +128,8 @@ export class SocialResolver {
         return this.socialService.getPrivateChatById(user.id, id);
     }
 
-    @Mutation(() => PrivateChatModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => PrivateChatModel, { name: 'requestChat' })
+    @Authorization()
     async requestChat(
         @Authorized() user: User,
         @Args('input') input: RequestChatInput,
@@ -136,8 +137,8 @@ export class SocialResolver {
         return this.socialService.requestChat(user.id, input);
     }
 
-    @Mutation(() => PrivateChatModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => PrivateChatModel, { name: 'updateChatStatus' })
+    @Authorization()
     async updateChatStatus(
         @Authorized() user: User,
         @Args('input') input: UpdateChatStatusInput,
@@ -145,8 +146,8 @@ export class SocialResolver {
         return this.socialService.updateChatStatus(user.id, input);
     }
 
-    @Mutation(() => PrivateMessageModel)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => PrivateMessageModel, { name: 'sendPrivateMessage' })
+    @Authorization()
     async sendPrivateMessage(
         @Authorized() user: User,
         @Args('input') input: SendPrivateMessageInput,
@@ -154,8 +155,8 @@ export class SocialResolver {
         return this.socialService.sendPrivateMessage(user.id, input);
     }
 
-    @Mutation(() => MarkMessagesAsReadResponse)
-    @UseGuards(GqlAuthGuard)
+    @Mutation(() => MarkMessagesAsReadResponse, { name: 'markMessagesAsRead' })
+    @Authorization()
     async markMessagesAsRead(
         @Authorized() user: User,
         @Args('input') input: MarkMessagesAsReadInput,
@@ -164,17 +165,18 @@ export class SocialResolver {
     }
 
     // Подписки
-    @Subscription(() => PostModel)
+    @Subscription(() => PostModel, { name: 'postCreated' })
     postCreated() {
         return this.socialService.onPostCreated();
     }
 
-    @Subscription(() => CommentModel)
+    @Subscription(() => CommentModel, { name: 'commentCreated' })
     commentCreated() {
         return this.socialService.onCommentCreated();
     }
 
     @Subscription(() => PrivateChatModel, {
+        name: 'chatRequested',
         filter: (payload: any, variables: any, context: any) => {
             const userId = context.req.user?.id;
             if (!userId) return false;
@@ -183,11 +185,12 @@ export class SocialResolver {
             return chat.recipientId === userId; // Только получатель запроса получает уведомление
         },
     })
-    chatRequested(@Context() context: any) {
-        return this.socialService.onChatRequested(context.req.user?.id);
+    chatRequested() {
+        return this.socialService.onChatRequested();
     }
 
     @Subscription(() => PrivateChatModel, {
+        name: 'chatStatusUpdated',
         filter: (payload: any, variables: any, context: any) => {
             const userId = context.req.user?.id;
             if (!userId) return false;
@@ -196,11 +199,12 @@ export class SocialResolver {
             return chat.creatorId === userId; // Только создатель чата получает уведомление об изменении статуса
         },
     })
-    chatStatusUpdated(@Context() context: any) {
-        return this.socialService.onChatStatusUpdated(context.req.user?.id);
+    chatStatusUpdated() {
+        return this.socialService.onChatStatusUpdated();
     }
 
     @Subscription(() => PrivateMessageModel, {
+        name: 'privateMessageSent',
         filter: (payload: any, variables: any, context: any) => {
             const userId = context.req.user?.id;
             if (!userId) return false;
@@ -212,11 +216,12 @@ export class SocialResolver {
             return (chat.creatorId === userId || chat.recipientId === userId) && message.senderId !== userId;
         },
     })
-    privateMessageSent(@Context() context: any) {
-        return this.socialService.onPrivateMessageSent(context.req.user?.id);
+    privateMessageSent() {
+        return this.socialService.onPrivateMessageSent();
     }
 
     @Subscription(() => PrivateMessageModel, {
+        name: 'onChatMessage',
         filter: (payload: any, variables: any, context: any) => {
             const userId = context.req.user?.id;
             if (!userId) return false;

@@ -1,5 +1,5 @@
-query FindPostById($id: ID!) {
-  post(id: $id) {
+query FindPostById($id: String!) {
+  findPostById(id: $id) {
     id
     content
     imageUrl

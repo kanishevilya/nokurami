@@ -1,4 +1,4 @@
-query GetPrivateChat($id: ID!) {
+query GetPrivateChat($id: String!) {
   privateChat(id: $id) {
     id
     creatorId

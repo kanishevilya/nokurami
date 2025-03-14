@@ -26,6 +26,8 @@ import { ChannelModule } from '../modules/channel/channel.module';
 import { NotificationModule } from '../modules/notification/notification.module';
 import { TelegramModule } from '../modules/libs/telegram/telegram.module';
 import { CronModule } from '../modules/libs/cron/cron.module';
+import { SocialModule } from '../modules/social/social.module';
+import { PubSubModule } from '../modules/libs/pub-sub/pub-sub.module';
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -61,6 +63,8 @@ import { CronModule } from '../modules/libs/cron/cron.module';
         VerificationModule,
         PasswordResetModule,
         TwoFactorAuthentificationModule,
+        SocialModule,
+        PubSubModule,
         WebhookModule
     ]
 })

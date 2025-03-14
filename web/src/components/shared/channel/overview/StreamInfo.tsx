@@ -4,9 +4,10 @@ import FollowUnfollowButton from "../../following/components/FollowUnfollowButto
 interface StreamInfoProps {
   channel: FindChannelByUsernameQuery["findChannelByUsername"];
   isCurrentUser: boolean;
+  myId: string;
 }
 
-export function StreamInfo({ channel, isCurrentUser }: StreamInfoProps) {
+export function StreamInfo({ channel, isCurrentUser, myId }: StreamInfoProps) {
   const stream = channel.stream;
 
   return (
@@ -21,7 +22,9 @@ export function StreamInfo({ channel, isCurrentUser }: StreamInfoProps) {
         <p className="text-sm text-muted-foreground">
           {stream?.isLive ? "In live" : "Not in live"}
         </p>
-        {!isCurrentUser && <FollowUnfollowButton channelId={channel.id} />}
+        {!isCurrentUser && (
+          <FollowUnfollowButton channelId={channel.id} myId={myId} />
+        )}
       </div>
     </div>
   );

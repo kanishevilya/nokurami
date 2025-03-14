@@ -1,13 +1,16 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { PrismaService } from '../../database/prisma.service';
 import { ChatStatus, CreatePostInput, UpdatePostInput, CreateCommentInput, UpdateCommentInput, ToggleLikeInput, RequestChatInput, UpdateChatStatusInput, SendPrivateMessageInput, MarkMessagesAsReadInput, PostFiltersInput, PostSortInput } from '../types/social.types';
-import { PubSubService } from '../../pub-sub/pub-sub.service';
+import { PrismaService } from '@/src/core/prisma/prisma.service';
+import { Inject } from '@nestjs/common';
+import { PUB_SUB } from '@/src/modules/libs/pub-sub/pub-sub.provider';
+import { PubSub } from 'graphql-subscriptions';
+
 
 @Injectable()
 export class SocialService {
     constructor(
         private prisma: PrismaService,
-        private pubSub: PubSubService,
+        @Inject(PUB_SUB) private pubSub: PubSub,
     ) { }
 
     // Posts
@@ -333,7 +336,7 @@ export class SocialService {
                         },
                     },
                 });
-                return { liked: true, entityId: input.postId, entityType: 'POST' };
+                return { liked: true, entityId: input.postId, entityType: 'POST', likeId: like.id };
             }
         } else if (input.commentId) {
             const comment = await this.prisma.comment.findUnique({
@@ -370,7 +373,7 @@ export class SocialService {
                         },
                     },
                 });
-                return { liked: true, entityId: input.commentId, entityType: 'COMMENT' };
+                return { liked: true, entityId: input.commentId, entityType: 'COMMENT', likeId: like.id };
             }
         }
     }
@@ -621,26 +624,26 @@ export class SocialService {
 
     // Подписки
     onPostCreated() {
-        return this.pubSub.asyncIterator('postCreated');
+        return this.pubSub.asyncIterableIterator('postCreated');
     }
 
     onCommentCreated() {
-        return this.pubSub.asyncIterator('commentCreated');
+        return this.pubSub.asyncIterableIterator('commentCreated');
     }
 
-    onChatRequested(userId: string) {
-        return this.pubSub.asyncIterator('chatRequested');
+    onChatRequested() {
+        return this.pubSub.asyncIterableIterator('chatRequested');
     }
 
-    onChatStatusUpdated(userId: string) {
-        return this.pubSub.asyncIterator('chatStatusUpdated');
+    onChatStatusUpdated() {
+        return this.pubSub.asyncIterableIterator('chatStatusUpdated');
     }
 
-    onPrivateMessageSent(userId: string) {
-        return this.pubSub.asyncIterator('privateMessageSent');
+    onPrivateMessageSent() {
+        return this.pubSub.asyncIterableIterator('privateMessageSent');
     }
 
     onChatMessage(chatId: string) {
-        return this.pubSub.asyncIterator(`chatMessages:${chatId}`);
+        return this.pubSub.asyncIterableIterator(`chatMessages:${chatId}`);
     }
 } 

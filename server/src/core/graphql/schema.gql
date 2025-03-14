@@ -63,9 +63,40 @@ type ChatSettingsModel {
   updatedAt: DateTime!
 }
 
+"""Status of a private chat"""
+enum ChatStatus {
+  ACCEPTED
+  PENDING
+  REJECTED
+}
+
+type CommentModel {
+  author: UserModel!
+  authorId: String!
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  likeCount: Float
+  likes: [LikeModel!]
+  post: PostModel!
+  postId: String!
+  updatedAt: DateTime!
+}
+
 input ConfirmChangedEmailInput {
   newEmail: String!
   token: String!
+}
+
+input CreateCommentInput {
+  content: String!
+  postId: ID!
+}
+
+input CreatePostInput {
+  content: String!
+  imageUrl: String
+  isPublic: Boolean! = true
 }
 
 input CreateUserInput {
@@ -137,6 +168,17 @@ type GenerateStreamTokenModel {
   token: String!
 }
 
+type LikeModel {
+  comment: CommentModel
+  commentId: String
+  createdAt: DateTime!
+  id: ID!
+  post: PostModel
+  postId: String
+  user: UserModel!
+  userId: String!
+}
+
 type LocationModel {
   city: String!
   country: String!
@@ -148,6 +190,15 @@ input LoginInput {
   login: String!
   password: String!
   pin: String
+}
+
+input MarkMessagesAsReadInput {
+  chatId: ID!
+}
+
+type MarkMessagesAsReadResponse {
+  count: Float!
+  success: Boolean!
 }
 
 type MessageModel {
@@ -172,25 +223,36 @@ type Mutation {
   changeStreamPreview(preview: Upload!): Boolean!
   clearSessionFromCookie: Boolean!
   confirmChangedEmail(data: ConfirmChangedEmailInput!): Boolean!
+  createComment(input: CreateCommentInput!): CommentModel!
   createIngress(ingressType: Float!): Boolean!
+  createPost(input: CreatePostInput!): PostModel!
   createSocialLink(data: SocialLinkInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!
+  deleteComment(id: String!): Boolean!
+  deletePost(id: String!): Boolean!
   disable2FA: Boolean!
   enable2FA(data: Enable2FAInput!): Boolean!
   followToChannel(channelId: String!): Boolean!
   generateStreamToken(data: GenerateStreamTokenInput!): GenerateStreamTokenModel!
   login(data: LoginInput!): AuthModel!
   logout: Boolean!
+  markMessagesAsRead(input: MarkMessagesAsReadInput!): MarkMessagesAsReadResponse!
   new_password(data: NewPasswordInput!): Boolean!
   removeProfileAvatar: Boolean!
   removeSession(id: String!): Boolean!
   removeSocialLink(id: String!): Boolean!
   removeStreamPreview: Boolean!
   reorderSocialLinks(list: [SocialLinkOrderInput!]!): Boolean!
+  requestChat(input: RequestChatInput!): PrivateChatModel!
   requestToEmailChange: Boolean!
   reset_password(data: ResetPasswordInput!): Boolean!
   sendMessage(data: SendMessageInput!): MessageModel!
+  sendPrivateMessage(input: SendPrivateMessageInput!): PrivateMessageModel!
+  toggleLike(input: ToggleLikeInput!): Boolean!
   unfollowFromChannel(channelId: String!): Boolean!
+  updateChatStatus(input: UpdateChatStatusInput!): PrivateChatModel!
+  updateComment(input: UpdateCommentInput!): CommentModel!
+  updatePost(input: UpdatePostInput!): PostModel!
   updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(data: VerificationInput!): AuthModel!
 }
@@ -228,6 +290,58 @@ enum NotificationType {
   STREAM_START
 }
 
+input PostFiltersInput {
+  followingOnly: Boolean
+  searchTerm: String
+  userId: String
+}
+
+type PostModel {
+  author: UserModel!
+  authorId: String!
+  commentCount: Float
+  comments: [CommentModel!]
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  imageUrl: String
+  isPublic: Boolean!
+  likeCount: Float
+  likes: [LikeModel!]
+  updatedAt: DateTime!
+}
+
+input PostSortInput {
+  latestFirst: Boolean
+  mostCommented: Boolean
+  mostLiked: Boolean
+}
+
+type PrivateChatModel {
+  createdAt: DateTime!
+  creator: UserModel!
+  creatorId: String!
+  id: ID!
+  messages: [PrivateMessageModel!]
+  recipient: UserModel!
+  recipientId: String!
+  status: ChatStatus!
+  unreadCount: Float
+  updatedAt: DateTime!
+}
+
+type PrivateMessageModel {
+  chat: PrivateChatModel!
+  chatId: String!
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  isRead: Boolean!
+  sender: UserModel!
+  senderId: String!
+  updatedAt: DateTime!
+}
+
 type Query {
   findAllCategories: [CategoryModel!]!
   findAllLiveStreams(filters: FiltersInput!): [StreamModel!]!
@@ -240,6 +354,8 @@ type Query {
   findMyFollowers(data: FindFollowersInput): FollowersResponse!
   findMyFollowings(data: FindFollowersInput): FollowingsResponse!
   findNotificationsByUserId: [NotificationModel!]!
+  findPostById(id: String!): PostModel!
+  findPosts(filters: PostFiltersInput, skip: Float, sort: PostSortInput, take: Float): [PostModel!]!
   findRandomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
   findRecommendedChannels: [UserModel!]!
@@ -250,6 +366,12 @@ type Query {
   getCurrentSession: SessionModel!
   getProfile: UserModel!
   getSessionsByUser: [SessionModel!]!
+  privateChat(id: String!): PrivateChatModel!
+  privateChats: [PrivateChatModel!]!
+}
+
+input RequestChatInput {
+  recipientId: ID!
 }
 
 input ResetPasswordInput {
@@ -259,6 +381,11 @@ input ResetPasswordInput {
 input SendMessageInput {
   streamId: String!
   text: String!
+}
+
+input SendPrivateMessageInput {
+  chatId: ID!
+  content: String!
 }
 
 type SessionMetadataModel {
@@ -318,13 +445,41 @@ type StreamModel {
 }
 
 type Subscription {
+  chatRequested: PrivateChatModel!
+  chatStatusUpdated: PrivateChatModel!
+  commentCreated: CommentModel!
   newMessageAdded(streamId: String!): MessageModel!
   newNotificationAdded(userId: String!): NotificationModel!
+  onChatMessage(chatId: String!): PrivateMessageModel!
+  postCreated: PostModel!
+  privateMessageSent: PrivateMessageModel!
+}
+
+input ToggleLikeInput {
+  commentId: ID
+  postId: ID
 }
 
 type TotpModel {
   qrcodeUrl: String!
   secret: String!
+}
+
+input UpdateChatStatusInput {
+  chatId: ID!
+  status: ChatStatus!
+}
+
+input UpdateCommentInput {
+  content: String!
+  id: ID!
+}
+
+input UpdatePostInput {
+  content: String
+  id: ID!
+  imageUrl: String
+  isPublic: Boolean
 }
 
 """The `Upload` scalar type represents a file upload."""

@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  useFindFollowersCountByChannelQuery,
+  useFindFollowingsCountByChannelQuery,
+  useFindMyFollowersQuery,
+  useFindMyFollowingsChannelsQuery,
   useFollowToChannelMutation,
   useUnfollowFromChannelMutation,
 } from "@/graphql/generated/output";
@@ -9,10 +13,42 @@ import { Button } from "@/components/ui/shadcn/Button";
 
 export default function FollowUnfollowButton({
   channelId,
+  myId,
 }: {
   channelId: string;
+  myId: string;
 }) {
   const [isFollowing, setIsFollowing] = useState(true);
+
+  const { data: followingsCount } = useFindFollowingsCountByChannelQuery({
+    variables: {
+      channelId: myId!,
+    },
+  });
+
+  const { data: myFollowings } = useFindMyFollowingsChannelsQuery({
+    variables: {
+      data: {
+        take: followingsCount?.findFollowingsCountByChannel,
+        skip: 0,
+      },
+    },
+    notifyOnNetworkStatusChange: true,
+  });
+
+  useEffect(() => {
+    async function checkIsFollowing() {
+      if (!myFollowings || !followingsCount) {
+        setIsFollowing(false);
+        return;
+      }
+      const isFollowing = myFollowings?.findMyFollowings.followings.some(
+        (following) => following.following.id === channelId
+      );
+      setIsFollowing(isFollowing ?? false);
+    }
+    checkIsFollowing();
+  }, [myFollowings]);
 
   const [followUser, { loading: following }] = useFollowToChannelMutation({
     onCompleted: () => {
