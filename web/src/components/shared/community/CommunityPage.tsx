@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Tabs,
   TabsContent,
@@ -33,10 +33,200 @@ import {
   TrendingUp,
   Clock,
   Users,
+  Image as ImageIcon,
+  X,
+  Loader,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useCurrent } from "@/hooks/useCurrent";
+import { useAuth } from "@/hooks/useAuth";
+import { getMediaSource } from "@/utils/get-media-source";
+import { format } from "date-fns";
+import {
+  useCreatePostMutation,
+  useFindPostsQuery,
+  useToggleLikeMutation,
+  useCreateCommentMutation,
+  usePostCreatedSubscription,
+  PostModel,
+  PostFiltersInput,
+  PostSortInput,
+} from "@/graphql/generated/output";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/shadcn/DropdownMenu";
+import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/shadcn/Dialog";
+import { Label } from "@/components/ui/shadcn/Label";
+import { Skeleton } from "@/components/ui/shadcn/Skeleton";
+import { PostCard } from "./PostCard";
 
 export function CommunityPage() {
   const [activeTab, setActiveTab] = useState("posts");
+  const { isAuthenticated } = useAuth();
+  const { user } = useCurrent();
+  const [postContent, setPostContent] = useState("");
+  const [showCommentInput, setShowCommentInput] = useState<string | null>(null);
+  const [commentContent, setCommentContent] = useState("");
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+  const [filters, setFilters] = useState<PostFiltersInput>({});
+  const [sort, setSort] = useState<PostSortInput>({ latestFirst: true });
+  const [isLiking, setIsLiking] = useState<string | null>(null);
+  const [isCommenting, setIsCommenting] = useState<string | null>(null);
+
+  // Запрос на получение постов
+  const {
+    data: postsData,
+    loading: loadingPosts,
+    error: postsError,
+    refetch: refetchPosts,
+  } = useFindPostsQuery({
+    variables: {
+      filters,
+      sort,
+      skip: 0,
+      take: 20,
+    },
+    fetchPolicy: "network-only",
+  });
+
+  // Мутация для создания поста
+  const [createPost, { loading: isCreatingPost }] = useCreatePostMutation({
+    onCompleted: () => {
+      setPostContent("");
+      toast.success("Post created successfully!");
+      refetchPosts();
+    },
+    onError: (error) => {
+      toast.error(`Failed to create post: ${error.message}`);
+    },
+  });
+
+  // Мутация для лайка/дизлайка
+  const [toggleLike] = useToggleLikeMutation({
+    onError: (error) => {
+      toast.error(`Failed to toggle like: ${error.message}`);
+    },
+  });
+
+  // Мутация для создания комментария
+  const [createComment, { loading: isCreatingComment }] =
+    useCreateCommentMutation({
+      onCompleted: () => {
+        setCommentContent("");
+        setShowCommentInput(null);
+        toast.success("Comment added successfully!");
+        refetchPosts();
+      },
+      onError: (error) => {
+        toast.error(`Failed to add comment: ${error.message}`);
+      },
+    });
+
+  // Подписка на новые посты
+  const { data: newPostData } = usePostCreatedSubscription();
+
+  useEffect(() => {
+    if (newPostData?.postCreated) {
+      // Обновляем данные после получения нового поста через подписку
+      refetchPosts();
+    }
+  }, [newPostData, refetchPosts]);
+
+  // Обработчик для создания поста
+  const handleCreatePost = async () => {
+    if (!postContent.trim()) return;
+
+    try {
+      await createPost({
+        variables: {
+          input: {
+            content: postContent,
+            isPublic: true,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
+  // Обработчик для лайка/дизлайка
+  const handleToggleLike = async (postId: string) => {
+    setIsLiking(postId);
+    try {
+      await toggleLike({
+        variables: {
+          input: {
+            postId,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    } finally {
+      setIsLiking(null);
+    }
+  };
+
+  // Обработчик для создания комментария
+  const handleCreateComment = async (postId: string, content: string) => {
+    setIsCommenting(postId);
+    try {
+      await createComment({
+        variables: {
+          input: {
+            postId,
+            content,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error creating comment:", error);
+    } finally {
+      setIsCommenting(null);
+    }
+  };
+
+  // Обработчик для смены фильтров
+  const handleFilterChange = (newFilters: PostFiltersInput) => {
+    setFilters(newFilters);
+    setIsFilterDialogOpen(false);
+  };
+
+  // Обработчик для смены сортировки
+  const handleSortChange = (newSort: PostSortInput) => {
+    setSort(newSort);
+  };
+
+  // Отфильтрованные посты в зависимости от активной вкладки
+  const getFilteredPosts = () => {
+    const posts = postsData?.findPosts || [];
+
+    if (activeTab === "trending") {
+      // Для "trending" используем сортировку по лайкам
+      return [...posts].sort((a, b) => (b.likeCount || 0) - (a.likeCount || 0));
+    }
+
+    if (activeTab === "following" && user) {
+      // Для "following" отфильтровываем посты от подписок
+      // Здесь должна быть логика фильтрации по подпискам
+      return posts.filter((post) => post.author.id !== user.id); // Временная логика
+    }
+
+    return posts;
+  };
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -46,7 +236,6 @@ export function CommunityPage() {
           description="Connect with streamers and other viewers"
           size="lg"
         />
-        <Button>Create Post</Button>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -64,183 +253,317 @@ export function CommunityPage() {
               </TabsList>
 
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsFilterDialogOpen(true)}
+                >
                   <Filter className="mr-2 h-4 w-4" />
                   Filter
                 </Button>
-                <Button variant="outline" size="sm">
-                  <TrendingUp className="mr-2 h-4 w-4" />
-                  Sort
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <TrendingUp className="mr-2 h-4 w-4" />
+                      Sort
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => handleSortChange({ latestFirst: true })}
+                    >
+                      Newest First
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleSortChange({ latestFirst: false })}
+                    >
+                      Oldest First
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleSortChange({ mostLiked: true })}
+                    >
+                      Most Liked
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleSortChange({ mostCommented: true })}
+                    >
+                      Most Commented
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
             <TabsContent value="posts" className="space-y-6">
               {/* Create Post Card */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start gap-4">
-                    <Avatar>
-                      <AvatarImage src="/placeholder-user.jpg" />
-                      <AvatarFallback>UN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <Textarea
-                        placeholder="What's on your mind?"
-                        className="min-h-[100px] resize-none"
-                      />
+              {isAuthenticated && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start gap-4">
+                      <Avatar>
+                        <AvatarImage src={getMediaSource(user?.avatar)} />
+                        <AvatarFallback>
+                          {user?.displayName?.[0] || user?.username?.[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <Textarea
+                          placeholder="What's on your mind?"
+                          className="min-h-[100px] resize-none"
+                          value={postContent}
+                          onChange={(e) => setPostContent(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardFooter className="flex justify-between">
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm">
-                      Add Image
+                  </CardHeader>
+                  <CardFooter className="flex justify-between">
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm">
+                        <ImageIcon className="mr-2 h-4 w-4" />
+                        Add Image
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        Tag Streamer
+                      </Button>
+                    </div>
+                    <Button
+                      onClick={handleCreatePost}
+                      disabled={isCreatingPost || !postContent.trim()}
+                    >
+                      {isCreatingPost ? (
+                        <>
+                          <Loader className="mr-2 h-4 w-4 animate-spin" />
+                          Posting...
+                        </>
+                      ) : (
+                        "Post"
+                      )}
                     </Button>
-                    <Button variant="outline" size="sm">
-                      Tag Streamer
-                    </Button>
-                  </div>
-                  <Button>Post</Button>
-                </CardFooter>
-              </Card>
+                  </CardFooter>
+                </Card>
+              )}
 
-              {/* Sample Posts */}
-              {Array.from({ length: 3 }).map((_, i) => (
-                <PostCard key={i} />
-              ))}
+              {/* Posts List */}
+              {loadingPosts ? (
+                <div className="space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i}>
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <Skeleton className="h-10 w-10 rounded-full" />
+                          <div className="space-y-2">
+                            <Skeleton className="h-4 w-36" />
+                            <Skeleton className="h-3 w-24" />
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-20 w-full mb-4" />
+                        <Skeleton className="h-40 w-full" />
+                      </CardContent>
+                      <CardFooter>
+                        <Skeleton className="h-8 w-full" />
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : postsError ? (
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="text-center text-red-500">
+                      <p>Error loading posts: {postsError.message}</p>
+                      <Button
+                        variant="outline"
+                        className="mt-2"
+                        onClick={() => refetchPosts()}
+                      >
+                        Retry
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : getFilteredPosts().length === 0 ? (
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="text-center text-muted-foreground">
+                      <p>No posts found. Be the first to create a post!</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                getFilteredPosts().map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    currentUserId={user?.id || ""}
+                    onLike={handleToggleLike}
+                    onComment={handleCreateComment}
+                    isLiking={isLiking === post.id}
+                    isCommenting={isCommenting === post.id}
+                  />
+                ))
+              )}
             </TabsContent>
 
             <TabsContent value="trending" className="space-y-6">
-              <div className="flex items-center justify-center p-12 text-muted-foreground">
-                <p>Trending posts will appear here in Stage 2</p>
-              </div>
+              {loadingPosts ? (
+                <div className="space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i}>
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <Skeleton className="h-10 w-10 rounded-full" />
+                          <div className="space-y-2">
+                            <Skeleton className="h-4 w-36" />
+                            <Skeleton className="h-3 w-24" />
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-20 w-full mb-4" />
+                        <Skeleton className="h-40 w-full" />
+                      </CardContent>
+                      <CardFooter>
+                        <Skeleton className="h-8 w-full" />
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : getFilteredPosts().length === 0 ? (
+                <div className="flex items-center justify-center p-12 text-muted-foreground">
+                  <p>No trending posts found</p>
+                </div>
+              ) : (
+                getFilteredPosts().map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    currentUserId={user?.id || ""}
+                    onLike={handleToggleLike}
+                    onComment={handleCreateComment}
+                    isLiking={isLiking === post.id}
+                    isCommenting={isCommenting === post.id}
+                  />
+                ))
+              )}
             </TabsContent>
 
             <TabsContent value="following" className="space-y-6">
-              <div className="flex items-center justify-center p-12 text-muted-foreground">
-                <p>Posts from followed streamers will appear here in Stage 2</p>
-              </div>
+              {!isAuthenticated ? (
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="text-center">
+                      <p className="mb-4 text-muted-foreground">
+                        Sign in to see posts from streamers you follow
+                      </p>
+                      <Button asChild>
+                        <Link href="/account/login">Sign In</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : loadingPosts ? (
+                <div className="space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i}>
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <Skeleton className="h-10 w-10 rounded-full" />
+                          <div className="space-y-2">
+                            <Skeleton className="h-4 w-36" />
+                            <Skeleton className="h-3 w-24" />
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-20 w-full mb-4" />
+                        <Skeleton className="h-40 w-full" />
+                      </CardContent>
+                      <CardFooter>
+                        <Skeleton className="h-8 w-full" />
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : getFilteredPosts().length === 0 ? (
+                <div className="flex items-center justify-center p-12 text-muted-foreground">
+                  <p>
+                    You don't follow any streamers or they haven't posted yet
+                  </p>
+                </div>
+              ) : (
+                getFilteredPosts().map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    currentUserId={user?.id || ""}
+                    onLike={handleToggleLike}
+                    onComment={handleCreateComment}
+                    isLiking={isLiking === post.id}
+                    isCommenting={isCommenting === post.id}
+                  />
+                ))
+              )}
             </TabsContent>
           </Tabs>
         </div>
-
-        <div className="col-span-1 space-y-6 lg:col-span-4">
-          {/* Sidebar */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Popular Streamers</CardTitle>
-              <CardDescription>Connect with top streamers</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={`/placeholder-user-${i + 1}.jpg`} />
-                    <AvatarFallback>S{i + 1}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">Streamer {i + 1}</p>
-                    <p className="text-xs text-muted-foreground">
-                      10K followers
-                    </p>
-                  </div>
-                  <Button variant="outline" size="sm" className="ml-auto">
-                    Follow
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">
-                View All
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Upcoming Events</CardTitle>
-              <CardDescription>Don't miss these streams</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium">Tomorrow, 8:00 PM</p>
-                  </div>
-                  <p className="text-sm">
-                    Special Stream with Streamer {i + 1}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground">
-                      1.2K interested
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">
-                View Calendar
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
       </div>
-    </div>
-  );
-}
 
-function PostCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start gap-4">
-          <Avatar>
-            <AvatarImage src="/placeholder-user.jpg" />
-            <AvatarFallback>UN</AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle className="text-base">Username</CardTitle>
-            <CardDescription>Posted 2 hours ago</CardDescription>
+      {/* Filter Dialog */}
+      <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Filter Posts</DialogTitle>
+            <DialogDescription>
+              Customize what posts you want to see
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="searchTerm">Search in posts</Label>
+              <Input
+                id="searchTerm"
+                placeholder="Search by content"
+                value={filters.searchTerm || ""}
+                onChange={(e) =>
+                  setFilters({ ...filters, searchTerm: e.target.value })
+                }
+              />
+            </div>
+
+            {isAuthenticated && (
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="followingOnly"
+                  checked={filters.followingOnly || false}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      followingOnly: e.target.checked,
+                      userId: user?.id,
+                    })
+                  }
+                  className="rounded border-gray-300"
+                />
+                <Label htmlFor="followingOnly">
+                  Show only posts from users I follow
+                </Label>
+              </div>
+            )}
           </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <p className="mb-4">
-          Just finished an amazing stream! Thanks to everyone who joined. What
-          games would you like to see next time?
-        </p>
-        <div className="relative aspect-video w-full overflow-hidden rounded-md bg-muted">
-          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-            Stream Highlight Image
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm">
-              <ThumbsUp className="mr-1 h-4 w-4" />
-              <span>124</span>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setFilters({})}>
+              Reset Filters
             </Button>
-            <Button variant="ghost" size="sm">
-              <MessageSquare className="mr-1 h-4 w-4" />
-              <span>23</span>
+            <Button onClick={() => handleFilterChange(filters)}>
+              Apply Filters
             </Button>
-            <Button variant="ghost" size="sm">
-              <Share2 className="mr-1 h-4 w-4" />
-              <span>Share</span>
-            </Button>
-          </div>
-          <Button variant="ghost" size="sm">
-            <Bookmark className="h-4 w-4" />
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
