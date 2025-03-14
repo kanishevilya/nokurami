@@ -51,6 +51,7 @@ import {
   PostModel,
   PostFiltersInput,
   PostSortInput,
+  CommentModel,
 } from "@/graphql/generated/output";
 import {
   DropdownMenu,
@@ -182,10 +183,13 @@ export function CommunityPage() {
   };
 
   // Обработчик для создания комментария
-  const handleCreateComment = async (postId: string, content: string) => {
+  const handleCreateComment = async (
+    postId: string,
+    content: string
+  ): Promise<any> => {
     setIsCommenting(postId);
     try {
-      await createComment({
+      const comment = await createComment({
         variables: {
           input: {
             postId,
@@ -194,6 +198,7 @@ export function CommunityPage() {
         },
       });
       refetchPosts();
+      return comment.data?.createComment;
     } catch (error) {
       console.error("Error creating comment:", error);
     } finally {
@@ -383,6 +388,7 @@ export function CommunityPage() {
                     onComment={handleCreateComment}
                     isLiking={isLiking === post.id}
                     isCommenting={isCommenting === post.id}
+                    refetchPosts={() => refetchPosts()}
                   />
                 ))
               )}
@@ -426,6 +432,7 @@ export function CommunityPage() {
                     onComment={handleCreateComment}
                     isLiking={isLiking === post.id}
                     isCommenting={isCommenting === post.id}
+                    refetchPosts={() => refetchPosts()}
                   />
                 ))
               )}
@@ -484,6 +491,7 @@ export function CommunityPage() {
                     onComment={handleCreateComment}
                     isLiking={isLiking === post.id}
                     isCommenting={isCommenting === post.id}
+                    refetchPosts={() => refetchPosts()}
                   />
                 ))
               )}

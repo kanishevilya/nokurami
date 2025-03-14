@@ -13,18 +13,45 @@ import {
   MoreHorizontal,
   Send,
   Loader2,
+  MoreHorizontalIcon,
+  Trash2Icon,
+  PencilIcon,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { getMediaSource } from "@/utils/get-media-source";
+import { DropdownMenuItem } from "@/components/ui/shadcn/DropdownMenu";
 import { cn } from "@/utils/cn";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/shadcn/DropdownMenu";
+import {
+  useDeleteCommentMutation,
+  useUpdateCommentMutation,
+  useUpdatePostMutation,
+} from "@/graphql/generated/output";
+import { useDeletePostMutation } from "@/graphql/generated/output";
+import { toast } from "sonner";
+import {
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/shadcn/Dialog";
+import { Dialog } from "@/components/ui/shadcn/Dialog";
+import { DialogContent } from "@/components/ui/shadcn/Dialog";
+import { Textarea } from "@/components/ui/shadcn/Textarea";
+import { v4 } from "uuid";
 
 export interface PostCardProps {
   post: any;
   currentUserId: string;
   onLike: (postId: string) => void;
-  onComment: (postId: string, content: string) => void;
+  onComment: (postId: string, content: string) => Promise<void>;
   isLiking: boolean;
   isCommenting: boolean;
+  refetchPosts: () => void;
 }
 
 export function PostCard({
@@ -34,21 +61,75 @@ export function PostCard({
   onComment,
   isLiking,
   isCommenting,
+  refetchPosts,
 }: PostCardProps) {
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [postContent, setPostContent] = useState(post.content);
+
+  const [updatePost, { loading: isUpdatingPost }] = useUpdatePostMutation({
+    variables: {
+      input: {
+        id: post.id,
+        content: post.content,
+      },
+    },
+    onCompleted: () => {
+      toast.success("Post updated successfully");
+    },
+    onError: (error) => {
+      toast.error(`Failed to update post: ${error.message}`);
+    },
+  });
+  const [deletePost, { loading: isDeletingPost }] = useDeletePostMutation({
+    variables: {
+      id: post.id,
+    },
+    onCompleted: () => {
+      toast.success("Post deleted successfully");
+    },
+    onError: (error) => {
+      toast.error(`Failed to delete post: ${error.message}`);
+    },
+  });
+
+  const handleUpdatePost = () => {
+    if (!postContent.trim()) {
+      toast.error("Post content cannot be empty");
+      return;
+    }
+    updatePost({
+      variables: {
+        input: { id: post.id, content: postContent },
+      },
+    });
+    setShowEditDialog(false);
+  };
+
+  const handleRemoveComment = (commentId: string) => {
+    const updatedComments = comments.filter(
+      (comment: any) => comment.id !== commentId
+    );
+    setComments(updatedComments);
+  };
+
+  const handleOpenEditDialog = () => {
+    setShowEditDialog(true);
+  };
 
   const handleLike = () => {
     onLike(post.id);
   };
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
+  const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (commentInput.trim()) {
-      onComment(post.id, commentInput);
-      setCommentInput("");
-      // Keep the comment input open after submitting
+      onComment(post.id, commentInput).then((comment) => {
+        setComments([...comments, comment]);
+        setCommentInput("");
+      });
     }
   };
 
@@ -68,13 +149,9 @@ export function PostCard({
   );
 
   // Normalize the comments array access
-  const comments = post.comments || [];
+  const [comments, setComments] = useState(post.comments || []);
   // Get comment count properly
   const commentCount = comments.length;
-
-  // Debugging info
-  const hasLikes = Array.isArray(likes) && likes.length > 0;
-  const hasComments = Array.isArray(comments) && comments.length > 0;
 
   return (
     <Card className="mb-4">
@@ -101,9 +178,41 @@ export function PostCard({
                   })}
                 </p>
               </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
+              {post.author?.id === currentUserId && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <MoreHorizontalIcon className="h-4 w-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[230px]">
+                    <Button
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => handleOpenEditDialog()}
+                      disabled={isUpdatingPost}
+                    >
+                      <DropdownMenuItem>
+                        <PencilIcon className="h-4 w-4" />
+                        Change post
+                      </DropdownMenuItem>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => {
+                        deletePost().then(() => {
+                          refetchPosts();
+                        });
+                      }}
+                      disabled={isDeletingPost}
+                    >
+                      <DropdownMenuItem>
+                        <Trash2Icon className="h-4 w-4" />
+                        Delete post
+                      </DropdownMenuItem>
+                    </Button>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
             <div className="mt-2">
               <p className="whitespace-pre-wrap">{post.content}</p>
@@ -159,7 +268,9 @@ export function PostCard({
             <Input
               placeholder="Write a comment..."
               value={commentInput}
-              onChange={(e) => setCommentInput(e.target.value)}
+              onChange={(e) => {
+                setCommentInput(e.target.value);
+              }}
               className="flex-1"
             />
             <Button
@@ -180,39 +291,184 @@ export function PostCard({
         {showComments && comments.length > 0 && (
           <div className="mt-3 space-y-3 border-t pt-3">
             <h4 className="text-sm font-medium">Comments</h4>
-            {comments.map((comment: any) => (
-              <div key={comment.id} className="flex gap-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src={getMediaSource(comment.author?.avatar)}
-                    alt={comment.author?.username || "User"}
-                  />
-                  <AvatarFallback>
-                    {(comment.author?.username || "U")
-                      .substring(0, 2)
-                      .toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 rounded-lg bg-muted p-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium">
-                      {comment.author?.displayName ||
-                        comment.author?.username ||
-                        "User"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(comment.createdAt), {
-                        addSuffix: true,
-                      })}
-                    </p>
-                  </div>
-                  <p className="mt-1 text-sm">{comment.content}</p>
-                </div>
-              </div>
+            {comments.map((comment: any, index: number) => (
+              <CommentCard
+                key={comment.id || index}
+                comment={comment}
+                currentUserId={currentUserId}
+                onRemoveComment={handleRemoveComment}
+              />
             ))}
           </div>
         )}
       </CardFooter>
+      {showEditDialog && (
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Post</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              <Textarea
+                value={postContent}
+                onChange={(e) => setPostContent(e.target.value)}
+                className="resize-x-none"
+              />
+            </DialogDescription>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowEditDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="default" onClick={() => handleUpdatePost()}>
+                Save
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </Card>
+  );
+}
+
+function CommentCard({
+  comment,
+  currentUserId,
+  onRemoveComment,
+}: {
+  comment: any;
+  currentUserId: string;
+  onRemoveComment: (commentId: string) => void;
+}) {
+  const [deleteComment, { loading: isDeletingComment }] =
+    useDeleteCommentMutation({
+      variables: {
+        id: comment.id,
+      },
+      onCompleted: () => {
+        toast.success("Comment deleted successfully");
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete comment: ${error.message}`);
+      },
+    });
+
+  const [updateComment, { loading: isUpdatingComment }] =
+    useUpdateCommentMutation({
+      variables: {
+        input: {
+          id: comment.id,
+          content: comment.content,
+        },
+      },
+    });
+
+  const handleUpdateComment = () => {
+    if (!commentContent.trim()) {
+      toast.error("Comment content cannot be empty");
+      return;
+    }
+    updateComment({
+      variables: { input: { id: comment.id, content: commentContent } },
+    });
+    setShowEditDialog(false);
+  };
+
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [commentContent, setCommentContent] = useState(comment.content);
+
+  return (
+    <div key={comment.id} className="flex gap-2">
+      <Avatar className="h-8 w-8">
+        <AvatarImage
+          src={getMediaSource(comment.author?.avatar)}
+          alt={comment.author?.username || "User"}
+        />
+        <AvatarFallback>
+          {(comment.author?.username || "U").substring(0, 2).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+      <div className="w-full flex rounded-lg bg-muted p-2">
+        <div className="flex-1">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium">
+              {comment.author?.displayName ||
+                comment.author?.username ||
+                "User"}
+            </p>
+            <p className="text-xs text-muted-foreground -mr-6">
+              {formatDistanceToNow(new Date(comment.createdAt), {
+                addSuffix: true,
+              })}
+            </p>
+          </div>
+          <p className="mt-1 text-sm">{comment.content}</p>
+        </div>
+        {comment.author?.id === currentUserId && (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreHorizontalIcon className="h-4 w-4 mt-4 mr-3" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[230px]">
+              <Button
+                variant="ghost"
+                className="w-full"
+                onClick={() => setShowEditDialog(true)}
+                disabled={isUpdatingComment}
+              >
+                <DropdownMenuItem>
+                  <PencilIcon className="h-4 w-4" />
+                  Edit comment
+                </DropdownMenuItem>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full"
+                onClick={() => {
+                  deleteComment().then(() => {
+                    onRemoveComment(comment.id);
+                  });
+                }}
+                disabled={isDeletingComment}
+              >
+                <DropdownMenuItem>
+                  <Trash2Icon className="h-4 w-4" />
+                  Delete comment
+                </DropdownMenuItem>
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        {showEditDialog && (
+          <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Comment</DialogTitle>
+              </DialogHeader>
+              <DialogDescription>
+                <Textarea
+                  value={commentContent}
+                  onChange={(e) => setCommentContent(e.target.value)}
+                  className="resize-x-none"
+                />
+              </DialogDescription>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowEditDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="default" onClick={() => handleUpdateComment()}>
+                  Save
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
+    </div>
   );
 }

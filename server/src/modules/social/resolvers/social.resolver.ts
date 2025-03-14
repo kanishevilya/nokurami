@@ -92,7 +92,7 @@ export class SocialResolver {
         return this.socialService.updateComment(user.id, input);
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => Boolean, { name: 'deleteComment' })
     @Authorization()
     async deleteComment(
         @Authorized() user: User,
