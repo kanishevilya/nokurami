@@ -1165,7 +1165,7 @@ export type FindPostsQueryVariables = Exact<{
 }>;
 
 
-export type FindPostsQuery = { __typename?: 'Query', findPosts: Array<{ __typename?: 'PostModel', id: string, content: string, imageUrl?: string | null, isPublic: boolean, createdAt: any, updatedAt: any, likeCount?: number | null, commentCount?: number | null, author: { __typename?: 'UserModel', id: string, username: string, displayName: string, avatar?: string | null } }> };
+export type FindPostsQuery = { __typename?: 'Query', findPosts: Array<{ __typename?: 'PostModel', id: string, content: string, imageUrl?: string | null, isPublic: boolean, createdAt: any, updatedAt: any, likeCount?: number | null, commentCount?: number | null, author: { __typename?: 'UserModel', id: string, username: string, displayName: string, avatar?: string | null }, likes?: Array<{ __typename?: 'LikeModel', id: string, userId: string, postId?: string | null, createdAt: any }> | null, comments?: Array<{ __typename?: 'CommentModel', id: string, content: string, postId: string, createdAt: any, author: { __typename?: 'UserModel', id: string, username: string, displayName: string, avatar?: string | null } }> | null }> };
 
 export type GetPrivateChatQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -3344,6 +3344,24 @@ export const FindPostsDocument = gql`
       username
       displayName
       avatar
+    }
+    likes {
+      id
+      userId
+      postId
+      createdAt
+    }
+    comments {
+      id
+      content
+      postId
+      createdAt
+      author {
+        id
+        username
+        displayName
+        avatar
+      }
     }
   }
 }

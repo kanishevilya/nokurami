@@ -43,37 +43,6 @@ export class SocialService {
 
         let orderBy: any = { createdAt: 'desc' };
 
-        if (sort?.mostLiked) {
-            // При сортировке по лайкам мы будем использовать подзапрос
-            const posts = await this.prisma.$queryRaw`
-        SELECT p.*, COUNT(l.id) as "likeCount"
-        FROM posts p
-        LEFT JOIN likes l ON p.id = l.post_id
-        WHERE p.is_public = true
-        ${filters?.userId ? `AND p.author_id = ${filters.userId}` : ''}
-        GROUP BY p.id
-        ORDER BY "likeCount" DESC
-        LIMIT ${take} OFFSET ${skip}
-      `;
-
-            return posts;
-        }
-
-        if (sort?.mostCommented) {
-            // При сортировке по комментариям тоже используем подзапрос
-            const posts = await this.prisma.$queryRaw`
-        SELECT p.*, COUNT(c.id) as "commentCount"
-        FROM posts p
-        LEFT JOIN comments c ON p.id = c.post_id
-        WHERE p.is_public = true
-        ${filters?.userId ? `AND p.author_id = ${filters.userId}` : ''}
-        GROUP BY p.id
-        ORDER BY "commentCount" DESC
-        LIMIT ${take} OFFSET ${skip}
-      `;
-
-            return posts;
-        }
 
         if (sort?.latestFirst === false) {
             orderBy = { createdAt: 'asc' };
@@ -86,6 +55,13 @@ export class SocialService {
             take,
             include: {
                 author: true,
+                comments: {
+                    include: {
+                        author: true,
+                        likes: true
+                    }
+                },
+                likes: true,
                 _count: {
                     select: { likes: true, comments: true },
                 },

@@ -19,5 +19,23 @@ query FindPosts(
       displayName
       avatar
     }
+    likes {
+      id
+      userId
+      postId
+      createdAt
+    }
+    comments {
+      id
+      content
+      postId
+      createdAt
+      author {
+        id
+        username
+        displayName
+        avatar
+      }
+    }
   }
 }

@@ -173,6 +173,7 @@ export function CommunityPage() {
           },
         },
       });
+      refetchPosts();
     } catch (error) {
       console.error("Error toggling like:", error);
     } finally {
@@ -192,6 +193,7 @@ export function CommunityPage() {
           },
         },
       });
+      refetchPosts();
     } catch (error) {
       console.error("Error creating comment:", error);
     } finally {
@@ -279,16 +281,6 @@ export function CommunityPage() {
                     >
                       Oldest First
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => handleSortChange({ mostLiked: true })}
-                    >
-                      Most Liked
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => handleSortChange({ mostCommented: true })}
-                    >
-                      Most Commented
-                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -316,16 +308,7 @@ export function CommunityPage() {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardFooter className="flex justify-between">
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm">
-                        <ImageIcon className="mr-2 h-4 w-4" />
-                        Add Image
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        Tag Streamer
-                      </Button>
-                    </div>
+                  <CardFooter className="flex justify-end">
                     <Button
                       onClick={handleCreatePost}
                       disabled={isCreatingPost || !postContent.trim()}

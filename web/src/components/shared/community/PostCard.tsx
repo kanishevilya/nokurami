@@ -52,8 +52,6 @@ export function PostCard({
     }
   };
 
-  console.log(post);
-
   const toggleComments = () => {
     setShowComments(!showComments);
   };
@@ -62,9 +60,21 @@ export function PostCard({
     setShowCommentInput(!showCommentInput);
   };
 
-  const isLikedByCurrentUser = post.likes?.some(
+  // Normalize the like array access
+  const likes = post.likes || [];
+  // Check if the post is liked by current user
+  const isLikedByCurrentUser = likes.some(
     (like: any) => like.userId === currentUserId
   );
+
+  // Normalize the comments array access
+  const comments = post.comments || [];
+  // Get comment count properly
+  const commentCount = comments.length;
+
+  // Debugging info
+  const hasLikes = Array.isArray(likes) && likes.length > 0;
+  const hasComments = Array.isArray(comments) && comments.length > 0;
 
   return (
     <Card className="mb-4">
@@ -117,9 +127,13 @@ export function PostCard({
               {isLiking ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <ThumbsUp className="h-4 w-4" />
+                <ThumbsUp
+                  className={`h-4 w-4 ${
+                    isLikedByCurrentUser ? "fill-current" : ""
+                  }`}
+                />
               )}
-              <span>{post.likes?.length || 0}</span>
+              <span>{likes.length}</span>
             </Button>
             <Button
               variant="ghost"
@@ -128,7 +142,7 @@ export function PostCard({
               onClick={toggleComments}
             >
               <MessageSquare className="h-4 w-4" />
-              <span>{post.comments?.length || 0}</span>
+              <span>{commentCount}</span>
             </Button>
           </div>
           <Button variant="ghost" size="sm" onClick={toggleCommentInput}>
@@ -163,10 +177,10 @@ export function PostCard({
         )}
 
         {/* Comments section */}
-        {showComments && post.comments && post.comments.length > 0 && (
+        {showComments && comments.length > 0 && (
           <div className="mt-3 space-y-3 border-t pt-3">
             <h4 className="text-sm font-medium">Comments</h4>
-            {post.comments.map((comment: any) => (
+            {comments.map((comment: any) => (
               <div key={comment.id} className="flex gap-2">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
