@@ -360,6 +360,7 @@ type Query {
   findRandomStreams: [StreamModel!]!
   findRecommendedChannels: [UserModel!]!
   findSocialLinks: [SocialLinkModel!]!
+  findStreamById(id: String!): StreamModel!
   findUnreadNotificationsCount: Float!
   generateTotpSecret: TotpModel!
   getAllSessions: [SessionModel!]!

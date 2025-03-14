@@ -41,6 +41,14 @@ export class StreamService {
         return streams
     }
 
+    public async findById(id: string) {
+        const stream = await this.prismaService.stream.findUnique({
+            where: { id }
+        })
+
+        return stream
+    }
+
     public async findAllLive(input: FiltersInput = {}) {
         const { take, skip, searchKey } = input
 

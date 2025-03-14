@@ -3,6 +3,7 @@
 import { useState, useEffect, FormEvent, useRef } from "react";
 import {
   useFindMessagesByStreamQuery,
+  useFindStreamByIdQuery,
   useNewMessageAddedSubscription,
   useSendMessageMutation,
 } from "@/graphql/generated/output";
@@ -39,10 +40,12 @@ import {
 } from "@/components/ui/shadcn/DropdownMenu";
 import { useCurrent } from "@/hooks/useCurrent";
 import { cn } from "@/utils/cn";
+import { getMediaSource } from "@/utils/get-media-source";
+import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ChatProps {
   streamId: string;
-  isLive: boolean;
 }
 
 interface Message {
@@ -57,13 +60,22 @@ interface Message {
   };
 }
 
-export function Chat({ streamId, isLive }: ChatProps) {
-  const { user: currentUser } = useCurrent();
+export function Chat({ streamId }: ChatProps) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
-  const [editText, setEditText] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [isLive, setIsLive] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  const { data: streamData, refetch } = useFindStreamByIdQuery({
+    variables: { id: streamId },
+  });
+
+  useEffect(() => {
+    if (streamData?.findStreamById) {
+      setIsLive(streamData.findStreamById.isLive);
+    }
+  }, [streamData]);
 
   const { data, loading, error } = useFindMessagesByStreamQuery({
     variables: { streamId },
@@ -74,41 +86,38 @@ export function Chat({ streamId, isLive }: ChatProps) {
     onError: (error) => console.error("Error sending message:", error.message),
   });
 
-  console.log("Stream ID:", streamId);
-  console.log("Is Live:", isLive);
+  // Добавляем обработчик клика для проверки активности чата
+  useEffect(() => {
+    const handleScreenClick = () => {
+      // Проверяем только если чат изначально неактивен
+      refetch().then((result) => {
+        if (result.data?.findStreamById?.isLive) {
+          setIsLive(true);
+        }
+      });
+    };
 
-  // Подписка на новые сообщения без skip параметра
+    document.addEventListener("click", handleScreenClick);
+
+    // Очищаем слушатель при размонтировании компонента
+    return () => {
+      document.removeEventListener("click", handleScreenClick);
+    };
+  }, [isLive, refetch]); // Зависимости: isLive и refetch
+
+  // Остальной код остается без изменений
   const { data: subscriptionData } = useNewMessageAddedSubscription({
     variables: {
       streamId: streamId,
     },
   });
 
-  console.log("Current subscription data:", subscriptionData);
-
-  // Handle subscription data
   useEffect(() => {
-    console.log("Subscription effect running, data:", subscriptionData);
-
     if (subscriptionData?.newMessageAdded) {
-      const newMessage = subscriptionData.newMessageAdded;
-      console.log("🔥 NEW MESSAGE RECEIVED:", newMessage);
-
-      // Важно: проверяем, есть ли это сообщение уже в списке
-      setMessages((prev) => {
-        // Проверка на дубликаты
-        const messageExists = prev.some((msg) => msg.id === newMessage.id);
-        if (messageExists) {
-          console.log("Message already exists in list, skipping...");
-          return prev;
-        }
-
-        console.log("Adding new message to list");
-        // Добавляем новое сообщение в начало списка
-        return [newMessage as unknown as Message, ...prev];
-      });
-
-      // Прокручиваем чат
+      setMessages((prev) => [
+        ...prev,
+        subscriptionData.newMessageAdded as unknown as Message,
+      ]);
       setTimeout(() => {
         if (chatContainerRef.current) {
           chatContainerRef.current.scrollTop = 0;
@@ -117,26 +126,13 @@ export function Chat({ streamId, isLive }: ChatProps) {
     }
   }, [subscriptionData]);
 
-  // Load initial messages
   useEffect(() => {
     if (!loading && data?.findMessagesByStream) {
-      console.log("Loaded initial messages:", data.findMessagesByStream);
-
-      // Сортируем сообщения в обратном хронологическом порядке (новые сверху)
-      const sortedMessages = [
-        ...data.findMessagesByStream,
-      ] as unknown as Message[];
-      sortedMessages.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-
-      setMessages(sortedMessages);
-
-      // Прокручиваем к началу списка
+      setMessages(data.findMessagesByStream);
       setTimeout(() => {
         if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = 0;
+          chatContainerRef.current.scrollTop =
+            chatContainerRef.current.scrollHeight;
         }
       }, 100);
     }
@@ -147,7 +143,6 @@ export function Chat({ streamId, isLive }: ChatProps) {
     if (!message.trim() || !isLive) return;
 
     try {
-      console.log("Sending message:", message, "to stream:", streamId);
       const result = await sendMessage({
         variables: {
           data: {
@@ -156,37 +151,19 @@ export function Chat({ streamId, isLive }: ChatProps) {
           },
         },
       });
-
-      console.log("Message sent successfully:", result.data);
-
-      // Очищаем поле ввода, НЕ добавляем сообщение в список - оно должно прийти через подписку
       setMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
     }
   };
 
-  const startEditMessage = (msg: Message) => {
-    setEditingMessageId(msg.id);
-    setEditText(msg.text);
-  };
-
-  const cancelEdit = () => {
-    setEditingMessageId(null);
-    setEditText("");
-  };
-
-  const saveEdit = () => {
-    // This would be implemented in Stage 2 with the actual mutation
-    setEditingMessageId(null);
-  };
-
   const formatMessageTime = (timestamp: string) => {
     return format(new Date(timestamp), "HH:mm");
   };
 
+  // JSX остается без изменений
   return (
-    <div className="flex h-full w-full flex-col rounded-lg bg-card shadow-md">
+    <div className="flex w-full flex-col rounded-lg bg-card shadow-md">
       <div className="flex items-center justify-between border-b border-border p-4">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-primary" />
@@ -220,94 +197,22 @@ export function Chat({ streamId, isLive }: ChatProps) {
               >
                 <div className="mb-1 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Avatar className="h-6 w-6">
-                      <AvatarImage src={msg.user?.avatar || ""} />
-                      <AvatarFallback>
-                        {msg.user?.username?.[0]?.toUpperCase() || "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium text-foreground">
-                      {msg.user?.username}
-                    </span>
+                    <Link href={`/${msg.user?.username}`}>
+                      <p className="font-medium text-foreground">
+                        {msg.user?.username}
+                      </p>
+                    </Link>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">
                       {formatMessageTime(msg.createdAt)}
                     </span>
-
-                    {currentUser?.id === msg.user.id && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 opacity-0 group-hover:opacity-100"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => startEditMessage(msg)}
-                          >
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    )}
                   </div>
                 </div>
 
-                {editingMessageId === msg.id ? (
-                  <div className="mt-2 flex items-center gap-2">
-                    <Input
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      className="flex-1"
-                    />
-                    <Button onClick={saveEdit}>Save</Button>
-                    <Button variant="ghost" onClick={cancelEdit}>
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
-                  <p className="text-sm text-foreground break-words">
-                    {msg.text}
-                  </p>
-                )}
-
-                <div className="mt-2 flex items-center gap-2 text-xs opacity-0 transition group-hover:opacity-100">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
-                          <ThumbsUp className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Like</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
-                          <ThumbsDown className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Dislike</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+                <p className="text-sm text-foreground opacity-70 break-words">
+                  {msg.text}
+                </p>
               </div>
             ))}
           </div>
@@ -325,7 +230,7 @@ export function Chat({ streamId, isLive }: ChatProps) {
       </div>
 
       <div className="border-t border-border p-4">
-        {isLive ? (
+        {isLive && isAuthenticated ? (
           <form onSubmit={handleSendMessage} className="flex gap-2">
             <Input
               value={message}

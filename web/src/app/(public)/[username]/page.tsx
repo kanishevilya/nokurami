@@ -183,7 +183,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
         </TabsContent>
 
         {/* Overview Tab - Shows follower and following counts */}
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview" className="space-y-4 ml-16">
           <Card>
             <CardHeader>
               <CardTitle>Overview</CardTitle>
@@ -210,7 +210,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
         </TabsContent>
 
         {/* About Tab - Shows information and social links */}
-        <TabsContent value="about">
+        <TabsContent value="about" className="space-y-4 ml-16">
           <Card>
             <CardHeader>
               <CardTitle>About</CardTitle>
@@ -249,7 +249,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
         </TabsContent>
 
         {/* Content Tab - Shows recent content */}
-        <TabsContent value="content">
+        <TabsContent value="content" className="space-y-4 ml-16">
           <Card>
             <CardHeader>
               <CardTitle>Content</CardTitle>

@@ -47,10 +47,7 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
 
           {/* Chat sidebar */}
           <div className="order-2 col-span-1 lg:col-span-4">
-            <Chat
-              streamId={channel.stream?.id}
-              isLive={Boolean(channel.stream?.isLive)}
-            />
+            <Chat streamId={channel.stream?.id} />
           </div>
         </div>
       </LiveKitRoom>

@@ -1,0 +1,7 @@
+query FindStreamById($id: String!) {
+  findStreamById(id: $id) {
+    id
+    title
+    isLive
+  }
+}

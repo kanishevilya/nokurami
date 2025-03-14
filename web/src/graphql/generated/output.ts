@@ -574,6 +574,7 @@ export type Query = {
   findRandomStreams: Array<StreamModel>;
   findRecommendedChannels: Array<UserModel>;
   findSocialLinks: Array<SocialLinkModel>;
+  findStreamById: StreamModel;
   findUnreadNotificationsCount: Scalars['Float']['output'];
   generateTotpSecret: TotpModel;
   getAllSessions: Array<SessionModel>;
@@ -640,6 +641,11 @@ export type QueryFindPostsArgs = {
   skip?: InputMaybe<Scalars['Float']['input']>;
   sort?: InputMaybe<PostSortInput>;
   take?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryFindStreamByIdArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -1243,6 +1249,13 @@ export type FindRandomStreamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FindRandomStreamsQuery = { __typename?: 'Query', findRandomStreams: Array<{ __typename?: 'StreamModel', id: string, title: string, previewUrl?: string | null, isLive: boolean, user: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null }, category: { __typename?: 'CategoryModel', title: string, slug: string } }> };
+
+export type FindStreamByIdQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type FindStreamByIdQuery = { __typename?: 'Query', findStreamById: { __typename?: 'StreamModel', id: string, title: string, isLive: boolean } };
 
 export type GenerateStreamTokenMutationVariables = Exact<{
   data: GenerateStreamTokenInput;
@@ -3964,6 +3977,48 @@ export type FindRandomStreamsQueryHookResult = ReturnType<typeof useFindRandomSt
 export type FindRandomStreamsLazyQueryHookResult = ReturnType<typeof useFindRandomStreamsLazyQuery>;
 export type FindRandomStreamsSuspenseQueryHookResult = ReturnType<typeof useFindRandomStreamsSuspenseQuery>;
 export type FindRandomStreamsQueryResult = Apollo.QueryResult<FindRandomStreamsQuery, FindRandomStreamsQueryVariables>;
+export const FindStreamByIdDocument = gql`
+    query FindStreamById($id: String!) {
+  findStreamById(id: $id) {
+    id
+    title
+    isLive
+  }
+}
+    `;
+
+/**
+ * __useFindStreamByIdQuery__
+ *
+ * To run a query within a React component, call `useFindStreamByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindStreamByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindStreamByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindStreamByIdQuery(baseOptions: Apollo.QueryHookOptions<FindStreamByIdQuery, FindStreamByIdQueryVariables> & ({ variables: FindStreamByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindStreamByIdQuery, FindStreamByIdQueryVariables>(FindStreamByIdDocument, options);
+      }
+export function useFindStreamByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindStreamByIdQuery, FindStreamByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindStreamByIdQuery, FindStreamByIdQueryVariables>(FindStreamByIdDocument, options);
+        }
+export function useFindStreamByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindStreamByIdQuery, FindStreamByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindStreamByIdQuery, FindStreamByIdQueryVariables>(FindStreamByIdDocument, options);
+        }
+export type FindStreamByIdQueryHookResult = ReturnType<typeof useFindStreamByIdQuery>;
+export type FindStreamByIdLazyQueryHookResult = ReturnType<typeof useFindStreamByIdLazyQuery>;
+export type FindStreamByIdSuspenseQueryHookResult = ReturnType<typeof useFindStreamByIdSuspenseQuery>;
+export type FindStreamByIdQueryResult = Apollo.QueryResult<FindStreamByIdQuery, FindStreamByIdQueryVariables>;
 export const GenerateStreamTokenDocument = gql`
     mutation GenerateStreamToken($data: GenerateStreamTokenInput!) {
   generateStreamToken(data: $data) {
