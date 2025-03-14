@@ -32,7 +32,7 @@ export function StreamItem({
 }: StreamItemProps) {
   return (
     <Link
-      href={`/profile/${username}`}
+      href={`/${username}`}
       className="group relative block w-full max-w-[300px] rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-card hover:-translate-y-1"
     >
       <div className="relative w-full h-[200px] overflow-hidden">

@@ -61,7 +61,7 @@ export function PrimaryNav() {
       ) : (
         <div className="space-y-2">
           <MyChannelItem
-            href={`/profile/${user?.username}`}
+            href={`/${user?.username}`}
             user={user}
             label={user?.username}
             stream={user?.stream}

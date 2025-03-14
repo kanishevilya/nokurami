@@ -74,24 +74,44 @@ export function Chat({ streamId, isLive }: ChatProps) {
     onError: (error) => console.error("Error sending message:", error.message),
   });
 
+  console.log("Stream ID:", streamId);
+  console.log("Is Live:", isLive);
+
+  // Подписка на новые сообщения без skip параметра
   const { data: subscriptionData } = useNewMessageAddedSubscription({
-    variables: { streamId },
-    skip: !streamId || !isLive,
+    variables: {
+      streamId: streamId,
+    },
   });
+
+  console.log("Current subscription data:", subscriptionData);
 
   // Handle subscription data
   useEffect(() => {
-    if (subscriptionData?.newMessageAdded) {
-      setMessages((prev) => [
-        ...prev,
-        subscriptionData.newMessageAdded as unknown as Message,
-      ]);
+    console.log("Subscription effect running, data:", subscriptionData);
 
-      // Scroll to bottom when new message arrives
+    if (subscriptionData?.newMessageAdded) {
+      const newMessage = subscriptionData.newMessageAdded;
+      console.log("🔥 NEW MESSAGE RECEIVED:", newMessage);
+
+      // Важно: проверяем, есть ли это сообщение уже в списке
+      setMessages((prev) => {
+        // Проверка на дубликаты
+        const messageExists = prev.some((msg) => msg.id === newMessage.id);
+        if (messageExists) {
+          console.log("Message already exists in list, skipping...");
+          return prev;
+        }
+
+        console.log("Adding new message to list");
+        // Добавляем новое сообщение в начало списка
+        return [newMessage as unknown as Message, ...prev];
+      });
+
+      // Прокручиваем чат
       setTimeout(() => {
         if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop =
-            chatContainerRef.current.scrollHeight;
+          chatContainerRef.current.scrollTop = 0;
         }
       }, 100);
     }
@@ -100,13 +120,23 @@ export function Chat({ streamId, isLive }: ChatProps) {
   // Load initial messages
   useEffect(() => {
     if (!loading && data?.findMessagesByStream) {
-      setMessages(data.findMessagesByStream as unknown as Message[]);
+      console.log("Loaded initial messages:", data.findMessagesByStream);
 
-      // Scroll to bottom when messages load
+      // Сортируем сообщения в обратном хронологическом порядке (новые сверху)
+      const sortedMessages = [
+        ...data.findMessagesByStream,
+      ] as unknown as Message[];
+      sortedMessages.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setMessages(sortedMessages);
+
+      // Прокручиваем к началу списка
       setTimeout(() => {
         if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop =
-            chatContainerRef.current.scrollHeight;
+          chatContainerRef.current.scrollTop = 0;
         }
       }, 100);
     }
@@ -116,16 +146,24 @@ export function Chat({ streamId, isLive }: ChatProps) {
     e.preventDefault();
     if (!message.trim() || !isLive) return;
 
-    await sendMessage({
-      variables: {
-        data: {
-          text: message,
-          streamId,
+    try {
+      console.log("Sending message:", message, "to stream:", streamId);
+      const result = await sendMessage({
+        variables: {
+          data: {
+            text: message,
+            streamId,
+          },
         },
-      },
-    });
+      });
 
-    setMessage("");
+      console.log("Message sent successfully:", result.data);
+
+      // Очищаем поле ввода, НЕ добавляем сообщение в список - оно должно прийти через подписку
+      setMessage("");
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
   };
 
   const startEditMessage = (msg: Message) => {

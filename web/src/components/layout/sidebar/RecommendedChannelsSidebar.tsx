@@ -31,7 +31,6 @@ interface StreamType {
 export function RecommendedChannelsSidebar() {
   const { isCollapsed } = useSidebar();
   const { data, loading } = useFindRandomStreamsQuery({
-    variables: { take: 5 },
     fetchPolicy: "network-only",
   });
 
@@ -87,7 +86,7 @@ export function RecommendedChannelsSidebar() {
       {streams.map((stream) => (
         <Link
           key={stream.id}
-          href={`/profile/${stream.user.username}`}
+          href={`/${stream.user.username}`}
           className={cn(
             "mb-2 flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-accent",
             isCollapsed && "justify-center"

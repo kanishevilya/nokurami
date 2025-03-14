@@ -32,7 +32,6 @@ interface StreamType {
 
 export function FeaturedChannelsCarousel() {
   const { data, loading } = useFindRandomStreamsQuery({
-    variables: { take: 9 },
     fetchPolicy: "network-only",
   });
 
@@ -155,7 +154,7 @@ interface FeaturedChannelCardProps {
 function FeaturedChannelCard({ stream, isActive }: FeaturedChannelCardProps) {
   return (
     <Link
-      href={`/profile/${stream.user.username}`}
+      href={`/${stream.user.username}`}
       className={cn(
         "block overflow-hidden rounded-lg bg-card shadow-md transition-all hover:shadow-lg",
         isActive ? "scale-100 opacity-100" : "scale-90 opacity-70"
