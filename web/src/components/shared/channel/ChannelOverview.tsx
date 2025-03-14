@@ -9,6 +9,7 @@ import { StreamInfo } from "./overview/StreamInfo";
 import { AboutChannel } from "./overview/AboutChannel";
 import { useCurrent } from "@/hooks/useCurrent";
 import { Chat } from "./chat/Chat";
+import AdditionalInfo from "./overview/AdditionalInfo";
 
 interface ChannelOverviewProps {
   channel: FindChannelByUsernameQuery["findChannelByUsername"];
@@ -35,14 +36,15 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
             <div className="overflow-hidden rounded-lg bg-card shadow-md">
               <StreamVideo channel={channel} />
             </div>
-
+            {/* <div> */}
             <StreamInfo
               channel={channel}
               isCurrentUser={isCurrentUser}
               myId={user?.id!}
             />
 
-            <AboutChannel channel={channel} />
+            {/* <AboutChannel channel={channel} /> */}
+            <AdditionalInfo username={channel.username} />
           </div>
 
           {/* Chat sidebar */}
