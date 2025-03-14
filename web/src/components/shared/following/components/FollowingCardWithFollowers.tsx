@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 
 export default function FollowingCardWithFollowers({
   following,
+  myId,
 }: {
   following: {
     id: string;
@@ -11,6 +12,7 @@ export default function FollowingCardWithFollowers({
     avatar?: string | null;
     isLive: boolean;
   };
+  myId: string;
 }) {
   const { data, loading } = useFindFollowersCountByChannelQuery({
     variables: { channelId: following.id },
@@ -25,5 +27,7 @@ export default function FollowingCardWithFollowers({
   console.log(data);
   console.log(following);
 
-  return <FollowingCard following={{ ...following, followersCount }} />;
+  return (
+    <FollowingCard myId={myId} following={{ ...following, followersCount }} />
+  );
 }

@@ -16,7 +16,7 @@ interface FollowingCardProps {
 
 export default function FollowingCard({ following, myId }: FollowingCardProps) {
   const { username, isLive, followersCount, id } = following;
-  console.log(following);
+  console.log(myId);
 
   return (
     <div className="group relative block w-full max-w-[400px] rounded-lg shadow-md bg-card overflow-hidden">

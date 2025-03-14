@@ -20,21 +20,23 @@ export default function FollowUnfollowButton({
 }) {
   const [isFollowing, setIsFollowing] = useState(true);
 
-  const { data: followingsCount } = useFindFollowingsCountByChannelQuery({
-    variables: {
-      channelId: myId!,
-    },
-  });
-
-  const { data: myFollowings } = useFindMyFollowingsChannelsQuery({
-    variables: {
-      data: {
-        take: followingsCount?.findFollowingsCountByChannel,
-        skip: 0,
+  const { data: followingsCount, loading: followingsCountLoading } =
+    useFindFollowingsCountByChannelQuery({
+      variables: {
+        channelId: myId!,
       },
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+    });
+
+  const { data: myFollowings, loading: myFollowingsLoading } =
+    useFindMyFollowingsChannelsQuery({
+      variables: {
+        data: {
+          take: followingsCount?.findFollowingsCountByChannel,
+          skip: 0,
+        },
+      },
+      notifyOnNetworkStatusChange: true,
+    });
 
   useEffect(() => {
     async function checkIsFollowing() {
@@ -42,13 +44,15 @@ export default function FollowUnfollowButton({
         setIsFollowing(false);
         return;
       }
-      const isFollowing = myFollowings?.findMyFollowings.followings.some(
+      console.log(myFollowingsLoading, followingsCountLoading);
+
+      const isFollowing = myFollowings?.findMyFollowings.followings.find(
         (following) => following.following.id === channelId
       );
-      setIsFollowing(isFollowing ?? false);
+      setIsFollowing(isFollowing ? true : false);
     }
     checkIsFollowing();
-  }, [myFollowings]);
+  }, [myFollowingsLoading, myFollowings]);
 
   const [followUser, { loading: following }] = useFollowToChannelMutation({
     onCompleted: () => {

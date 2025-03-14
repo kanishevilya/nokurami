@@ -55,6 +55,7 @@ export default function FollowingChannelsPage({
           {sortedFollowingsList.length > 0 ? (
             sortedFollowingsList.map((following) => (
               <FollowingCardWithFollowers
+                myId={user.id}
                 key={following.following.username}
                 following={{
                   id: following.following.id,
