@@ -26,7 +26,7 @@ export function PrivateChat({
   onRefetchChats,
 }: PrivateChatProps) {
   const [newMessage, setNewMessage] = useState("");
-
+  console.log(chatId);
   // Запрос на получение конкретного чата с сообщениями
   const {
     data: selectedChatData,
@@ -34,9 +34,7 @@ export function PrivateChat({
     error: selectedChatError,
     refetch: refetchSelectedChat,
   } = useGetPrivateChatQuery({
-    variables: { id: chatId || "" },
-    skip: !chatId,
-    fetchPolicy: "network-only",
+    variables: { id: chatId! },
   });
 
   // Мутация для отправки сообщения
@@ -63,12 +61,8 @@ export function PrivateChat({
     });
 
   // Мутация для отметки сообщений как прочитанных
-  const [markMessagesAsRead] = useMarkMessagesAsReadMutation({
-    onError: (error) => {
-      console.error("Error marking messages as read:", error);
-    },
-  });
 
+  console.log(chatId, currentUserId);
   // Подписка на новые сообщения
   const { data: newMessageData } = usePrivateMessageSentSubscription({
     skip: !chatId || !currentUserId,
@@ -80,34 +74,20 @@ export function PrivateChat({
       if (chatId === newMessageData.privateMessageSent.chatId) {
         refetchSelectedChat();
         // Отмечаем сообщения как прочитанные
-        markAsRead(chatId);
+        // markAsRead(chatId);
       }
       onRefetchChats();
     }
   }, [newMessageData, chatId, refetchSelectedChat, onRefetchChats]);
 
   // Отмечаем сообщения как прочитанные при выборе чата
-  useEffect(() => {
-    if (chatId) {
-      markAsRead(chatId);
-    }
-  }, [chatId]);
+  // useEffect(() => {
+  //   if (chatId) {
+  //     markAsRead(chatId);
+  //   }
+  // }, [chatId]);
 
   // Функция для отметки сообщений как прочитанных
-  const markAsRead = async (chatId: string) => {
-    try {
-      await markMessagesAsRead({
-        variables: {
-          input: {
-            chatId,
-          },
-        },
-      });
-      onRefetchChats(); // Обновляем счетчики непрочитанных сообщений
-    } catch (error) {
-      console.error("Error marking messages as read:", error);
-    }
-  };
 
   // Функция для отправки сообщения
   const handleSendMessage = async (e: FormEvent) => {
@@ -164,22 +144,10 @@ export function PrivateChat({
     }
   };
 
-  // Получаем выбранный чат из данных
   const selectedChatDetails = selectedChatData?.privateChat;
 
-  if (!chatId) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-center">
-        <div>
-          <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-2 font-semibold">Your Messages</h3>
-          <p className="mt-1 text-muted-foreground">
-            Select a conversation or start a new one.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  console.log(selectedChatData);
+  console.log(loadingSelectedChat);
 
   if (loadingSelectedChat) {
     return (

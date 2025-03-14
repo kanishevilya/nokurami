@@ -13,6 +13,7 @@ import {
   useChatRequestedSubscription,
   useChatStatusUpdatedSubscription,
   ChatStatus,
+  useMarkMessagesAsReadMutation,
 } from "@/graphql/generated/output";
 import { ChatList } from "../components/ChatList";
 import { PrivateChat } from "./PrivateChat";
@@ -35,17 +36,16 @@ export function MessagesPage() {
     fetchPolicy: "network-only",
   });
 
-  // Подписка на новые запросы чата
+  console.log(isAuthenticated, user?.id);
+
   const { data: newChatRequestData } = useChatRequestedSubscription({
     skip: !isAuthenticated || !user?.id,
   });
 
-  // Подписка на обновления статуса чата
   const { data: chatStatusUpdateData } = useChatStatusUpdatedSubscription({
     skip: !isAuthenticated || !user?.id,
   });
 
-  // Обработка новых запросов на чат
   useEffect(() => {
     if (newChatRequestData?.chatRequested) {
       refetchChats();
@@ -55,7 +55,6 @@ export function MessagesPage() {
     }
   }, [newChatRequestData, refetchChats]);
 
-  // Обработка обновлений статуса чата
   useEffect(() => {
     if (chatStatusUpdateData?.chatStatusUpdated) {
       const chat = chatStatusUpdateData.chatStatusUpdated;
@@ -74,6 +73,32 @@ export function MessagesPage() {
       }
     }
   }, [chatStatusUpdateData, refetchChats, selectedChat]);
+
+  const [markMessagesAsRead] = useMarkMessagesAsReadMutation({
+    onError: (error) => {
+      console.error("Error marking messages as read:", error);
+    },
+  });
+
+  const markAsRead = async (chatId: string) => {
+    try {
+      await markMessagesAsRead({
+        variables: {
+          input: {
+            chatId,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedChat) {
+      markAsRead(selectedChat);
+    }
+  }, [selectedChat]);
 
   // Если не аутентифицирован, показываем сообщение о необходимости входа
   if (!isAuthenticated) {
@@ -139,13 +164,25 @@ export function MessagesPage() {
         </div>
 
         {/* Окно чата */}
-        <div className="md:col-span-8">
-          <PrivateChat
-            chatId={selectedChat}
-            currentUserId={user?.id || ""}
-            onRefetchChats={refetchChats}
-          />
-        </div>
+        {selectedChat && user?.id !== null ? (
+          <div className="md:col-span-8">
+            <PrivateChat
+              chatId={selectedChat}
+              currentUserId={user?.id || ""}
+              onRefetchChats={refetchChats}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-1 w-full items-center justify-center text-center md:col-span-6">
+            <div>
+              <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground" />
+              <h3 className="mt-2 font-semibold">Your Messages</h3>
+              <p className="mt-1 text-muted-foreground">
+                Select a conversation or start a new one.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

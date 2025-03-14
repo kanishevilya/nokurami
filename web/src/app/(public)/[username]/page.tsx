@@ -34,7 +34,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCurrent } from "@/hooks/useCurrent";
 import { getMediaSource } from "@/utils/get-media-source";
 import { use } from "react";
-
+import { useRouter } from "next/navigation";
 interface ChannelPageProps {
   params: Promise<{ username: string }>;
 }
@@ -45,7 +45,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
   const { user: currentUser } = useCurrent();
   const [activeTab, setActiveTab] = useState("overview");
   const [requestingChat, setRequestingChat] = useState(false);
-
+  const router = useRouter();
   const { data, loading, error } = useFindChannelByUsernameQuery({
     variables: {
       username,
@@ -73,13 +73,8 @@ export default function ChannelPage({ params }: ChannelPageProps) {
 
     setRequestingChat(true);
 
-    // This would be replaced with an actual API call
     try {
-      // Simulate API call
-      setTimeout(() => {
-        toast.success("Chat request sent successfully");
-        setRequestingChat(false);
-      }, 1000);
+      router.push(`/messages/request?username=${channel.username}`);
     } catch (error) {
       toast.error("Failed to send chat request");
       setRequestingChat(false);

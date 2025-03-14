@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/shadcn/InputOtp";
 
 export function TwoFactorSettings() {
-  const { user } = useCurrent();
+  const { user, refetch } = useCurrent();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useForm<TwoFactorFormData>({
@@ -59,6 +59,7 @@ export function TwoFactorSettings() {
     onCompleted() {
       toast.success("Two-factor authentication enabled successfully");
       setIsDialogOpen(false);
+      refetch();
       form.reset();
     },
     onError(error) {
@@ -80,6 +81,7 @@ export function TwoFactorSettings() {
       setIsDialogOpen(true);
     } else {
       await disable2FA();
+      refetch();
     }
   };
 

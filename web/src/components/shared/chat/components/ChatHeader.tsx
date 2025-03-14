@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/shadcn/Badge";
 import { Button } from "@/components/ui/shadcn/Button";
 import { getMediaSource } from "@/utils/get-media-source";
 import { ChatStatus } from "@/graphql/generated/output";
-import { Check, Clock, X } from "lucide-react";
+import { Check, Clock, X, RefreshCw } from "lucide-react";
 
 interface ChatHeaderProps {
   status: ChatStatus;
@@ -89,6 +89,17 @@ export function ChatHeader({
               Decline
             </Button>
           </div>
+        )}
+        {status === ChatStatus.Rejected && recipientId === currentUserId && (
+          <Button
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={onAccept}
+            disabled={isUpdatingStatus}
+          >
+            <RefreshCw className="h-4 w-4 mr-1" />
+            Accept after rejection
+          </Button>
         )}
 
         {/* Уведомление о статусе, если это исходящий запрос */}

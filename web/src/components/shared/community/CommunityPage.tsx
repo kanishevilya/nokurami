@@ -86,7 +86,6 @@ export function CommunityPage() {
   const [isLiking, setIsLiking] = useState<string | null>(null);
   const [isCommenting, setIsCommenting] = useState<string | null>(null);
 
-  // Запрос на получение постов
   const {
     data: postsData,
     loading: loadingPosts,
@@ -102,7 +101,6 @@ export function CommunityPage() {
     fetchPolicy: "network-only",
   });
 
-  // Мутация для создания поста
   const [createPost, { loading: isCreatingPost }] = useCreatePostMutation({
     onCompleted: () => {
       setPostContent("");
@@ -114,14 +112,12 @@ export function CommunityPage() {
     },
   });
 
-  // Мутация для лайка/дизлайка
   const [toggleLike] = useToggleLikeMutation({
     onError: (error) => {
       toast.error(`Failed to toggle like: ${error.message}`);
     },
   });
 
-  // Мутация для создания комментария
   const [createComment, { loading: isCreatingComment }] =
     useCreateCommentMutation({
       onCompleted: () => {
@@ -135,17 +131,14 @@ export function CommunityPage() {
       },
     });
 
-  // Подписка на новые посты
   const { data: newPostData } = usePostCreatedSubscription();
 
   useEffect(() => {
     if (newPostData?.postCreated) {
-      // Обновляем данные после получения нового поста через подписку
       refetchPosts();
     }
   }, [newPostData, refetchPosts]);
 
-  // Обработчик для создания поста
   const handleCreatePost = async () => {
     if (!postContent.trim()) return;
 
@@ -163,7 +156,6 @@ export function CommunityPage() {
     }
   };
 
-  // Обработчик для лайка/дизлайка
   const handleToggleLike = async (postId: string) => {
     setIsLiking(postId);
     try {
@@ -182,7 +174,6 @@ export function CommunityPage() {
     }
   };
 
-  // Обработчик для создания комментария
   const handleCreateComment = async (
     postId: string,
     content: string
@@ -206,30 +197,24 @@ export function CommunityPage() {
     }
   };
 
-  // Обработчик для смены фильтров
   const handleFilterChange = (newFilters: PostFiltersInput) => {
     setFilters(newFilters);
     setIsFilterDialogOpen(false);
   };
 
-  // Обработчик для смены сортировки
   const handleSortChange = (newSort: PostSortInput) => {
     setSort(newSort);
   };
 
-  // Отфильтрованные посты в зависимости от активной вкладки
   const getFilteredPosts = () => {
     const posts = postsData?.findPosts || [];
 
     if (activeTab === "trending") {
-      // Для "trending" используем сортировку по лайкам
       return [...posts].sort((a, b) => (b.likeCount || 0) - (a.likeCount || 0));
     }
 
     if (activeTab === "following" && user) {
-      // Для "following" отфильтровываем посты от подписок
-      // Здесь должна быть логика фильтрации по подпискам
-      return posts.filter((post) => post.author.id !== user.id); // Временная логика
+      return posts.filter((post) => post.author.id !== user.id);
     }
 
     return posts;

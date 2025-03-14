@@ -391,56 +391,58 @@ function CommentCard({
         </AvatarFallback>
       </Avatar>
       <div className="w-full flex rounded-lg bg-muted p-2">
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
+        <div className="flex justify-between w-full">
+          <div className="flex flex-col w-3/4 items-start justify-between">
             <p className="text-xs font-medium">
               {comment.author?.displayName ||
                 comment.author?.username ||
                 "User"}
             </p>
-            <p className="text-xs text-muted-foreground -mr-6">
+            <p className="mt-1 text-sm">{comment.content}</p>
+          </div>
+          <div className="gap-2 flex flex-col items-end justify-between">
+            <p className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(comment.createdAt), {
                 addSuffix: true,
               })}
             </p>
+            {comment.author?.id === currentUserId && (
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <MoreHorizontalIcon className="h-4 w-4 mt-1" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[230px]">
+                  <Button
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => setShowEditDialog(true)}
+                    disabled={isUpdatingComment}
+                  >
+                    <DropdownMenuItem>
+                      <PencilIcon className="h-4 w-4" />
+                      Edit comment
+                    </DropdownMenuItem>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => {
+                      deleteComment().then(() => {
+                        onRemoveComment(comment.id);
+                      });
+                    }}
+                    disabled={isDeletingComment}
+                  >
+                    <DropdownMenuItem>
+                      <Trash2Icon className="h-4 w-4" />
+                      Delete comment
+                    </DropdownMenuItem>
+                  </Button>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
-          <p className="mt-1 text-sm">{comment.content}</p>
         </div>
-        {comment.author?.id === currentUserId && (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreHorizontalIcon className="h-4 w-4 mt-4 mr-3" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[230px]">
-              <Button
-                variant="ghost"
-                className="w-full"
-                onClick={() => setShowEditDialog(true)}
-                disabled={isUpdatingComment}
-              >
-                <DropdownMenuItem>
-                  <PencilIcon className="h-4 w-4" />
-                  Edit comment
-                </DropdownMenuItem>
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full"
-                onClick={() => {
-                  deleteComment().then(() => {
-                    onRemoveComment(comment.id);
-                  });
-                }}
-                disabled={isDeletingComment}
-              >
-                <DropdownMenuItem>
-                  <Trash2Icon className="h-4 w-4" />
-                  Delete comment
-                </DropdownMenuItem>
-              </Button>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
         {showEditDialog && (
           <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
             <DialogContent>

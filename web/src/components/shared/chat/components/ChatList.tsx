@@ -64,7 +64,9 @@ export function ChatListItem({
       className={`p-3 border-b flex items-center hover:bg-accent cursor-pointer ${
         selected ? "bg-accent/50" : ""
       }`}
-      onClick={onClick}
+      onClick={() => {
+        onClick();
+      }}
     >
       <Avatar className="w-10 h-10">
         <AvatarImage
@@ -83,8 +85,11 @@ export function ChatListItem({
           </p>
           <span className="text-xs text-muted-foreground">
             {messages &&
-              messages[0] &&
-              format(new Date(messages[0].createdAt), "HH:mm")}
+              messages[messages.length - 1] &&
+              format(
+                new Date(messages[messages.length - 1].createdAt),
+                "HH:mm"
+              )}
           </span>
         </div>
 
@@ -95,8 +100,8 @@ export function ChatListItem({
                 <Clock className="w-3 h-3 mr-1" />
                 {isCreator ? "Request pending" : "Chat request"}
               </span>
-            ) : messages && messages[0] ? (
-              messages[0].content
+            ) : messages && messages[messages.length - 1] ? (
+              messages[messages.length - 1].content
             ) : (
               "No messages yet"
             )}

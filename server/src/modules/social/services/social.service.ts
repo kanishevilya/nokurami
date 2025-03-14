@@ -405,6 +405,8 @@ export class SocialService {
             },
         });
 
+        console.log(chat);
+
         if (!chat) {
             throw new NotFoundException(`Chat with ID ${chatId} not found`);
         }
@@ -423,6 +425,11 @@ export class SocialService {
             },
         });
 
+        console.log({
+            ...chat,
+            unreadCount,
+        });
+
         return {
             ...chat,
             unreadCount,
@@ -430,7 +437,6 @@ export class SocialService {
     }
 
     async requestChat(userId: string, input: RequestChatInput) {
-        // Проверяем, существует ли уже чат между этими пользователями
         const existingChat = await this.prisma.privateChat.findFirst({
             where: {
                 OR: [
@@ -443,6 +449,10 @@ export class SocialService {
                         recipientId: userId,
                     },
                 ],
+            },
+            include: {
+                creator: true,
+                recipient: true,
             },
         });
 

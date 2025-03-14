@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/shadcn/Avatar";
 import { getMediaSource } from "@/utils/get-media-source";
 
-export function ChatRequestPage() {
+export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
   const { isAuthenticated } = useAuth();
   const { user } = useCurrent();
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(usernameParam);
   const debouncedUsername = useDebounce(username, 500);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
@@ -152,7 +152,6 @@ export function ChatRequestPage() {
                     </div>
                   ) : (
                     <div>
-                      {/* Показываем найденного пользователя */}
                       <div
                         className={`p-3 flex items-center hover:bg-accent cursor-pointer ${
                           selectedUserId ===
