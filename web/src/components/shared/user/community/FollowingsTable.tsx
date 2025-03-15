@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -19,6 +18,7 @@ import { TableCell } from "@/components/ui/shadcn/Table";
 import { TableRow } from "@/components/ui/shadcn/Table";
 import { ActionDropdown } from "@/components/ui/shadcn/ActionDropdown";
 import { getMediaSource } from "@/utils/get-media-source";
+import { useTranslations } from "next-intl";
 
 export function FollowingsTable() {
   const [search, setSearch] = useState("");
@@ -29,6 +29,8 @@ export function FollowingsTable() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("profile");
+  const commonT = useTranslations("common");
 
   useEffect(() => {
     if (inputRef.current) {
@@ -63,10 +65,10 @@ export function FollowingsTable() {
   const [unfollowUser, { loading: unfollowing }] =
     useUnfollowFromChannelMutation({
       onCompleted: () => {
-        toast.success("Successfully unfollowed");
+        toast.success(t("unfollowSuccess"));
         refetch();
       },
-      onError: (error) => toast.error(`Error unfollowing: ${error.message}`),
+      onError: (error) => toast.error(`${commonT("error")}: ${error.message}`),
     });
 
   const followings = data?.findMyFollowings.followings || [];
@@ -94,8 +96,8 @@ export function FollowingsTable() {
 
   return (
     <UserTable
-      title="Followings"
-      description="View users you follow"
+      title={t("following")}
+      description={t("followingDescription")}
       data={followings}
       loading={loading}
       totalCount={totalCount}
@@ -128,12 +130,12 @@ export function FollowingsTable() {
             <ActionDropdown
               actions={[
                 {
-                  label: "View Channel",
+                  label: t("viewChannel"),
                   onClick: () =>
                     (window.location.href = `/${following.following.username}`),
                 },
                 {
-                  label: "Unfollow",
+                  label: t("unfollow"),
                   onClick: () =>
                     unfollowUser({
                       variables: { channelId: following.followingId },
@@ -142,18 +144,6 @@ export function FollowingsTable() {
                 },
               ]}
             />
-            {
-
-
-
-
-
-
-
-
-
-
-}
           </TableCell>
         </TableRow>
       )}

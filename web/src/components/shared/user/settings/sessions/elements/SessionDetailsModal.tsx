@@ -9,6 +9,9 @@ import {
   DialogFooter,
 } from "@/components/ui/shadcn/Dialog";
 import { getOSIcon, getBrowserIcon, getDeviceIcon } from "../data/SessionIcons";
+import { SessionDetailItem } from "./SessionDetailItem";
+import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type SessionDetailsModalProps = {
   session: any;
@@ -27,85 +30,79 @@ export function SessionDetailsModal({
   isRemoving,
   isCurrent,
 }: SessionDetailsModalProps) {
+  const t = useTranslations("settings");
+
   if (!session) return null;
 
-  const { metadata, createdAt } = session;
-  const { device, location, ip } = metadata || {};
+  const { metadata, createdAt, ip } = session;
+  const { device, browser, os, location } = metadata || {};
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Session Details</DialogTitle>
+          <DialogTitle>{t("sessionDetails")}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            {getDeviceIcon(device?.type)}
-            {getOSIcon(device?.os)}
-            {getBrowserIcon(device?.browser)}
-            <p className="font-medium">
-              {device?.type || "Unknown Device"} •{" "}
-              {device?.browser || "Unknown Browser"} on{" "}
-              {device?.os || "Unknown OS"}
-            </p>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Location:{" "}
-            {location?.city && location?.country
-              ? `${location.city}, ${location.country}`
-              : "Unknown Location"}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Created:{" "}
-            {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
-          </p>
-          <p className="text-sm text-muted-foreground">IP: {ip}</p>
-
-          {location?.latitude && location?.longitude ? (
-            <YMaps>
-              <Map
-                defaultState={{
-                  center: [
-                    parseFloat(location.latitude),
-                    parseFloat(location.longitude),
-                  ],
-                  zoom: 10,
-                }}
-                width="100%"
-                height="300px"
-              >
-                <Placemark
-                  geometry={[
-                    parseFloat(location.latitude),
-                    parseFloat(location.longitude),
-                  ]}
-                />
-              </Map>
-            </YMaps>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Location coordinates not available.
-            </p>
-          )}
+        <div className="flex flex-col gap-4 py-4">
+          <SessionDetailItem
+            label={t("device")}
+            value={device?.type || t("unknown")}
+            icon={getDeviceIcon(device?.type)}
+          />
+          <SessionDetailItem
+            label={t("browser")}
+            value={device?.browser || t("unknown")}
+            icon={getBrowserIcon(device?.browser)}
+          />
+          <SessionDetailItem
+            label={t("operatingSystem")}
+            value={device?.os || t("unknown")}
+            icon={getOSIcon(device?.os)}
+          />
+          <SessionDetailItem
+            label={t("ipAddress")}
+            value={ip || t("unknown")}
+          />
+          <SessionDetailItem
+            label={t("location")}
+            value={
+              location?.city && location?.country
+                ? `${location.city}, ${location.country}`
+                : t("unknown")
+            }
+          />
+          <SessionDetailItem
+            label={t("createdAt")}
+            value={formatDistanceToNow(new Date(createdAt), {
+              addSuffix: true,
+            })}
+          />
           {isCurrent && (
-            <p className="text-sm text-red-500">
-              This is your current session.
-            </p>
+            <div className="mt-2 rounded-md bg-green-500/10 border border-green-500/30 p-2 text-sm text-center">
+              {t("thisIsYourCurrentSession")}
+            </div>
           )}
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={isRemoving}>
-            Close
+        <DialogFooter className="sm:justify-between">
+          <Button variant="ghost" onClick={onClose}>
+            {t("close")}
           </Button>
-          {!isCurrent && (
-            <Button
-              className="bg-red-500 hover:bg-red-400"
-              onClick={onRemove}
-              disabled={isRemoving}
-            >
-              {isRemoving ? "Removing..." : "Remove Session"}
-            </Button>
-          )}
+          <Button
+            variant="destructive"
+            onClick={onRemove}
+            disabled={isRemoving}
+          >
+            {isRemoving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t("terminating")}
+              </>
+            ) : isCurrent ? (
+              t("terminateThisSession")
+            ) : (
+              t("terminateSession")
+            )}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

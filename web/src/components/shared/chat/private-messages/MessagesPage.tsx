@@ -17,6 +17,7 @@ import {
 } from "@/graphql/generated/output";
 import { ChatList } from "../components/ChatList";
 import { PrivateChat } from "./PrivateChat";
+import { useTranslations } from "next-intl";
 
 export function MessagesPage() {
   const { isAuthenticated } = useAuth();
@@ -24,6 +25,10 @@ export function MessagesPage() {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const t = useTranslations("privateMessages");
+  const tChat = useTranslations("chat");
+  const tCommon = useTranslations("common");
+  const tMessages = useTranslations("messages");
 
   const {
     data: chatsData,
@@ -49,10 +54,12 @@ export function MessagesPage() {
     if (newChatRequestData?.chatRequested) {
       refetchChats();
       toast.info(
-        `New chat request from ${newChatRequestData.chatRequested.creator.username}`
+        `${tChat("newRequest")} ${
+          newChatRequestData.chatRequested.creator.username
+        }`
       );
     }
-  }, [newChatRequestData, refetchChats]);
+  }, [newChatRequestData, refetchChats, tChat]);
 
   useEffect(() => {
     if (chatStatusUpdateData?.chatStatusUpdated) {
@@ -60,9 +67,9 @@ export function MessagesPage() {
 
       if (chat.status === ChatStatus.Accepted) {
         refetchChats();
-        toast.success("Chat request accepted");
+        toast.success(tChat("chatAccepted"));
       } else if (chat.status === ChatStatus.Rejected) {
-        toast.error("Chat request rejected");
+        toast.error(tChat("chatRejected"));
 
         if (selectedChat === chat.id) {
           setSelectedChat(null);
@@ -70,7 +77,7 @@ export function MessagesPage() {
         refetchChats();
       }
     }
-  }, [chatStatusUpdateData, refetchChats, selectedChat]);
+  }, [chatStatusUpdateData, refetchChats, selectedChat, tChat]);
 
   const [markMessagesAsRead] = useMarkMessagesAsReadMutation({
     onError: (error) => {
@@ -105,13 +112,13 @@ export function MessagesPage() {
           <CardContent className="flex flex-col items-center justify-center p-12">
             <User className="mb-4 h-16 w-16 text-muted-foreground" />
             <h2 className="mb-2 text-xl font-bold">
-              Sign in to access messages
+              {tMessages("loginRequired")}
             </h2>
             <p className="mb-4 text-center text-muted-foreground">
-              You need to be signed in to view and send messages
+              {tMessages("loginToAccessMessages")}
             </p>
             <Button asChild>
-              <Link href="/account/login">Sign In</Link>
+              <Link href="/account/login">{tCommon("signIn")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -130,7 +137,7 @@ export function MessagesPage() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search conversations..."
+                    placeholder={t("searchConversations")}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="flex-1 pl-9"
@@ -140,7 +147,7 @@ export function MessagesPage() {
                   size="icon"
                   variant="outline"
                   onClick={() => router.push("/messages/request")}
-                  title="New chat request"
+                  title={t("startNewConversation")}
                 >
                   <MessageSquare className="h-4 w-4" />
                 </Button>
@@ -173,9 +180,9 @@ export function MessagesPage() {
           <div className="flex flex-1 w-full items-center justify-center text-center md:col-span-6">
             <div>
               <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-2 font-semibold">Your Messages</h3>
+              <h3 className="mt-2 font-semibold">{t("yourMessages")}</h3>
               <p className="mt-1 text-muted-foreground">
-                Select a conversation or start a new one.
+                {t("selectConversation")}
               </p>
             </div>
           </div>

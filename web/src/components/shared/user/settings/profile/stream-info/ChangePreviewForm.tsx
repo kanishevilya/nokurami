@@ -5,6 +5,7 @@ import { Trash } from "lucide-react";
 import { type ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import { Form, FormDescription, FormField } from "@/components/ui/shadcn/Form";
@@ -28,6 +29,7 @@ import Image from "next/image";
 import { getMediaSource } from "@/utils/get-media-source";
 
 export function ChangePreviewForm() {
+  const t = useTranslations("settings");
   const { user, isLoadingProfile, refetch } = useCurrent();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -45,10 +47,10 @@ export function ChangePreviewForm() {
     {
       onCompleted(data) {
         refetch();
-        toast.success("Preview updated successfully");
+        toast.success(t("previewUpdatedSuccess"));
       },
       onError() {
-        toast.error("Error updating preview");
+        toast.error(t("previewUpdateError"));
       },
     }
   );
@@ -57,10 +59,10 @@ export function ChangePreviewForm() {
     {
       onCompleted() {
         refetch();
-        toast.success("Preview removed successfully");
+        toast.success(t("previewRemovedSuccess"));
       },
       onError() {
-        toast.error("Error removing preview");
+        toast.error(t("previewRemoveError"));
       },
     }
   );
@@ -76,10 +78,9 @@ export function ChangePreviewForm() {
 
   return (
     <FormWrapper
-      heading="Stream Preview"
+      heading={t("streamPreview")}
       id="preview"
-      description="Change your stream preview to a new image. You can upload a new image or remove your current preview."
-      
+      description={t("streamPreviewDescription")}
     >
       {isLoadingProfile ? (
         <ChangePreviewFormSkeleton />
@@ -102,12 +103,12 @@ export function ChangePreviewForm() {
                             ? URL.createObjectURL(field.value)
                             : field.value
                         )}
-                        alt="Preview"
+                        alt={t("preview")}
                         className="w-[850px] h-[450px] object-cover rounded-xl"
                       />
                       <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <p className="text-white text-sm font-medium">
-                          Change Preview
+                          {t("changePreview")}
                         </p>
                       </div>
                     </div>
@@ -128,13 +129,13 @@ export function ChangePreviewForm() {
                           disabled={isLoadingUpdate || isLoadingRemove}
                         >
                           {isLoadingUpdate
-                            ? "Uploading..."
-                            : "Upload New Preview"}
+                            ? t("uploading")
+                            : t("uploadNewPreview")}
                         </Button>
                         {user?.avatar && (
                           <ConfirmModal
-                            heading="Remove Preview"
-                            message="Are you sure you want to remove your preview? This action cannot be undone."
+                            heading={t("removePreview")}
+                            message={t("removePreviewConfirmation")}
                             onConfirm={() => remove()}
                           >
                             <Button
@@ -143,8 +144,8 @@ export function ChangePreviewForm() {
                               disabled={isLoadingUpdate || isLoadingRemove}
                             >
                               {isLoadingRemove
-                                ? "Removing..."
-                                : "Remove Preview"}
+                                ? t("removing")
+                                : t("removePreview")}
                               <Trash className="ml-2 size-4" />
                             </Button>
                           </ConfirmModal>
@@ -152,10 +153,10 @@ export function ChangePreviewForm() {
                       </div>
                       <div className="space-y-2">
                         <p className="text-sm text-muted-foreground">
-                          Recommended: 16:9 aspect ratio
+                          {t("previewRecommendedRatio")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Supported formats: JPG, PNG, GIF, WEBP (max 10MB)
+                          {t("previewSupportedFormats")}
                         </p>
                       </div>
                     </div>
@@ -163,9 +164,7 @@ export function ChangePreviewForm() {
                 </div>
               )}
             />
-            <FormDescription>
-              You can upload a new preview or remove your current preview.
-            </FormDescription>
+            <FormDescription>{t("previewUploadDescription")}</FormDescription>
           </div>
         </Form>
       )}

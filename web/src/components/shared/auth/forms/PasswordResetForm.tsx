@@ -28,9 +28,11 @@ import {
   AlertTitle,
 } from "@/components/ui/shadcn/Alert";
 import { CircleCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function PasswordResetForm() {
   const [isSuccess, setIsSuccess] = useState(false);
+  const t = useTranslations("auth");
 
   const form = useForm<TypeResetPasswordSchema>({
     resolver: zodResolver(resetPasswordSchema),
@@ -42,14 +44,10 @@ export function PasswordResetForm() {
   const [passwordReset, { loading }] = usePasswordResetMutation({
     onCompleted(data) {
       setIsSuccess(true);
-      toast.success(
-        "Сообщение с инструкциями по сбросу пароля отправлено на ваш email"
-      );
+      toast.success(t("passwordResetLinkSent"));
     },
     onError() {
-      toast.error(
-        "Ошибка при отправке сообщения с инструкциями по сбросу пароля"
-      );
+      toast.error(t("passwordResetError"));
     },
   });
 
@@ -61,17 +59,15 @@ export function PasswordResetForm() {
 
   return (
     <AuthWrapper
-      heading="Сброс пароля"
-      backButtonLabel="Вернуться на страницу входа"
+      heading={t("resetPassword")}
+      backButtonLabel={t("backToLogin")}
       backButtonHref="/account/login"
     >
       {isSuccess ? (
         <Alert>
           <CircleCheck className="h-4 w-4" />
-          <AlertTitle>Ссылка отправлена</AlertTitle>
-          <AlertDescription>
-            Сообщение с инструкциями по сбросу пароля отправлено на ваш email
-          </AlertDescription>
+          <AlertTitle>{t("linkSent")}</AlertTitle>
+          <AlertDescription>{t("passwordResetLinkSent")}</AlertDescription>
         </Alert>
       ) : (
         <Form {...form}>
@@ -81,16 +77,20 @@ export function PasswordResetForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" disabled={loading} {...field} />
+                    <Input
+                      placeholder={t("emailPlaceholder")}
+                      disabled={loading}
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>Введите email</FormDescription>
+                  <FormDescription>{t("emailDescription")}</FormDescription>
                 </FormItem>
               )}
             />
             <Button className="w-full mt-4" disabled={!isValid || loading}>
-              Сбросить пароль
+              {t("resetPassword")}
             </Button>
           </form>
         </Form>

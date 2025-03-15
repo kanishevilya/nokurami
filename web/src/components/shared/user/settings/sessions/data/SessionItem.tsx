@@ -2,6 +2,7 @@ import { Info } from "lucide-react";
 import { Button } from "@/components/ui/shadcn/Button";
 import { getOSIcon, getBrowserIcon, getDeviceIcon } from "./SessionIcons";
 import { formatDistanceToNow } from "date-fns";
+import { useTranslations } from "next-intl";
 
 type SessionItemProps = {
   session: any;
@@ -18,6 +19,7 @@ export function SessionItem({
 }: SessionItemProps) {
   const { metadata, createdAt } = session;
   const { device, location } = metadata || {};
+  const t = useTranslations("settings");
 
   return (
     <div className="flex items-center justify-between">
@@ -29,14 +31,14 @@ export function SessionItem({
         </div>
         <div className="space-y-1">
           <p className="font-medium group-hover:text-primary transition-colors duration-200">
-            {device?.type || "Unknown Device"} •{" "}
-            {device?.browser || "Unknown Browser"} on{" "}
-            {device?.os || "Unknown OS"}
+            {device?.type || t("unknownDevice")} •{" "}
+            {device?.browser || t("unknownBrowser")} {t("on")}{" "}
+            {device?.os || t("unknownOS")}
           </p>
           <p className="text-sm text-muted-foreground group-hover:text-primary  transition-colors duration-200">
             {location?.city && location?.country
               ? `${location.city}, ${location.country}`
-              : "Unknown Location"}{" "}
+              : t("unknownLocation")}{" "}
             • {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
           </p>
         </div>
@@ -48,6 +50,7 @@ export function SessionItem({
           onClick={() => onShowDetails?.(session)}
           disabled={isRemoving}
           className="hover:bg-blue-100/20 hover:text-blue-500 transition-colors duration-200"
+          aria-label={t("sessionInfo")}
         >
           <Info className="min-h-5 min-w-5" />
         </Button>

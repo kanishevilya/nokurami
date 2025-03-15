@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getMediaSource } from "@/utils/get-media-source";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { useTranslations } from "next-intl";
 
 interface StreamCardProps {
   stream: {
@@ -21,6 +22,7 @@ interface StreamCardProps {
 
 export function StreamCard({ stream }: StreamCardProps) {
   const { previewUrl, title, isLive, user, category } = stream;
+  const t = useTranslations("streams");
 
   return (
     <Link
@@ -40,7 +42,7 @@ export function StreamCard({ stream }: StreamCardProps) {
         <div className="absolute inset-0 z-10 overflow-hidden rounded-t-lg">
           <div className="absolute inset-y-0 left-0 bg-primary text-transparent flex items-center justify-center w-0 group-hover:w-full group-hover:text-primary-foreground transition-all duration-150 ease-out">
             <span className="text-md font-semibold">
-              {isLive ? "Перейти на стрим" : "Перейти на канал"}
+              {isLive ? t("goToStream") : t("goToChannel")}
             </span>
           </div>
         </div>
@@ -48,12 +50,12 @@ export function StreamCard({ stream }: StreamCardProps) {
           <div className="absolute top-2 left-2 flex items-center gap-1 z-20">
             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
             <span className="px-2 py-1 text-xs font-semibold bg-primary transition-colors text-white rounded-full shadow-sm">
-              LIVE
+              {t("live")}
             </span>
           </div>
         ) : (
           <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium bg-muted text-muted-foreground rounded-full z-20">
-            Оффлайн
+            {t("offline")}
           </div>
         )}
       </div>

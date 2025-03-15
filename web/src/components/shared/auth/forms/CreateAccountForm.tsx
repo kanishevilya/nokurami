@@ -27,8 +27,10 @@ import {
   AlertTitle,
 } from "@/components/ui/shadcn/Alert";
 import { CircleCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function CreateAccountForm() {
+  const t = useTranslations("auth");
   const [success, setSuccess] = useState(false);
 
   const form = useForm<TypeCreateAccountSchema>({
@@ -43,10 +45,9 @@ export function CreateAccountForm() {
   const [createUser, { loading }] = useCreateUserMutation({
     onCompleted() {
       setSuccess(true);
-      // toast.success('Аккаунт успешно создан')
     },
     onError() {
-      toast.error("Ошибка при создании аккаунта");
+      toast.error(t("registerError"));
     },
   });
 
@@ -62,17 +63,15 @@ export function CreateAccountForm() {
 
   return (
     <AuthWrapper
-      heading="Регистрация в Nokurami"
-      backButtonLabel="Есть учетная запись? Войти"
+      heading={t("registerTitle")}
+      backButtonLabel={t("alreadyHaveAccount") + " " + t("login")}
       backButtonHref="/account/login"
     >
       {success ? (
         <Alert>
           <CircleCheck className="h-4 w-4" />
-          <AlertTitle>Аккаунт успешно создан</AlertTitle>
-          <AlertDescription>
-            Теперь вы должны подтвердить почту
-          </AlertDescription>
+          <AlertTitle>{t("accountCreationSuccess")}</AlertTitle>
+          <AlertDescription>{t("emailVerification")}</AlertDescription>
         </Alert>
       ) : (
         <Form {...form}>
@@ -82,17 +81,15 @@ export function CreateAccountForm() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Имя пользователя</FormLabel>
+                  <FormLabel>{t("username")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="johanliebert"
+                      placeholder={t("usernamePlaceholder")}
                       disabled={loading}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Поле для ввода имени пользователя
-                  </FormDescription>
+                  <FormDescription>{t("usernameDescription")}</FormDescription>
                 </FormItem>
               )}
             />
@@ -102,15 +99,15 @@ export function CreateAccountForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Почта</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="johan.liebert@example.com"
+                      placeholder={t("emailPlaceholder")}
                       disabled={loading}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Поле для ввода email</FormDescription>
+                  <FormDescription>{t("emailDescription")}</FormDescription>
                 </FormItem>
               )}
             />
@@ -120,22 +117,22 @@ export function CreateAccountForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Пароль</FormLabel>
+                  <FormLabel>{t("password")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="********"
+                      placeholder={t("passwordPlaceholder")}
                       type="password"
                       disabled={loading}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Поле для ввода пароля</FormDescription>
+                  <FormDescription>{t("passwordDescription")}</FormDescription>
                 </FormItem>
               )}
             />
 
             <Button className="w-full mt-4" disabled={!isValid || loading}>
-              Зарегистрироваться
+              {t("registerButtonLabel")}
             </Button>
           </form>
         </Form>

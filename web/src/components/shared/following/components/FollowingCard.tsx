@@ -2,6 +2,7 @@ import { ChannelAvatar } from "@/components/ui/items/ChannelAvatar";
 
 import FollowUnfollowButton from "./FollowUnfollowButton";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface FollowingCardProps {
   following: {
@@ -16,6 +17,7 @@ interface FollowingCardProps {
 
 export default function FollowingCard({ following, myId }: FollowingCardProps) {
   const { username, isLive, followersCount, id } = following;
+  const t = useTranslations("profile");
   console.log(myId);
 
   return (
@@ -36,7 +38,9 @@ export default function FollowingCard({ following, myId }: FollowingCardProps) {
       </Link>
 
       <div className="absolute h-6 flex items-center justify-between left-0 right-0 bottom-0 p-4 pr-0 bg-card text-muted-foreground transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-10">
-        <p className="text-sm">Подписчиков: {followersCount}</p>
+        <p className="text-sm">
+          {t("followersCount", { count: followersCount })}
+        </p>
         <FollowUnfollowButton channelId={id} myId={myId} />
       </div>
     </div>

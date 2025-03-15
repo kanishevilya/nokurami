@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Form,
@@ -49,6 +50,8 @@ export function StreamSettings() {
   const { user, isLoadingProfile, refetch } = useCurrent();
   const { data: categoriesData, loading: loadingCategories } =
     useFindAllCategoriesQuery();
+  const t = useTranslations("streams");
+  const formT = useTranslations("common");
 
   const form = useForm<StreamSettingsFormData>({
     resolver: zodResolver(streamSettingsSchema),
@@ -61,11 +64,11 @@ export function StreamSettings() {
 
   const [updateStream, { loading: isUpdating }] = useUpdateStreamMutation({
     onCompleted() {
-      toast.success("Stream settings updated successfully");
+      toast.success(t("settingsUpdatedSuccess"));
       refetch();
     },
     onError(error) {
-      toast.error(`Error updating stream settings: ${error.message}`);
+      toast.error(`${t("settingsUpdateError")}: ${error.message}`);
     },
   });
 
@@ -85,7 +88,6 @@ export function StreamSettings() {
         data: {
           title: data.title,
           categoryId: data.categoryId,
-          previewUrl: data.previewUrl || null,
         },
       },
     });
@@ -94,15 +96,15 @@ export function StreamSettings() {
   return (
     <div className="flex flex-col gap-6">
       <Heading
-        title="Stream Settings"
-        description="Manage your stream information"
+        title={t("streamSettings")}
+        description={t("streamSettingsDescription")}
         size="lg"
       />
 
       <FormWrapper
-        heading="Stream Information"
+        heading={t("streamInformation")}
         id="stream-information"
-        description="Update your stream title, category, and thumbnail."
+        description={t("streamInformationDescription")}
         alwaysOpen={true}
       >
         {isLoadingProfile || loadingCategories ? (
@@ -118,10 +120,10 @@ export function StreamSettings() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Stream Title</FormLabel>
+                    <FormLabel>{t("streamTitle")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter your stream title"
+                        placeholder={t("enterStreamTitle")}
                         {...field}
                         disabled={isUpdating}
                       />
@@ -136,7 +138,7 @@ export function StreamSettings() {
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>{t("category")}</FormLabel>
                     <Select
                       disabled={isUpdating}
                       onValueChange={field.onChange}
@@ -145,7 +147,7 @@ export function StreamSettings() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
+                          <SelectValue placeholder={t("selectCategory")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -166,10 +168,10 @@ export function StreamSettings() {
                 name="previewUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Thumbnail URL (optional)</FormLabel>
+                    <FormLabel>{t("thumbnailUrl")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter your thumbnail URL"
+                        placeholder={t("enterThumbnailUrl")}
                         {...field}
                         value={field.value || ""}
                         disabled={isUpdating}
@@ -184,10 +186,10 @@ export function StreamSettings() {
                 {isUpdating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Updating...
+                    {t("updating")}
                   </>
                 ) : (
-                  "Save Changes"
+                  formT("save")
                 )}
               </Button>
             </form>

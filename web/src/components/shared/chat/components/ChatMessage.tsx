@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/shadcn/Avatar";
 import { getMediaSource } from "@/utils/get-media-source";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export interface MessageProps {
   id: string;
@@ -29,6 +30,8 @@ export function ChatMessage({
   isCurrentUser,
   sender,
 }: MessageProps) {
+  const t = useTranslations("chat");
+
   const formatMessageTime = (timestamp: string) => {
     return format(new Date(timestamp), "HH:mm");
   };
@@ -65,7 +68,9 @@ export function ChatMessage({
         >
           {formatMessageTime(createdAt)}
           {isCurrentUser && isRead !== undefined && (
-            <span className="ml-1">{isRead ? "• Read" : "• Sent"}</span>
+            <span className="ml-1">
+              {isRead ? `• ${t("read")}` : `• ${t("sent")}`}
+            </span>
           )}
         </p>
       </div>

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
+import { useTranslations } from "next-intl";
 
 export function FollowedChannels() {
   const { data, loading } = useFindMyFollowingsChannelsQuery({
@@ -28,16 +29,17 @@ export function FollowedChannels() {
   const showViewAll = followings.length === 10;
 
   console.log(followings);
+  const t = useTranslations("navigation");
   return (
     <div className="space-y-2">
       {isCollapsed ? (
-        <Hint label="Subscriptions" side="right" asChild>
+        <Hint label={t("subscriptions")} side="right" asChild>
           <Users className="h-5 w-5 relative left-3 top-6" />
         </Hint>
       ) : (
         <div className="p-5 flex items-center h-11 w-full justify-start gap-x-4 text-base font-semibold">
           <Users className="h-5 w-5" />
-          <p className="text-sm font-medium">Subscriptions</p>
+          <p className="text-sm font-medium">{t("subscriptions")}</p>
         </div>
       )}
 

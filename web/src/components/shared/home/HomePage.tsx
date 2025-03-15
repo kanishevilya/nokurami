@@ -8,8 +8,6 @@ export default function HomePage() {
     <div className="flex flex-col gap-4 gap-y-8">
       <FeaturedChannelsCarousel />
 
-      {}
-
       <RandomCategories />
 
       <StreamsPage />

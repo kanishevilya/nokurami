@@ -14,6 +14,7 @@ import {
   usePrivateMessageSentSubscription,
   useOnChatMessageSubscription,
 } from "@/graphql/generated/output";
+import { useTranslations } from "next-intl";
 
 interface PrivateChatProps {
   chatId: string | null;
@@ -27,6 +28,9 @@ export function PrivateChat({
   onRefetchChats,
 }: PrivateChatProps) {
   const [newMessage, setNewMessage] = useState("");
+  const t = useTranslations("privateMessages");
+  const tChat = useTranslations("chat");
+  const tCommon = useTranslations("common");
 
   const {
     data: selectedChatData,
@@ -44,7 +48,7 @@ export function PrivateChat({
         refetchSelectedChat(); // Обновляем только текущий чат
       },
       onError: (error) => {
-        console.error(`Failed to send message: ${error.message}`);
+        console.error(`${tCommon("error")}: ${error.message}`);
       },
     });
 
@@ -55,7 +59,7 @@ export function PrivateChat({
         refetchSelectedChat(); // Обновляем текущий чат
       },
       onError: (error) => {
-        console.error(`Failed to update chat status: ${error.message}`);
+        console.error(`${tCommon("error")}: ${error.message}`);
       },
     });
 
@@ -135,11 +139,11 @@ export function PrivateChat({
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
         <AlertCircle className="h-10 w-10 text-destructive mb-2" />
-        <h3 className="font-semibold mb-1">Failed to load conversation</h3>
+        <h3 className="font-semibold mb-1">{t("failedToLoadConversation")}</h3>
         <p className="text-sm text-muted-foreground mb-4">
           {selectedChatError.message}
         </p>
-        <Button onClick={() => refetchSelectedChat()}>Try Again</Button>
+        <Button onClick={() => refetchSelectedChat()}>{t("tryAgain")}</Button>
       </div>
     );
   }
@@ -147,7 +151,7 @@ export function PrivateChat({
   if (!selectedChatDetails) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <p className="text-muted-foreground">Chat not found</p>
+        <p className="text-muted-foreground">{tChat("chatNotFound")}</p>
       </div>
     );
   }

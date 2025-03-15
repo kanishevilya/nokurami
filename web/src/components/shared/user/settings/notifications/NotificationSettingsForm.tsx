@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Info } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import {
@@ -41,6 +42,8 @@ export function NotificationSettingsForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { telegramToken, setTelegramToken, clearTelegramToken } =
     useTelegramTokenStore();
+  const t = useTranslations("settings");
+  const commonT = useTranslations("common");
 
   const form = useForm<NotificationSettingsFormData>({
     resolver: zodResolver(notificationSettingsSchema),
@@ -54,7 +57,7 @@ export function NotificationSettingsForm() {
     useChangeNotificationSettingsMutation({
       onCompleted(data) {
         refetch();
-        toast.success("Notification settings updated");
+        toast.success(t("notificationSettingsUpdated"));
 
         if (
           data.changeNotificationSettings.notificationSettings
@@ -68,7 +71,7 @@ export function NotificationSettingsForm() {
         }
       },
       onError(error) {
-        toast.error(`Error: ${error.message}`);
+        toast.error(`${commonT("error")}: ${error.message}`);
         form.setValue("telegramNotificationsEnable", false);
         clearTelegramToken();
         setIsModalOpen(false);
@@ -124,7 +127,7 @@ export function NotificationSettingsForm() {
       },
     });
     setIsModalOpen(false);
-    clearTelegramToken(); 
+    clearTelegramToken();
   };
 
   const handleCheckStatus = async () => {
@@ -134,38 +137,33 @@ export function NotificationSettingsForm() {
     const chatId = data?.getProfile.telegramChatId;
 
     if (chatId) {
-      toast.success("Telegram notifications are active.");
+      toast.success(t("telegramNotificationsActive"));
       clearTelegramToken();
       setIsModalOpen(false);
     } else if (isTelegramEnabled && telegramToken) {
-      toast.warning(
-        "Telegram linking incomplete. Please open Telegram with the token or generate a new one by toggling the switch off and on."
-      );
+      toast.warning(t("telegramLinkingIncomplete"));
       setIsModalOpen(true);
     } else if (!isTelegramEnabled && telegramToken) {
-      toast.error(
-        "Telegram notifications were disabled. The token may have expired or the account is linked to another profile. Toggle the switch off and on to generate a new token."
-      );
+      toast.error(t("telegramNotificationsDisabled"));
       form.setValue("telegramNotificationsEnable", false);
       setIsModalOpen(true);
     } else if (!chatId && !isTelegramEnabled && !telegramToken) {
-      toast.info(
-        "Telegram notifications are disabled. Enable them to generate a token."
-      );
+      toast.info(t("telegramNotificationsOff"));
       setIsModalOpen(false);
     }
   };
+
   return (
     <div className="flex flex-col gap-6">
       <Heading
-        title="Notifications"
-        description="Configure how you want to receive notifications from the platform"
+        title={t("notifications")}
+        description={t("notificationsDescription")}
         size="lg"
       />
       <FormWrapper
-        heading="Notification Settings"
+        heading={t("notificationSettings")}
         id="notification-settings"
-        description="Manage your notification preferences."
+        description={t("notificationSettingsDescription")}
         alwaysOpen={true}
       >
         {isLoadingProfile ? (
@@ -179,7 +177,7 @@ export function NotificationSettingsForm() {
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between">
                     <FormLabel className="text-lg">
-                      Site Notifications
+                      {t("siteNotifications")}
                     </FormLabel>
                     <FormControl>
                       <Switch
@@ -200,7 +198,7 @@ export function NotificationSettingsForm() {
                   <FormItem className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <FormLabel className="text-lg">
-                        Telegram Notifications
+                        {t("telegramNotifications")}
                       </FormLabel>
                       {field.value && telegramToken && (
                         <Button
@@ -231,29 +229,23 @@ export function NotificationSettingsForm() {
             </div>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <DialogContent>
+              <DialogContent className="w-full max-w-4xl">
                 <DialogHeader>
-                  <DialogTitle>Setup Telegram Notifications</DialogTitle>
+                  <DialogTitle>{t("setupTelegramNotifications")}</DialogTitle>
                 </DialogHeader>
                 <div className="text-sm text-muted-foreground">
-                  To enable Telegram notifications:
-                  <ol className="list-decimal pl-5 mt-2">
+                  {t("telegramSetupInstructions")}:
+                  <ol className="pl-5 mt-2">
+                    <li>{t("telegramSetupStep1")}</li>
                     <li>
-                      Click "Open Telegram" to start the bot with the token
-                      below.
-                    </li>
-                    <li>
-                      Token:{" "}
+                      {t("telegramSetupStep2")}:{" "}
                       <strong>
-                        {getDecryptedToken(telegramToken) || "Loading..."}
+                        {getDecryptedToken(telegramToken) || t("loading")}
                       </strong>
                     </li>
-                    <li>After linking, click "Check Status" to verify.</li>
+                    <li>{t("telegramSetupStep3")}</li>
                   </ol>
-                  <p className="mt-2">
-                    Note: If this Telegram account is already linked to another
-                    profile, notifications will be disabled automatically.
-                  </p>
+                  <p className="mt-2">{t("telegramSetupNote")}</p>
                 </div>
                 <DialogFooter>
                   <Button
@@ -261,20 +253,20 @@ export function NotificationSettingsForm() {
                     onClick={handleDisableTelegram}
                     disabled={isLoadingUpdate}
                   >
-                    Disable Telegram
+                    {t("disableTelegram")}
                   </Button>
                   <Button
                     variant="outline"
                     onClick={handleCheckStatus}
                     disabled={isLoadingUpdate}
                   >
-                    Check Status
+                    {t("checkStatus")}
                   </Button>
                   <Button
                     onClick={handleOpenTelegram}
                     disabled={isLoadingUpdate || !telegramToken}
                   >
-                    Open Telegram
+                    {t("openTelegram")}
                   </Button>
                 </DialogFooter>
               </DialogContent>

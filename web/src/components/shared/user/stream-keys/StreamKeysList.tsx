@@ -3,9 +3,11 @@
 import { useCurrent } from "@/hooks/useCurrent";
 import { StreamKeyField } from "./StreamKeyField";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
+import { useTranslations } from "next-intl";
 
 export function StreamKeysList() {
   const { user, isLoadingProfile } = useCurrent();
+  const t = useTranslations("profile");
 
   return isLoadingProfile ? (
     <StreamKeysSkeleton />
@@ -13,11 +15,11 @@ export function StreamKeysList() {
     <div className="space-y-6">
       <div className="space-y-4 rounded-lg">
         <StreamKeyField
-          label="Stream URL"
+          label={t("streamUrl")}
           value={user?.stream?.serverUrl || ""}
         />
         <StreamKeyField
-          label="Stream Key"
+          label={t("streamKey")}
           value={user?.stream?.streamKey || ""}
           isSecret
         />

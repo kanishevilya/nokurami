@@ -72,8 +72,11 @@ import {
 import { Label } from "@/components/ui/shadcn/Label";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { PostCard } from "./PostCard";
+import { useTranslations } from "next-intl";
 
 export function CommunityPage() {
+  const t = useTranslations("community");
+  const commonT = useTranslations("common");
   const [activeTab, setActiveTab] = useState("posts");
   const { isAuthenticated } = useAuth();
   const { user } = useCurrent();
@@ -223,11 +226,7 @@ export function CommunityPage() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-8 flex items-center justify-between">
-        <Heading
-          title="Nokurami Community"
-          description="Connect with streamers and other viewers"
-          size="lg"
-        />
+        <Heading title={t("title")} description={t("subtitle")} size="lg" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -239,37 +238,37 @@ export function CommunityPage() {
           >
             <div className="mb-6 flex items-center justify-between">
               <TabsList>
-                <TabsTrigger value="posts">Posts</TabsTrigger>
-                <TabsTrigger value="trending">Trending</TabsTrigger>
-                <TabsTrigger value="following">Following</TabsTrigger>
+                <TabsTrigger value="posts">{t("posts")}</TabsTrigger>
+                <TabsTrigger value="trending">{t("trending")}</TabsTrigger>
+                <TabsTrigger value="following">{t("following")}</TabsTrigger>
               </TabsList>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-x-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setIsFilterDialogOpen(true)}
                 >
                   <Filter className="mr-2 h-4 w-4" />
-                  Filter
+                  {commonT("filter")}
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                       <TrendingUp className="mr-2 h-4 w-4" />
-                      Sort
+                      {commonT("sort")}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem
                       onClick={() => handleSortChange({ latestFirst: true })}
                     >
-                      Newest First
+                      {commonT("newestFirst")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => handleSortChange({ latestFirst: false })}
                     >
-                      Oldest First
+                      {commonT("oldestFirst")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -277,7 +276,6 @@ export function CommunityPage() {
             </div>
 
             <TabsContent value="posts" className="space-y-6">
-              {}
               {isAuthenticated && (
                 <Card>
                   <CardHeader className="pb-3">
@@ -290,7 +288,7 @@ export function CommunityPage() {
                       </Avatar>
                       <div className="flex-1">
                         <Textarea
-                          placeholder="What's on your mind?"
+                          placeholder={t("whatOnMind")}
                           className="min-h-[100px] resize-none"
                           value={postContent}
                           onChange={(e) => setPostContent(e.target.value)}
@@ -306,17 +304,16 @@ export function CommunityPage() {
                       {isCreatingPost ? (
                         <>
                           <Loader className="mr-2 h-4 w-4 animate-spin" />
-                          Posting...
+                          {commonT("posting")}
                         </>
                       ) : (
-                        "Post"
+                        commonT("post")
                       )}
                     </Button>
                   </CardFooter>
                 </Card>
               )}
 
-              {}
               {loadingPosts ? (
                 <div className="space-y-6">
                   {[1, 2, 3].map((i) => (
@@ -344,13 +341,17 @@ export function CommunityPage() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="text-center text-red-500">
-                      <p>Error loading posts: {postsError.message}</p>
+                      <p>
+                        {t("errorLoadingPosts", {
+                          message: postsError.message,
+                        })}
+                      </p>
                       <Button
                         variant="outline"
                         className="mt-2"
                         onClick={() => refetchPosts()}
                       >
-                        Retry
+                        {commonT("retry")}
                       </Button>
                     </div>
                   </CardContent>
@@ -359,7 +360,7 @@ export function CommunityPage() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="text-center text-muted-foreground">
-                      <p>No posts found. Be the first to create a post!</p>
+                      <p>{t("noPostsFound")}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -424,20 +425,21 @@ export function CommunityPage() {
             </TabsContent>
 
             <TabsContent value="following" className="space-y-6">
-              {!isAuthenticated ? (
+              {!isAuthenticated && (
                 <Card>
                   <CardContent className="p-6">
                     <div className="text-center">
                       <p className="mb-4 text-muted-foreground">
-                        Sign in to see posts from streamers you follow
+                        {t("signInToSee")}
                       </p>
                       <Button asChild>
-                        <Link href="/account/login">Sign In</Link>
+                        <Link href="/account/login">{commonT("signIn")}</Link>
                       </Button>
                     </div>
                   </CardContent>
                 </Card>
-              ) : loadingPosts ? (
+              )}
+              {loadingPosts ? (
                 <div className="space-y-6">
                   {[1, 2, 3].map((i) => (
                     <Card key={i}>
@@ -462,9 +464,7 @@ export function CommunityPage() {
                 </div>
               ) : getFilteredPosts().length === 0 ? (
                 <div className="flex items-center justify-center p-12 text-muted-foreground">
-                  <p>
-                    You don't follow any streamers or they haven't posted yet
-                  </p>
+                  <p>{t("noFollowing")}</p>
                 </div>
               ) : (
                 getFilteredPosts().map((post) => (

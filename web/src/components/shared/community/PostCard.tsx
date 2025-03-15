@@ -43,6 +43,7 @@ import { Dialog } from "@/components/ui/shadcn/Dialog";
 import { DialogContent } from "@/components/ui/shadcn/Dialog";
 import { Textarea } from "@/components/ui/shadcn/Textarea";
 import { v4 } from "uuid";
+import { useTranslations } from "next-intl";
 
 export interface PostCardProps {
   post: any;
@@ -63,6 +64,9 @@ export function PostCard({
   isCommenting,
   refetchPosts,
 }: PostCardProps) {
+  const t = useTranslations("community");
+  const commonT = useTranslations("common");
+
   const [commentInput, setCommentInput] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -77,10 +81,10 @@ export function PostCard({
       },
     },
     onCompleted: () => {
-      toast.success("Post updated successfully");
+      toast.success(t("postUpdated"));
     },
     onError: (error) => {
-      toast.error(`Failed to update post: ${error.message}`);
+      toast.error(`${t("failedToUpdatePost")}: ${error.message}`);
     },
   });
   const [deletePost, { loading: isDeletingPost }] = useDeletePostMutation({
@@ -88,16 +92,16 @@ export function PostCard({
       id: post.id,
     },
     onCompleted: () => {
-      toast.success("Post deleted successfully");
+      toast.success(t("postDeleted"));
     },
     onError: (error) => {
-      toast.error(`Failed to delete post: ${error.message}`);
+      toast.error(`${t("failedToDeletePost")}: ${error.message}`);
     },
   });
 
   const handleUpdatePost = () => {
     if (!postContent.trim()) {
-      toast.error("Post content cannot be empty");
+      toast.error(t("postContentEmpty"));
       return;
     }
     updatePost({
@@ -188,7 +192,7 @@ export function PostCard({
                     >
                       <DropdownMenuItem>
                         <PencilIcon className="h-4 w-4" />
-                        Change post
+                        {t("editPost")}
                       </DropdownMenuItem>
                     </Button>
                     <Button
@@ -203,7 +207,7 @@ export function PostCard({
                     >
                       <DropdownMenuItem>
                         <Trash2Icon className="h-4 w-4" />
-                        Delete post
+                        {t("deletePost")}
                       </DropdownMenuItem>
                     </Button>
                   </DropdownMenuContent>
@@ -251,7 +255,7 @@ export function PostCard({
             </Button>
           </div>
           <Button variant="ghost" size="sm" onClick={toggleCommentInput}>
-            Add comment
+            {t("addComment")}
           </Button>
         </div>
 
@@ -261,7 +265,7 @@ export function PostCard({
             className="mt-3 flex items-center gap-2"
           >
             <Input
-              placeholder="Write a comment..."
+              placeholder={t("writeComment")}
               value={commentInput}
               onChange={(e) => {
                 setCommentInput(e.target.value);
@@ -284,7 +288,7 @@ export function PostCard({
 
         {showComments && comments.length > 0 && (
           <div className="mt-3 space-y-3 border-t pt-3">
-            <h4 className="text-sm font-medium">Comments</h4>
+            <h4 className="text-sm font-medium">{t("comments")}</h4>
             {comments.map((comment: any, index: number) => (
               <CommentCard
                 key={comment.id || index}
@@ -300,7 +304,7 @@ export function PostCard({
         <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Post</DialogTitle>
+              <DialogTitle>{t("editPost")}</DialogTitle>
             </DialogHeader>
             <DialogDescription>
               <Textarea
@@ -314,10 +318,10 @@ export function PostCard({
                 variant="outline"
                 onClick={() => setShowEditDialog(false)}
               >
-                Cancel
+                {commonT("cancel")}
               </Button>
               <Button variant="default" onClick={() => handleUpdatePost()}>
-                Save
+                {commonT("save")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -336,16 +340,22 @@ function CommentCard({
   currentUserId: string;
   onRemoveComment: (commentId: string) => void;
 }) {
+  const t = useTranslations("community");
+  const commonT = useTranslations("common");
+
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [commentContent, setCommentContent] = useState(comment.content);
+
   const [deleteComment, { loading: isDeletingComment }] =
     useDeleteCommentMutation({
       variables: {
         id: comment.id,
       },
       onCompleted: () => {
-        toast.success("Comment deleted successfully");
+        toast.success(t("commentDeleted"));
       },
       onError: (error) => {
-        toast.error(`Failed to delete comment: ${error.message}`);
+        toast.error(`${t("failedToDeleteComment")}: ${error.message}`);
       },
     });
 
@@ -357,21 +367,26 @@ function CommentCard({
           content: comment.content,
         },
       },
+      onCompleted: () => {
+        toast.success(t("commentUpdated"));
+      },
+      onError: (error) => {
+        toast.error(`${t("failedToUpdateComment")}: ${error.message}`);
+      },
     });
 
   const handleUpdateComment = () => {
     if (!commentContent.trim()) {
-      toast.error("Comment content cannot be empty");
+      toast.error(t("commentContentEmpty"));
       return;
     }
     updateComment({
-      variables: { input: { id: comment.id, content: commentContent } },
+      variables: {
+        input: { id: comment.id, content: commentContent },
+      },
     });
     setShowEditDialog(false);
   };
-
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const [commentContent, setCommentContent] = useState(comment.content);
 
   return (
     <div key={comment.id} className="flex gap-2">
@@ -414,7 +429,7 @@ function CommentCard({
                   >
                     <DropdownMenuItem>
                       <PencilIcon className="h-4 w-4" />
-                      Edit comment
+                      {t("editComment")}
                     </DropdownMenuItem>
                   </Button>
                   <Button
@@ -429,7 +444,7 @@ function CommentCard({
                   >
                     <DropdownMenuItem>
                       <Trash2Icon className="h-4 w-4" />
-                      Delete comment
+                      {t("deleteComment")}
                     </DropdownMenuItem>
                   </Button>
                 </DropdownMenuContent>
@@ -441,7 +456,7 @@ function CommentCard({
           <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit Comment</DialogTitle>
+                <DialogTitle>{t("editComment")}</DialogTitle>
               </DialogHeader>
               <DialogDescription>
                 <Textarea
@@ -455,10 +470,10 @@ function CommentCard({
                   variant="outline"
                   onClick={() => setShowEditDialog(false)}
                 >
-                  Cancel
+                  {commonT("cancel")}
                 </Button>
                 <Button variant="default" onClick={() => handleUpdateComment()}>
-                  Save
+                  {commonT("save")}
                 </Button>
               </DialogFooter>
             </DialogContent>

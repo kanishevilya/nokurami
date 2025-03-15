@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Copy, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/shadcn/Button";
 import { Input } from "@/components/ui/shadcn/Input";
+import { useTranslations } from "next-intl";
 
 interface StreamKeyFieldProps {
   label: string;
@@ -18,10 +19,11 @@ export function StreamKeyField({
   isSecret = false,
 }: StreamKeyFieldProps) {
   const [showSecret, setShowSecret] = useState(false);
+  const t = useTranslations("profile");
 
   const handleCopy = () => {
     navigator.clipboard.writeText(value);
-    toast.success(`${label} copied to clipboard`);
+    toast.success(t("copiedToClipboard", { label }));
   };
 
   return (
@@ -42,6 +44,7 @@ export function StreamKeyField({
               size="icon"
               className="absolute right-10 top-0 h-full px-2"
               onClick={() => setShowSecret(!showSecret)}
+              title={showSecret ? t("hideValue") : t("showValue")}
             >
               {showSecret ? (
                 <EyeOff className="size-4" />
@@ -56,6 +59,7 @@ export function StreamKeyField({
             size="icon"
             className="absolute right-0 top-0 h-full px-2"
             onClick={handleCopy}
+            title={t("copyValue")}
           >
             <Copy className="size-4" />
           </Button>

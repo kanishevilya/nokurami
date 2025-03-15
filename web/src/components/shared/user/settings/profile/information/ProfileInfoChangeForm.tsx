@@ -1,10 +1,10 @@
-
 "use client";
 
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import {
@@ -31,6 +31,7 @@ import { Tooltip, TooltipTrigger } from "@/components/ui/shadcn/Tooltip";
 import { TooltipProvider } from "@/components/ui/shadcn/Tooltip";
 
 export function ProfileInfoChangeForm() {
+  const t = useTranslations("settings");
   const { user, isLoadingProfile, refetch } = useCurrent();
 
   const form = useForm<ChangeProfileInfoFormData>({
@@ -46,10 +47,10 @@ export function ProfileInfoChangeForm() {
     useChangeProfileInformationMutation({
       onCompleted() {
         refetch();
-        toast.success("Profile information updated successfully");
+        toast.success(t("profileInfoUpdatedSuccess"));
       },
       onError(error) {
-        toast.error(`Error updating profile: ${error.message}`);
+        toast.error(`${t("error")}: ${error.message}`);
       },
     });
 
@@ -71,7 +72,7 @@ export function ProfileInfoChangeForm() {
   }, [user, form]);
 
   const handleReset = () => {
-    resetForm(user, "Form reset to default values");
+    resetForm(user, t("formResetSuccess"));
   };
 
   const onSubmit = (data: ChangeProfileInfoFormData) => {
@@ -88,9 +89,9 @@ export function ProfileInfoChangeForm() {
 
   return (
     <FormWrapper
-      heading="Profile Information"
+      heading={t("profileInformation")}
       id="profile-info"
-      description="Update your username, display name, and additional information."
+      description={t("profileInfoDescription")}
     >
       {isLoadingProfile ? (
         <ProfileInfoChangeFormSkeleton />
@@ -105,10 +106,10 @@ export function ProfileInfoChangeForm() {
               name="username"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Username </FormLabel>
+                  <FormLabel>{t("username")}</FormLabel>
 
                   <FormControl>
-                    <Input placeholder="Your username" {...field} />
+                    <Input placeholder={t("usernamePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage className="text-red-400" />
                 </FormItem>
@@ -119,10 +120,13 @@ export function ProfileInfoChangeForm() {
               name="displayName"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Display Name</FormLabel>
+                  <FormLabel>{t("displayName")}</FormLabel>
 
                   <FormControl>
-                    <Input placeholder="Your display name" {...field} />
+                    <Input
+                      placeholder={t("displayNamePlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-red-400" />
                 </FormItem>
@@ -133,10 +137,10 @@ export function ProfileInfoChangeForm() {
               name="information"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Information</FormLabel>
+                  <FormLabel>{t("information")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Tell us about yourself (max 300 characters)"
+                      placeholder={t("informationPlaceholder")}
                       className="resize-none"
                       maxLength={300}
                       {...field}
@@ -148,7 +152,7 @@ export function ProfileInfoChangeForm() {
             />
             <div className="flex gap-4">
               <Button type="submit" disabled={isLoadingUpdate}>
-                {isLoadingUpdate ? "Saving..." : "Save Changes"}
+                {isLoadingUpdate ? t("saving") : t("saveChanges")}
               </Button>
               <Button
                 type="button"
@@ -156,14 +160,10 @@ export function ProfileInfoChangeForm() {
                 onClick={handleReset}
                 disabled={isLoadingUpdate}
               >
-                Reset to my values
+                {t("resetToMyValues")}
               </Button>
             </div>
-            <FormDescription>
-              Username must contain only letters, numbers, and hyphens. Display
-              name must be less than 30 characters. Information must be less
-              than 300 characters.
-            </FormDescription>
+            <FormDescription>{t("profileInfoRequirements")}</FormDescription>
           </form>
         </Form>
       )}

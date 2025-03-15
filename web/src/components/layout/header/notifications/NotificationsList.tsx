@@ -2,8 +2,12 @@ import { useFindNotificationsByUserQuery } from "@/graphql/generated/output";
 import { toast } from "sonner";
 import { NotificationItem } from "@/components/layout/header/notifications/NotificationItem";
 import { Loader } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const NotificationsList = () => {
+  const t = useTranslations("notifications");
+  const commonT = useTranslations("common");
+
   const { refetch } = useFindNotificationsByUserQuery();
 
   const { data, loading } = useFindNotificationsByUserQuery({
@@ -11,7 +15,7 @@ export const NotificationsList = () => {
       refetch();
     },
     onError() {
-      toast.error("Ошибка при загрузке уведомлений");
+      toast.error(t("loadError"));
     },
   });
 
@@ -24,7 +28,7 @@ export const NotificationsList = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold pl-3">Уведомления</h2>
+        <h2 className="text-lg font-bold pl-3">{t("title")}</h2>
       </div>
       {loading ? (
         <Loader className="size-6 animate-spin" />
@@ -42,7 +46,7 @@ export const NotificationsList = () => {
             ))
           ) : (
             <div className="text-left pl-3 text-md text-muted-foreground">
-              У вас еще нет уведомлений
+              {t("noNotifications")}
             </div>
           )}
         </div>

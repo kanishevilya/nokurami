@@ -33,6 +33,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/shadcn/Pagination";
 import { FollowsSkeleton } from "./FollowsSkeleton";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -74,6 +75,8 @@ export function UserTable({
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const totalPages = Math.ceil(totalCount / itemsPerPage);
+  const t = useTranslations("profile");
+  const commonT = useTranslations("common");
 
   useEffect(() => {
     if (inputRef.current) {
@@ -103,7 +106,7 @@ export function UserTable({
         <div className="flex items-center gap-2">
           <Input
             ref={inputRef}
-            placeholder="Search by username..."
+            placeholder={t("searchByUsername")}
             value={search}
             onChange={handleSearchChange}
             className="max-w-sm"
@@ -113,7 +116,7 @@ export function UserTable({
             onValueChange={(value) => onItemsPerPageChange(Number(value))}
           >
             <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Items per page" />
+              <SelectValue placeholder={t("itemsPerPage")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="3">3</SelectItem>
@@ -127,20 +130,20 @@ export function UserTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="select-none">Avatar</TableHead>
+              <TableHead className="select-none">{t("avatar")}</TableHead>
               <TableHead
                 onClick={() => onSort("username")}
                 className="cursor-pointer select-none"
               >
-                Username
+                {t("username")}
               </TableHead>
               <TableHead
                 onClick={() => onSort("createdAt")}
                 className="cursor-pointer select-none"
               >
-                Followed Since
+                {t("followedSince")}
               </TableHead>
-              <TableHead className="select-none">Actions</TableHead>
+              <TableHead className="select-none">{t("actions")}</TableHead>
             </TableRow>
           </TableHeader>
           {loading ? (
@@ -153,7 +156,7 @@ export function UserTable({
                     colSpan={4}
                     className="text-center text-muted-foreground"
                   >
-                    No users found
+                    {t("noUsersFound")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -162,43 +165,41 @@ export function UserTable({
             </TableBody>
           )}
         </Table>
-        {totalPages > 1 && (
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => onPageChange(Math.max(1, page - 1))}
-                  className={
-                    page === 1
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => onPageChange(Math.max(1, page - 1))}
+                className={
+                  page === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <PaginationItem key={p}>
+                <PaginationLink
+                  onClick={() => onPageChange(p)}
+                  isActive={page === p}
+                  className="cursor-pointer"
+                >
+                  {p}
+                </PaginationLink>
               </PaginationItem>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <PaginationItem key={p}>
-                  <PaginationLink
-                    onClick={() => onPageChange(p)}
-                    isActive={page === p}
-                    className="cursor-pointer"
-                  >
-                    {p}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-                  className={
-                    page === totalPages
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer"
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+                className={
+                  page === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </CardContent>
     </Card>
   );

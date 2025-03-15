@@ -9,8 +9,10 @@ import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useState, useEffect } from "react";
 import { StreamsList } from "../directory/streams/StreamsList";
+import { useTranslations } from "next-intl";
 
 export default function StreamsPage() {
+  const t = useTranslations("streams");
   const { data, loading, fetchMore } = useFindAllStreamsQuery({
     variables: {
       filters: {
@@ -71,7 +73,7 @@ export default function StreamsPage() {
 
   return (
     <div className="space-y-8 w-full">
-      <Heading title="Стримы" description="Стримы на платформе" />
+      <Heading title={t("title")} description={t("description")} />
       <InfiniteScroll
         dataLength={streamList.length}
         next={fetchMoreStreams}

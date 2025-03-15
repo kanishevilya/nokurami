@@ -15,10 +15,12 @@ import { SecuritySettings } from "./security/SecuritySettings";
 import { useClearAccordions } from "@/hooks/useAccordion";
 import { useCallback } from "react";
 import { useTabs } from "@/hooks/useTabs";
+import { useTranslations } from "next-intl";
 
 export function UserDashboardSettings() {
   const { clearAccordions } = useClearAccordions();
   const { settingsTab, setSettingsTab } = useTabs();
+  const t = useTranslations("settings");
 
   const handleTabChange = useCallback(
     (tab: string) => {
@@ -31,8 +33,8 @@ export function UserDashboardSettings() {
   return (
     <div className="lg:px-10">
       <Heading
-        title={"Settings"}
-        description={"Manage your account settings and preferences"}
+        title={t("title")}
+        description={t("dashboardDescription")}
         size="lg"
       />
       <Tabs
@@ -42,11 +44,11 @@ export function UserDashboardSettings() {
         className="mt-3 w-full"
       >
         <TabsList className="grid grid-cols-5 w-full">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="sessions">Sessions</TabsTrigger>
-          <TabsTrigger value="appearance">Appearance & Language</TabsTrigger>
+          <TabsTrigger value="profile">{t("profile")}</TabsTrigger>
+          <TabsTrigger value="security">{t("security")}</TabsTrigger>
+          <TabsTrigger value="notifications">{t("notifications")}</TabsTrigger>
+          <TabsTrigger value="sessions">{t("sessions")}</TabsTrigger>
+          <TabsTrigger value="appearance">{t("appearance")}</TabsTrigger>
         </TabsList>
         <div className="mt-10">
           <TabsContent value="profile">

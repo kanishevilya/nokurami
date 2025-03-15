@@ -1,23 +1,23 @@
 import { Heading } from "@/components/ui/items/Heading";
 import { Separator } from "@/components/ui/shadcn/Separator";
-import { Card, CardContent } from "@/components/ui/shadcn/Card";
+import { Card } from "@/components/ui/shadcn/Card";
+import { TwoFactorSettings } from "./two-factor/TwoFactorSettings";
 import { ChangePasswordForm } from "./password/ChangePasswordForm";
 import { ChangeEmailForm } from "./email-change/ChangeEmailForm";
-import { TwoFactorSettings } from "./two-factor/TwoFactorSettings";
+import { useTranslations } from "next-intl";
 
 export function SecuritySettings() {
+  const t = useTranslations("settings");
+
   return (
-    <div className="flex flex-col gap-6">
-      <Heading
-        title="Security"
-        description="Manage your security settings"
-        size="lg"
-      />
-      <ChangePasswordForm />
+    <Card className="space-y-6 p-6">
+      <Heading title={t("security")} description={t("securityDescription")} />
       <Separator />
-      <ChangeEmailForm />
-      <Separator />
-      <TwoFactorSettings />
-    </div>
+      <div className="space-y-4">
+        <ChangePasswordForm />
+        <ChangeEmailForm />
+        <TwoFactorSettings />
+      </div>
+    </Card>
   );
 }

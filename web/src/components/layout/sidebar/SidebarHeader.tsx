@@ -11,11 +11,13 @@ import { Button } from "@/components/ui/shadcn/Button";
 import { Hint } from "@/components/ui/shadcn/Hint";
 
 import { useSidebar } from "@/hooks/useSidebar";
+import { useTranslations } from "next-intl";
 
 export function SidebarHeader() {
   const { isCollapsed, open, close } = useSidebar();
+  const t = useTranslations("common");
 
-  const label = isCollapsed ? "Expand" : "Collapse";
+  const label = isCollapsed ? t("expand") : t("collapse");
 
   return isCollapsed ? (
     <div className="mb-4 hidden w-full items-center justify-center pt-4 lg:flex">
@@ -27,7 +29,9 @@ export function SidebarHeader() {
     </div>
   ) : (
     <div className="mb-2 flex w-full items-center justify-between p-3 pl-4">
-      <h2 className="text-lg font-semibold text-foreground">Navigation</h2>
+      <h2 className="text-lg font-semibold text-foreground">
+        {t("navigation")}
+      </h2>
       <Hint label={label} side="right" asChild>
         <Button onClick={() => close()} variant="ghost" size="icon">
           <PanelLeftClose className="min-w-5 min-h-5" />

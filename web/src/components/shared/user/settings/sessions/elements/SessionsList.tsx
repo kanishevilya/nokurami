@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/shadcn/Card";
 import { SessionItem } from "../data/SessionItem";
 import { SessionSkeleton } from "./SessionSkeleton";
+import { useTranslations } from "next-intl";
 
 type SessionsListProps = {
   sessions: any[];
@@ -26,10 +27,14 @@ export function SessionsList({
   onShowDetails,
   onTerminateAll,
 }: SessionsListProps) {
+  const t = useTranslations("settings");
+
   return (
     <Card className="shadow-lg rounded-xl border border-border">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-xl font-semibold">Other Sessions</CardTitle>
+        <CardTitle className="text-xl font-semibold">
+          {t("otherSessions")}
+        </CardTitle>
         {sessions.length > 0 && (
           <Button
             className="bg-red-500 hover:bg-red-400 text-white"
@@ -37,7 +42,7 @@ export function SessionsList({
             disabled={isRemoving || isLoading}
           >
             <X className="h-4 w-4 mr-2" />
-            Terminate All Other Sessions
+            {t("terminateAllOtherSessions")}
           </Button>
         )}
       </CardHeader>
@@ -58,7 +63,7 @@ export function SessionsList({
             </div>
           ))
         ) : (
-          <p className="text-muted-foreground">No other active sessions.</p>
+          <p className="text-muted-foreground">{t("noOtherActiveSessions")}</p>
         )}
       </CardContent>
     </Card>

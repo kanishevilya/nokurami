@@ -17,22 +17,27 @@ import { MyChannelItem } from "./MyChannelItem";
 import { useCurrent } from "@/hooks/useCurrent";
 import { useAuth } from "@/hooks/useAuth";
 import { FollowedChannels } from "./FollowedChannels";
+import { useTranslations } from "next-intl";
+
 export function PrimaryNav() {
   const { user, isLoadingProfile } = useCurrent();
   const { isAuthenticated } = useAuth();
+  const t = useTranslations("navigation");
+  const messagesT = useTranslations("messages");
+
   const routes: Route[] = [
     {
-      label: "Home",
+      label: t("home"),
       href: "/",
       icon: Home,
     },
     {
-      label: "Categories",
+      label: t("categories"),
       href: "/directory",
       icon: List,
     },
     {
-      label: "Community",
+      label: t("community"),
       href: "/community",
       icon: MessageSquare,
     },
@@ -47,7 +52,7 @@ export function PrimaryNav() {
       {isAuthenticated && (
         <SidebarItem
           route={{
-            label: "Messages",
+            label: messagesT("title"),
             href: "/messages",
             icon: Mail,
           }}

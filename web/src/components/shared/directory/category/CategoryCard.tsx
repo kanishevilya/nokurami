@@ -2,17 +2,20 @@ import { FindCategoryBySlugQuery } from "@/graphql/generated/output";
 import { getMediaSource } from "@/utils/get-media-source";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface CategoryCardProps {
   category: FindCategoryBySlugQuery["findCategoryBySlug"];
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {
+  const t = useTranslations("categories");
+
   return (
     <div className="relative group w-full max-w-[240px] perspective-[1000px]">
       <div className="absolute inset-0 bg-primary rounded-lg shadow-lg h-[320px] z-0 flex flex-col items-start justify-end">
         <span className="px-4 py-2 text-primary-foreground text-md font-mono">
-          Show more
+          {t("showMore")}
         </span>
       </div>
       <Link href={`/categories/${category.slug}`}>

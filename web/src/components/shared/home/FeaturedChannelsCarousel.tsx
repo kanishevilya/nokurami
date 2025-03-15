@@ -18,6 +18,8 @@ import { Badge } from "@/components/ui/shadcn/Badge";
 import { Card, CardContent } from "@/components/ui/shadcn/Card";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+
 interface StreamType {
   id: string;
   title: string;
@@ -35,31 +37,36 @@ interface StreamType {
 }
 
 export function FeaturedChannelsCarousel() {
+  const t = useTranslations("home");
+  const streamsT = useTranslations("streams");
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const router = useRouter();
+
   const { data, loading } = useFindRandomStreamsQuery();
 
   const streams = data?.findRandomStreams || [];
 
   console.log(streams);
   const handlePrev = () => {
-    if (isAnimating || streams.length < 2) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev === 0 ? streams.length - 1 : prev - 1));
-    setTimeout(() => setIsAnimating(false), 500);
+    if (!isAnimating && streams.length > 1) {
+      setIsAnimating(true);
+      setActiveIndex((prev) => (prev === 0 ? streams.length - 1 : prev - 1));
+      setTimeout(() => setIsAnimating(false), 500);
+    }
   };
 
   const handleNext = () => {
-    if (isAnimating || streams.length < 2) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev === streams.length - 1 ? 0 : prev + 1));
-    setTimeout(() => setIsAnimating(false), 500);
+    if (!isAnimating && streams.length > 1) {
+      setIsAnimating(true);
+      setActiveIndex((prev) => (prev === streams.length - 1 ? 0 : prev + 1));
+      setTimeout(() => setIsAnimating(false), 500);
+    }
   };
 
-  
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -69,16 +76,15 @@ export function FeaturedChannelsCarousel() {
   };
 
   const handleTouchEnd = () => {
-    if (touchStartX.current - touchEndX.current > 50) {
-      
+    const diff = touchStartX.current - touchEndX.current;
+
+    if (diff > 50) {
       handleNext();
-    } else if (touchEndX.current - touchStartX.current > 50) {
-      
+    } else if (diff < -50) {
       handlePrev();
     }
   };
 
-  
   useEffect(() => {
     if (streams.length < 2) return;
 
@@ -94,7 +100,9 @@ export function FeaturedChannelsCarousel() {
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-gradient-to-b from-background/80 to-background p-6 shadow-md">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-tight">Featured Channels</h2>
+        <h2 className="text-2xl font-bold tracking-tight">
+          {t("featuredChannels")}
+        </h2>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -102,7 +110,7 @@ export function FeaturedChannelsCarousel() {
             onClick={handlePrev}
             disabled={isAnimating || streams.length < 2}
             className="h-9 w-9 rounded-full"
-            aria-label="Previous channel"
+            aria-label={t("previousSlide")}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -112,7 +120,7 @@ export function FeaturedChannelsCarousel() {
             onClick={handleNext}
             disabled={isAnimating || streams.length < 2}
             className="h-9 w-9 rounded-full"
-            aria-label="Next channel"
+            aria-label={t("nextSlide")}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -199,7 +207,7 @@ export function FeaturedChannelsCarousel() {
                   setTimeout(() => setIsAnimating(false), 500);
                 }
               }}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={t("goToSlide", { number: index + 1 })}
             />
           ))}
         </div>
@@ -214,7 +222,8 @@ interface FeaturedChannelCardProps {
 }
 
 function FeaturedChannelCard({ stream, isActive }: FeaturedChannelCardProps) {
-  
+  const commonT = useTranslations("common");
+  const streamsT = useTranslations("streams");
   const hasAvatar = stream.user.avatar && stream.user.avatar.trim() !== "";
   const router = useRouter();
   return (
@@ -238,7 +247,7 @@ function FeaturedChannelCard({ stream, isActive }: FeaturedChannelCardProps) {
             variant="destructive"
             className="absolute left-3 top-3 px-2 py-1 text-xs font-semibold"
           >
-            LIVE
+            {streamsT("live")}
           </Badge>
         )}
       </div>
@@ -277,7 +286,7 @@ function FeaturedChannelCard({ stream, isActive }: FeaturedChannelCardProps) {
                 router.push(`/${stream.user.username}`);
               }}
             >
-              Watch Now
+              {streamsT("watchNow")}
             </Button>
           )}
         </div>

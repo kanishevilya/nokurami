@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ArrowLeft, GripVertical, ListRestart, Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import {
@@ -32,6 +33,7 @@ interface SocialLinkItemProps {
 }
 
 export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
+  const t = useTranslations("settings");
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: link.id });
 
@@ -47,10 +49,10 @@ export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
     useUpdateSocialLinkMutation({
       onCompleted() {
         refetch();
-        toast.success("Social link updated successfully");
+        toast.success(t("socialLinkUpdatedSuccess"));
       },
       onError(error) {
-        toast.error(`Error updating social link: ${error.message}`);
+        toast.error(`${t("error")}: ${error.message}`);
       },
     });
 
@@ -58,10 +60,10 @@ export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
     useRemoveSocialLinkMutation({
       onCompleted() {
         refetch();
-        toast.success("Social link removed successfully");
+        toast.success(t("socialLinkRemovedSuccess"));
       },
       onError(error) {
-        toast.error(`Error removing social link: ${error.message}`);
+        toast.error(`${t("error")}: ${error.message}`);
       },
     });
 
@@ -88,7 +90,7 @@ export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
       title: link.title,
       url: link.url,
     });
-    toast.info("Reset to last saved values");
+    toast.info(t("resetToLastSavedValues"));
   };
 
   const style = {
@@ -116,10 +118,10 @@ export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="flex gap-2 items-center">
-                  Title <FormMessage className="text-red-400" />
+                  {t("title")} <FormMessage className="text-red-400" />
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g., Twitter" {...field} />
+                  <Input placeholder={t("titlePlaceholder")} {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -130,19 +132,16 @@ export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="flex gap-2 items-center">
-                  URL <FormMessage className="text-red-400" />
+                  {t("url")} <FormMessage className="text-red-400" />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="e.g., https://twitter.com/yourprofile"
-                    {...field}
-                  />
+                  <Input placeholder={t("urlPlaceholder")} {...field} />
                 </FormControl>
               </FormItem>
             )}
           />
           <Button type="submit" disabled={isUpdating || isRemoving}>
-            {isUpdating ? "Updating..." : "Update"}
+            {isUpdating ? t("updating") : t("update")}
           </Button>
           <Button
             type="button"
@@ -158,7 +157,7 @@ export function SocialLinkItem({ link, refetch }: SocialLinkItemProps) {
             onClick={handleRemove}
             disabled={isUpdating || isRemoving}
           >
-            {isRemoving ? "Removing..." : <Trash className="h-4 w-4" />}
+            {isRemoving ? t("removing") : <Trash className="h-4 w-4" />}
           </Button>
         </form>
       </Form>

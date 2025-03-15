@@ -10,26 +10,29 @@ import {
 import { SidebarMenu } from "@/components/ui/shadcn/Sidebar";
 import { Route } from "./types/Route";
 import { SidebarItem } from "./SidebarItem";
+import { useTranslations } from "next-intl";
 
 export function DashboardNav() {
+  const t = useTranslations("profile");
+
   const routes: Route[] = [
     {
-      label: "Settings",
+      label: t("settings"),
       href: "/dashboard/settings",
       icon: Settings,
     },
     {
-      label: "Stream Keys",
+      label: t("streamKeys"),
       href: "/dashboard/stream-keys",
       icon: Key,
     },
     {
-      label: "Chat",
+      label: t("chat"),
       href: "/dashboard/chat",
       icon: MessageCircle,
     },
     {
-      label: "Community",
+      label: t("community"),
       href: "/dashboard/community",
       icon: Users,
     },

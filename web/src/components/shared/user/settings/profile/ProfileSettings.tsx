@@ -6,13 +6,16 @@ import { ProfileInfoChangeForm } from "./information/ProfileInfoChangeForm";
 import { SocialLinksForm } from "./links/SocialLinkForm";
 import { ChangePreviewForm } from "./stream-info/ChangePreviewForm";
 import { ChangeStreamInfoForm } from "./stream-info/ChangeStreamInfoForm";
+import { useTranslations } from "next-intl";
 
 export function ProfileSettings() {
+  const t = useTranslations("settings");
+
   return (
     <div className="flex flex-col gap-6">
       <Heading
-        title="Profile"
-        description="Manage your profile information"
+        title={t("profile")}
+        description={t("profileDescription")}
         size="lg"
       />
       <AvatarChangeForm />

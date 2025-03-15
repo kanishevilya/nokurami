@@ -35,6 +35,8 @@ import { useCurrent } from "@/hooks/useCurrent";
 import { getMediaSource } from "@/utils/get-media-source";
 import { use } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+
 interface ChannelPageProps {
   params: Promise<{ username: string }>;
 }
@@ -54,7 +56,6 @@ export default function ChannelPage({ params }: ChannelPageProps) {
 
   const channel = data?.findChannelByUsername;
 
-  
   const { data: followerData } = useFindFollowersCountByChannelQuery({
     variables: { channelId: channel?.id || "" },
     skip: !channel?.id,

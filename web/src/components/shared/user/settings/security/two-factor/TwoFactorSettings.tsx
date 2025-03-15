@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import { Switch } from "@/components/ui/shadcn/Switch";
@@ -43,6 +44,7 @@ import {
 export function TwoFactorSettings() {
   const { user, refetch } = useCurrent();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const t = useTranslations("settings");
 
   const form = useForm<TwoFactorFormData>({
     resolver: zodResolver(twoFactorSchema),
@@ -57,22 +59,22 @@ export function TwoFactorSettings() {
 
   const [enable2FA, { loading: isLoading2FA }] = useEnable2FaMutation({
     onCompleted() {
-      toast.success("Two-factor authentication enabled successfully");
+      toast.success(t("twoFactorEnabledSuccess"));
       setIsDialogOpen(false);
       refetch();
       form.reset();
     },
     onError(error) {
-      toast.error(`Error enabling 2FA: ${error.message}`);
+      toast.error(`${t("twoFactorEnableError")}: ${error.message}`);
     },
   });
 
   const [disable2FA, { loading: isDisabling }] = useDisable2FaMutation({
     onCompleted() {
-      toast.success("Two-factor authentication disabled successfully");
+      toast.success(t("twoFactorDisabledSuccess"));
     },
     onError(error) {
-      toast.error(`Error disabling 2FA: ${error.message}`);
+      toast.error(`${t("twoFactorDisableError")}: ${error.message}`);
     },
   });
 
@@ -100,16 +102,16 @@ export function TwoFactorSettings() {
 
   return (
     <FormWrapper
-      heading="Two-Factor Authentication"
+      heading={t("twoFactorAuth")}
       id="two-factor"
-      description="Add an extra layer of security to your account by requiring both a password and an authentication code."
+      description={t("twoFactorDescription")}
     >
       <div className="p-6 pb-0 space-y-6">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <h3 className="text-base font-medium">Two-Factor Authentication</h3>
+            <h3 className="text-base font-medium">{t("twoFactorAuth")}</h3>
             <p className="text-sm text-muted-foreground">
-              Protect your account with TOTP two-factor authentication.
+              {t("twoFactorTotpDescription")}
             </p>
           </div>
           <Switch
@@ -122,7 +124,7 @@ export function TwoFactorSettings() {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Enable Two-Factor Authentication</DialogTitle>
+              <DialogTitle>{t("enableTwoFactor")}</DialogTitle>
             </DialogHeader>
             <Form {...form}>
               <form
@@ -134,14 +136,14 @@ export function TwoFactorSettings() {
                     <div className="relative w-64 h-64">
                       <Image
                         src={totpData.generateTotpSecret.qrcodeUrl}
-                        alt="TOTP QR Code"
+                        alt={t("totpQrCode")}
                         fill
                         className="object-contain rounded-lg"
                       />
                     </div>
                     <div className="w-full">
                       <p className="text-lg text-muted-foreground">
-                        Or enter the code below
+                        {t("enterCodeBelow")}
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {totpData.generateTotpSecret.secret}
@@ -177,7 +179,7 @@ export function TwoFactorSettings() {
                       className="w-full"
                       disabled={isLoading2FA}
                     >
-                      {isLoading2FA ? "Verifying..." : "Verify and Enable"}
+                      {isLoading2FA ? t("verifying") : t("verifyAndEnable")}
                     </Button>
                   </div>
                 )}

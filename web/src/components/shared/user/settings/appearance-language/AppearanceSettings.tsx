@@ -16,9 +16,11 @@ import {
 } from "@/schemas/dashboard/settings/appearance-settings.schema";
 import { Switch } from "@/components/ui/shadcn/Switch";
 import { Label } from "@/components/ui/shadcn/Label";
+import { useTranslations } from "next-intl";
 
 export function AppearanceSettings() {
   const { theme, setTheme } = useTheme();
+  const t = useTranslations("settings");
 
   const form = useForm<AppearanceSettingsFormData>({
     resolver: zodResolver(appearanceSettingsSchema),
@@ -32,14 +34,14 @@ export function AppearanceSettings() {
 
     setTheme(newTheme);
     form.setValue("theme", newTheme);
-    toast.success("Theme updated successfully");
+    toast.success(t("themeUpdatedSuccess"));
   }
 
   return (
     <FormWrapper
-      heading="Appearance"
+      heading={t("theme")}
       id="appearance-settings"
-      description="Customize the look and feel of the interface"
+      description={t("themeDescription")}
       alwaysOpen={true}
     >
       <Form {...form}>
@@ -49,7 +51,7 @@ export function AppearanceSettings() {
             name="theme"
             render={({ field }) => (
               <div className="flex items-center space-x-2">
-                <Label className="text-xl font-medium">Dark Mode</Label>
+                <Label className="text-xl font-medium">{t("darkMode")}</Label>
                 <Switch
                   checked={field.value === "dark"}
                   onCheckedChange={onChange}

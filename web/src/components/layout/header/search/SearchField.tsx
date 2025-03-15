@@ -3,10 +3,12 @@ import { Input } from "@/components/ui/shadcn/Input";
 import { SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const SearchField = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+  const t = useTranslations("common");
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +24,7 @@ const SearchField = () => {
     <div className="ml-auto hidden lg:block">
       <form className="relative flex items-center" onSubmit={onSubmit}>
         <Input
-          placeholder="Поиск"
+          placeholder={t("search")}
           type="text"
           className="w-full rounded-lg pl-4 pr-10 lg:w-[400px]"
           value={searchTerm}

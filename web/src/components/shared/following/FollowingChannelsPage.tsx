@@ -9,6 +9,7 @@ import { Heading } from "@/components/ui/items/Heading";
 import FollowingCardWithFollowers from "./components/FollowingCardWithFollowers";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { useFindFollowingsCountByChannelQuery } from "@/graphql/generated/output";
+import { useTranslations } from "next-intl";
 
 interface FollowingChannelsPageProps {
   user: FindProfileQuery["getProfile"];
@@ -17,6 +18,7 @@ interface FollowingChannelsPageProps {
 export default function FollowingChannelsPage({
   user,
 }: FollowingChannelsPageProps) {
+  const t = useTranslations("profile");
   console.log(user);
 
   const { data: followingsCount } = useFindFollowingsCountByChannelQuery({
@@ -47,7 +49,10 @@ export default function FollowingChannelsPage({
 
   return (
     <div className="space-y-8 w-full">
-      <Heading title="Подписки" description="Каналы, на которые вы подписаны" />
+      <Heading
+        title={t("following")}
+        description={t("followingChannelsDescription")}
+      />
       {loading ? (
         <FollowingsSkeleton />
       ) : (
@@ -68,7 +73,7 @@ export default function FollowingChannelsPage({
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
               <p className="text-sm text-gray-500">
-                Вы не подписаны ни на один канал
+                {t("noFollowingChannels")}
               </p>
             </div>
           )}

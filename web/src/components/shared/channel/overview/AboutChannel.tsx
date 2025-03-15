@@ -1,5 +1,6 @@
 import { FindChannelByUsernameQuery } from "@/graphql/generated/output";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface AboutChannelProps {
   channel: FindChannelByUsernameQuery["findChannelByUsername"];
@@ -7,17 +8,20 @@ interface AboutChannelProps {
 
 export function AboutChannel({ channel }: AboutChannelProps) {
   const socialLinks = channel.socialLinks || [];
+  const t = useTranslations("profile");
 
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold text-foreground">About channel</h3>
+      <h3 className="text-lg font-semibold text-foreground">
+        {t("aboutChannel")}
+      </h3>
       <p className="text-sm text-muted-foreground">
-        {channel.information || "Channel description is missing"}
+        {channel.information || t("noChannelDescription")}
       </p>
       {socialLinks.length > 0 && (
         <div className="mt-4">
           <h4 className="text-lg font-semibold text-foreground">
-            Social links
+            {t("socialLinks")}
           </h4>
           <ul className="mt-2 space-y-2">
             {socialLinks.map((link) => (

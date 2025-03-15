@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useTranslations } from "next-intl";
 
 import {
   FindAllStreamsQuery,
@@ -17,6 +18,7 @@ import { StreamsList } from "../directory/streams/StreamsList";
 export default function ResultPage() {
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
+  const t = useTranslations("streams");
 
   const { data, loading, fetchMore } = useFindAllStreamsQuery({
     variables: {
@@ -77,12 +79,12 @@ export default function ResultPage() {
   console.log("StreamList before render:", streamList);
 
   const description = searchTerm
-    ? `Results for your search: ${searchTerm}`
-    : "Streams on platform";
+    ? t("searchResults", { searchTerm })
+    : t("description");
 
   return (
     <div className="space-y-8 w-full">
-      <Heading title="Streams" description={description} />
+      <Heading title={t("title")} description={description} />
       <InfiniteScroll
         dataLength={streamList.length}
         next={fetchMoreStreams}

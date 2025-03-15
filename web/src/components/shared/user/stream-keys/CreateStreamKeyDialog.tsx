@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import {
@@ -43,6 +44,8 @@ export function CreateStreamKeyDialog({
   isOpen,
   onClose,
 }: CreateStreamKeyDialogProps) {
+  const t = useTranslations("profile");
+
   const form = useForm<TypeCreateIngressSchema>({
     resolver: zodResolver(createIngressSchema),
     defaultValues: {
@@ -52,12 +55,12 @@ export function CreateStreamKeyDialog({
 
   const [createIngress, { loading: isCreating }] = useCreateIngressMutation({
     onCompleted() {
-      toast.success("Stream key created successfully");
+      toast.success(t("streamKeyCreatedSuccess"));
       onClose();
       form.reset();
     },
     onError(error) {
-      toast.error(`Error creating stream key: ${error.message}`);
+      toast.error(`${t("streamKeyCreationError")}: ${error.message}`);
     },
   });
 
@@ -73,7 +76,7 @@ export function CreateStreamKeyDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Generate Stream Key</DialogTitle>
+          <DialogTitle>{t("generateStreamKey")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -82,7 +85,7 @@ export function CreateStreamKeyDialog({
               name="ingressType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ingress Type</FormLabel>
+                  <FormLabel>{t("ingressType")}</FormLabel>
                   <Select
                     onValueChange={(value) =>
                       field.onChange(parseInt(value) as IngressType)
@@ -91,7 +94,7 @@ export function CreateStreamKeyDialog({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select ingress type" />
+                        <SelectValue placeholder={t("selectIngressType")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -108,7 +111,7 @@ export function CreateStreamKeyDialog({
               )}
             />
             <Button type="submit" className="w-full" disabled={isCreating}>
-              {isCreating ? "Generating..." : "Generate Stream Key"}
+              {isCreating ? t("generating") : t("generateStreamKey")}
             </Button>
           </form>
         </Form>

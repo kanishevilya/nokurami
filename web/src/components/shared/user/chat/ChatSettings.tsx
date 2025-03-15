@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import {
   Form,
@@ -26,6 +27,8 @@ import {
 
 export function ChatSettings() {
   const { user, isLoadingProfile, refetch } = useCurrent();
+  const t = useTranslations("chat");
+  const commonT = useTranslations("common");
 
   const form = useForm<ChatSettingsFormData>({
     resolver: zodResolver(chatSettingsSchema),
@@ -39,10 +42,10 @@ export function ChatSettings() {
     useChangeChatSettingsMutation({
       onCompleted() {
         refetch();
-        toast.success("Chat settings updated successfully");
+        toast.success(t("chatSettingsUpdated"));
       },
       onError(error) {
-        toast.error(`Error updating chat settings: ${error.message}`);
+        toast.error(`${commonT("error")}: ${error.message}`);
       },
     });
 
@@ -73,14 +76,14 @@ export function ChatSettings() {
   return (
     <div className="flex flex-col gap-6">
       <Heading
-        title="Chat"
-        description="Configure your stream chat settings"
+        title={t("title")}
+        description={t("configureStreamChat")}
         size="lg"
       />
       <FormWrapper
-        heading="Chat Settings"
+        heading={t("chatSettings")}
         id="chat-settings"
-        description="Manage your chat preferences."
+        description={t("manageChatPreferences")}
         alwaysOpen={true}
       >
         {isLoadingProfile ? (
@@ -93,7 +96,7 @@ export function ChatSettings() {
                 name="isChatEnabled"
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between">
-                    <FormLabel className="text-lg">Enable Chat</FormLabel>
+                    <FormLabel className="text-lg">{t("enableChat")}</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -111,7 +114,9 @@ export function ChatSettings() {
                 name="isChatFollowersOnly"
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between">
-                    <FormLabel className="text-lg">Followers Only</FormLabel>
+                    <FormLabel className="text-lg">
+                      {t("followersOnly")}
+                    </FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}

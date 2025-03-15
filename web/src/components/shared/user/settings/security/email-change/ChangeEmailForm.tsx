@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/shadcn/Button";
 import { FormWrapper } from "@/components/ui/items/FormWrapper";
 import { useRequestToEmailChangeMutation } from "@/graphql/generated/output";
 import { useCurrent } from "@/hooks/useCurrent";
+import { useTranslations } from "next-intl";
 
 export function ChangeEmailForm() {
   const { user } = useCurrent();
   const [isRequesting, setIsRequesting] = useState(false);
+  const t = useTranslations("settings");
 
   const [requestEmailChange] = useRequestToEmailChangeMutation({
     onCompleted() {
-      toast.success(
-        "Please check your current email for confirmation instructions"
-      );
+      toast.success(t("emailChangeRequestSent"));
       setIsRequesting(false);
     },
     onError(error) {
-      toast.error(`Error initiating email change: ${error.message}`);
+      toast.error(`${t("emailChangeRequestError")}: ${error.message}`);
       setIsRequesting(false);
     },
   });
@@ -31,17 +31,17 @@ export function ChangeEmailForm() {
 
   return (
     <FormWrapper
-      heading="Email Address"
+      heading={t("emailAddress")}
       id="email-change"
-      description="Change your email address. This will require verification of both your current and new email."
+      description={t("emailChangeDescription")}
     >
       <div className="p-6 pb-0 space-y-4">
         <div className="flex flex-col space-y-2">
-          <span className="text-lg font-medium">Current Email: </span>
+          <span className="text-lg font-medium">{t("currentEmail")}: </span>
           <span className="text-sm text-muted-foreground">{user?.email}</span>
         </div>
         <Button onClick={handleEmailChangeRequest} disabled={isRequesting}>
-          {isRequesting ? "Sending verification..." : "Change Email"}
+          {isRequesting ? t("sendingVerification") : t("changeEmail")}
         </Button>
       </div>
     </FormWrapper>

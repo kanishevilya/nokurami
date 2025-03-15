@@ -24,11 +24,16 @@ import {
   AvatarImage,
 } from "@/components/ui/shadcn/Avatar";
 import { getMediaSource } from "@/utils/get-media-source";
+import { useTranslations } from "next-intl";
 
 export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
   const { isAuthenticated } = useAuth();
   const { user } = useCurrent();
   const router = useRouter();
+  const t = useTranslations("privateMessages");
+  const tChat = useTranslations("chat");
+  const tCommon = useTranslations("common");
+  const tAuth = useTranslations("auth");
 
   const [username, setUsername] = useState(usernameParam);
   const debouncedUsername = useDebounce(username, 500);
@@ -40,23 +45,21 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
       skip: !debouncedUsername || debouncedUsername.length < 3,
     });
 
-  
   const [requestChat, { loading: isRequesting }] = useRequestChatMutation({
     onCompleted: (data) => {
-      toast.success("Chat request sent successfully");
+      toast.success(tChat("chatRequestSent"));
       router.push("/messages");
     },
     onError: (error) => {
-      toast.error(`Failed to send chat request: ${error.message}`);
+      toast.error(`${tCommon("error")}: ${error.message}`);
     },
   });
 
-  
   const handleRequestChat = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!selectedUserId) {
-      toast.error("Please select a user to chat with");
+      toast.error(t("pleaseSelectUser"));
       return;
     }
 
@@ -73,27 +76,22 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
     }
   };
 
-  
   const handleSelectUser = (userId: string) => {
     setSelectedUserId(userId);
   };
 
-  
   if (!isAuthenticated) {
     return (
       <div className="container mx-auto py-8">
         <Card>
           <CardContent className="flex flex-col items-center justify-center p-12">
             <User className="mb-4 h-16 w-16 text-muted-foreground" />
-            <h2 className="mb-2 text-xl font-bold">
-              Sign in to request a chat
-            </h2>
+            <h2 className="mb-2 text-xl font-bold">{tCommon("signIn")}</h2>
             <p className="mb-4 text-center text-muted-foreground">
-              You need to be signed in to request a private chat with other
-              users
+              {tChat("loginToAccessMessages")}
             </p>
             <Button asChild>
-              <Link href="/account/login">Sign In</Link>
+              <Link href="/account/login">{tCommon("signIn")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -107,7 +105,7 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5" />
-            Request a Private Chat
+            {t("requestChat")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -115,16 +113,16 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium mb-1 block">
-                  Find a user to chat with
+                  {t("findUserToChat")}
                 </label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search by username..."
+                    placeholder={t("searchByUsername")}
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
-                      setSelectedUserId(null); 
+                      setSelectedUserId(null);
                     }}
                     className="pl-9"
                   />
@@ -134,7 +132,7 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
               {}
               <div className="border rounded-md overflow-hidden">
                 <div className="p-3 bg-muted/50 border-b">
-                  <h3 className="font-medium text-sm">Search Results</h3>
+                  <h3 className="font-medium text-sm">{t("searchResults")}</h3>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto">
                   {loadingChannels ? (
@@ -143,12 +141,12 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
                     </div>
                   ) : !debouncedUsername || debouncedUsername.length < 3 ? (
                     <div className="p-6 text-center text-muted-foreground">
-                      <p>Enter at least 3 characters to search</p>
+                      <p>{t("enterAtLeast3Characters")}</p>
                     </div>
                   ) : channelsData?.findChannelsContainingUsername.length ===
                     0 ? (
                     <div className="p-6 text-center text-muted-foreground">
-                      <p>No users found</p>
+                      <p>{t("noUsersFound")}</p>
                     </div>
                   ) : (
                     <div>
@@ -198,16 +196,16 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
                 type="button"
                 onClick={() => router.push("/messages")}
               >
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button type="submit" disabled={!selectedUserId || isRequesting}>
                 {isRequesting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Sending Request...
+                    {t("sendingRequest")}
                   </>
                 ) : (
-                  "Send Chat Request"
+                  t("sendChatRequest")
                 )}
               </Button>
             </div>

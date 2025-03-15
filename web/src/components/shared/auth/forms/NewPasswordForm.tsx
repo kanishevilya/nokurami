@@ -17,10 +17,12 @@ import {
 import { FormField, FormItem, FormLabel } from "@/components/ui/shadcn/Form";
 import { Input } from "@/components/ui/shadcn/Input";
 import { Button } from "@/components/ui/shadcn/Button";
+import { useTranslations } from "next-intl";
 
 export function NewPasswordForm() {
   const router = useRouter();
   const params = useParams<{ token: string }>();
+  const t = useTranslations("auth");
 
   const form = useForm<TypeNewPasswordSchema>({
     resolver: zodResolver(newPasswordSchema),
@@ -34,11 +36,11 @@ export function NewPasswordForm() {
 
   const [newPassword, { loading }] = useNewPasswordMutation({
     onCompleted() {
-      toast.success("Пароль успешно изменен");
+      toast.success(t("passwordChangedSuccess"));
       router.push("/account/login");
     },
     onError() {
-      toast.error("Ошибка при смене пароля");
+      toast.error(t("passwordChangeError"));
     },
   });
 
@@ -48,8 +50,8 @@ export function NewPasswordForm() {
 
   return (
     <AuthWrapper
-      heading="Смена пароля"
-      backButtonLabel="Вернуться на страницу входа"
+      heading={t("changePassword")}
+      backButtonLabel={t("backToLogin")}
       backButtonHref="/account/login"
     >
       <Form {...form}>
@@ -59,18 +61,16 @@ export function NewPasswordForm() {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Новый пароль</FormLabel>
+                <FormLabel>{t("newPassword")}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Новый пароль"
+                    placeholder={t("newPasswordPlaceholder")}
                     disabled={loading}
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  Новый пароль должен быть не менее 8 символов
-                </FormDescription>
+                <FormDescription>{t("passwordRequirements")}</FormDescription>
               </FormItem>
             )}
           />
@@ -79,21 +79,23 @@ export function NewPasswordForm() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Подтвердите пароль</FormLabel>
+                <FormLabel>{t("confirmPassword")}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Подтвердите пароль"
+                    placeholder={t("confirmPasswordPlaceholder")}
                     disabled={loading}
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Подтвердите ваш пароль</FormDescription>
+                <FormDescription>
+                  {t("confirmPasswordDescription")}
+                </FormDescription>
               </FormItem>
             )}
           />
           <Button className="w-full mt-4" disabled={!isValid || loading}>
-            Сменить пароль
+            {t("changePassword")}
           </Button>
         </form>
       </Form>

@@ -11,12 +11,16 @@ import { Heading } from "@/components/ui/items/Heading";
 import { StreamCard } from "@/components/shared/stream/StreamCard";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { useCurrent } from "@/hooks/useCurrent";
+import { useTranslations } from "next-intl";
 
 export default function FollowingStreamsPage({
   user,
 }: {
   user: FindProfileQuery["getProfile"];
 }) {
+  const t = useTranslations("streams");
+  const profileT = useTranslations("profile");
+
   const { data: followingsCount } = useFindFollowingsCountByChannelQuery({
     variables: {
       channelId: user?.id!,
@@ -48,7 +52,7 @@ export default function FollowingStreamsPage({
   ) {
     return {
       previewUrl: following.following.stream?.previewUrl || null,
-      title: following.following.stream?.title || "Без названия",
+      title: following.following.stream?.title || t("noTitle"),
       isLive: following.following.stream?.isLive || false,
       user: {
         username: following.following.username,
@@ -64,12 +68,12 @@ export default function FollowingStreamsPage({
   return (
     <div className="space-y-8 w-full">
       <Heading
-        title="Стримы подписок"
-        description="Активные стримы каналов, на которые вы подписаны"
+        title={profileT("followingStreams")}
+        description={profileT("followingStreamsDescription")}
       />
 
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">В сети</h2>
+        <h2 className="text-xl font-semibold text-foreground">{t("live")}</h2>
         {loading ? (
           <StreamsSkeleton count={3} />
         ) : onlineStreams.length > 0 ? (
@@ -82,12 +86,14 @@ export default function FollowingStreamsPage({
             ))}
           </div>
         ) : (
-          <p className="text-muted-foreground">Нет активных стримов</p>
+          <p className="text-muted-foreground">{t("noActiveStreams")}</p>
         )}
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">Не в сети</h2>
+        <h2 className="text-xl font-semibold text-foreground">
+          {t("offline")}
+        </h2>
         {loading ? (
           <StreamsSkeleton count={3} />
         ) : offlineStreams.length > 0 ? (
@@ -100,7 +106,7 @@ export default function FollowingStreamsPage({
             ))}
           </div>
         ) : (
-          <p className="text-muted-foreground">Нет неактивных стримов</p>
+          <p className="text-muted-foreground">{t("noStreams")}</p>
         )}
       </div>
     </div>

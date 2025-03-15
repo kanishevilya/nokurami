@@ -1,10 +1,10 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import {
@@ -44,6 +44,7 @@ interface Category {
 }
 
 export function ChangeStreamInfoForm() {
+  const t = useTranslations("settings");
   const { user, isLoadingProfile, refetch } = useCurrent();
   const [defaultCategoryId, setDefaultCategoryId] = useState<string>("");
 
@@ -73,10 +74,10 @@ export function ChangeStreamInfoForm() {
     useChangeStreamInfoMutation({
       onCompleted() {
         refetch();
-        toast.success("Stream information updated successfully");
+        toast.success(t("streamInfoUpdatedSuccess"));
       },
       onError(error) {
-        toast.error(`Error updating stream information: ${error.message}`);
+        toast.error(`${t("error")}: ${error.message}`);
       },
     });
 
@@ -93,9 +94,9 @@ export function ChangeStreamInfoForm() {
 
   return (
     <FormWrapper
-      heading="Stream Information"
+      heading={t("streamInformation")}
       id="stream-info"
-      description="Update your stream title and description."
+      description={t("streamInfoDescription")}
     >
       {isLoadingProfile ? (
         <Skeleton />
@@ -110,9 +111,12 @@ export function ChangeStreamInfoForm() {
               name="title"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Stream Title</FormLabel>
+                  <FormLabel>{t("streamTitle")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your stream title" {...field} />
+                    <Input
+                      placeholder={t("streamTitlePlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-red-400" />
                 </FormItem>
@@ -123,14 +127,14 @@ export function ChangeStreamInfoForm() {
               name="categoryId"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Stream Category</FormLabel>
+                  <FormLabel>{t("streamCategory")}</FormLabel>
                   <FormControl>
                     <Select
                       value={field.value || defaultCategoryId}
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
+                        <SelectValue placeholder={t("selectCategory")} />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((category) => (
@@ -147,13 +151,10 @@ export function ChangeStreamInfoForm() {
             />
             <div className="flex gap-4">
               <Button type="submit" disabled={isLoadingUpdate}>
-                {isLoadingUpdate ? "Saving..." : "Save Changes"}
+                {isLoadingUpdate ? t("saving") : t("saveChanges")}
               </Button>
             </div>
-            <FormDescription>
-              Title must be less than 100 characters. Description must be less
-              than 300 characters.
-            </FormDescription>
+            <FormDescription>{t("streamInfoRequirements")}</FormDescription>
           </form>
         </Form>
       )}

@@ -7,11 +7,14 @@ import { toast } from "sonner";
 import { AuthWrapper } from "../AuthWrapper";
 import { Loader } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslations } from "next-intl";
 
 export function VerifyAccountForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { authenticate } = useAuth();
+  const t = useTranslations("auth");
+  const errorsT = useTranslations("errors");
 
   const token = searchParams.get("token") ?? "";
 
@@ -21,16 +24,16 @@ export function VerifyAccountForm() {
       router.push("/dashboard/settings");
     },
     onError() {
-      toast.error("Failed to verify account");
+      toast.error(errorsT("verificationFailed"));
     },
   });
 
   useEffect(() => {
     verifyAccount({ variables: { data: { token } } });
-  }, [token]);
+  }, [token, verifyAccount]);
 
   return (
-    <AuthWrapper heading="Verify Account">
+    <AuthWrapper heading={t("verifyAccount")}>
       <div className="flex justify-center items-center">
         <Loader className="size-8 animate-spin" />
       </div>

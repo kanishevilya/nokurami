@@ -6,6 +6,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/shadcn/Avatar";
+import { useTranslations } from "next-intl";
 
 interface StreamItemProps {
   previewUrl: string;
@@ -30,6 +31,8 @@ export function StreamItem({
   user,
   category,
 }: StreamItemProps) {
+  const t = useTranslations("streams");
+
   return (
     <Link
       href={`/${username}`}
@@ -45,41 +48,34 @@ export function StreamItem({
         {isLive ? (
           <div className="absolute inset-0 ">
             <span className="absolute top-3 right-3 px-3 py-1 text-sm font-semibold bg-primary text-white rounded-full shadow-md">
-              LIVE
+              {t("live")}
             </span>
           </div>
         ) : (
           <div className="absolute inset-0 bg-gray-800/80 transition-opacity ">
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-muted-foreground text-lg font-medium bg-card px-4 py-2 rounded-full shadow-sm">
-                Оффлайн
+                {t("offline")}
               </span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="p-4 space-y-2">
-        <h3 className="text-lg font-semibold text-foreground line-clamp-1 group-hover:text-primary transition-colors duration-300">
-          {title}
-        </h3>
-
-        <div className="flex items-center gap-2">
-          <Avatar className="w-9 h-9 text-muted-foreground shadow-md transition-transform duration-300 group-hover:scale-110">
-            <AvatarImage src={getMediaSource(user.avatar || "")} />
-            <AvatarFallback className="flex items-center justify-center bg-muted text-foreground rounded-full">
-              {user.username[0].toUpperCase()}
-            </AvatarFallback>
+      <div className="p-4">
+        <h3 className="text-base font-medium truncate">{title}</h3>
+        <div className="mt-2 flex items-center gap-2">
+          <Avatar className="h-5 w-5">
+            <AvatarImage src={getMediaSource(user.avatar)} />
+            <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <p className="text-md text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-            {user.username}
-          </p>
+          <span className="text-sm text-muted-foreground truncate">
+            {username}
+          </span>
         </div>
-
-        <p className="text-sm text-muted-foreground opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 line-clamp-1">
-          <span className="font-medium text-primary">{category.title}</span> (
-          {category.slug})
-        </p>
+        <div className="mt-2 text-xs font-medium text-primary">
+          {category.title}
+        </div>
       </div>
     </Link>
   );

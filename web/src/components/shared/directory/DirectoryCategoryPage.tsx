@@ -4,16 +4,15 @@ import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { useFindAllCategoriesQuery } from "@/graphql/generated/output";
 import { CategoriesList } from "./category/CategoriesList";
 import { Heading } from "@/components/ui/items/Heading";
+import { useTranslations } from "next-intl";
 
 export default function DirectoryCategoryPage() {
+  const t = useTranslations("categories");
   const { data, loading } = useFindAllCategoriesQuery();
 
   return (
     <div className="space-y-8">
-      <Heading
-        title="Категории"
-        description="Все категории, которые вы можете найти на нашей платформе"
-      />
+      <Heading title={t("title")} description={t("description")} />
       {loading ? (
         <CategoriesSkeleton />
       ) : (

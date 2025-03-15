@@ -43,6 +43,7 @@ import { cn } from "@/utils/cn";
 import { getMediaSource } from "@/utils/get-media-source";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslations } from "next-intl";
 
 interface ChatProps {
   streamId: string;
@@ -66,6 +67,7 @@ export function Chat({ streamId }: ChatProps) {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isLive, setIsLive] = useState(false);
   const { isAuthenticated } = useAuth();
+  const t = useTranslations("chat");
 
   const { data: streamData, refetch } = useFindStreamByIdQuery({
     variables: { id: streamId },
@@ -162,16 +164,18 @@ export function Chat({ streamId }: ChatProps) {
       <div className="flex items-center justify-between border-b border-border p-4">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Live Chat</h3>
+          <h3 className="text-lg font-semibold text-foreground">
+            {t("title")}
+          </h3>
           {isLive && (
             <div className="ml-2 inline-flex items-center rounded-full border border-transparent bg-emerald-500 px-2.5 py-0.5 text-xs font-semibold text-emerald-50">
-              Live
+              {t("live")}
             </div>
           )}
         </div>
         {!isLive && (
           <div className="inline-flex items-center rounded-full border border-transparent bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
-            <AlertCircle className="mr-1 h-3 w-3" /> Offline
+            <AlertCircle className="mr-1 h-3 w-3" /> {t("offline")}
           </div>
         )}
       </div>
@@ -214,10 +218,12 @@ export function Chat({ streamId }: ChatProps) {
         ) : (
           <div className="flex h-full flex-col items-center justify-center">
             <MessageSquare className="mb-2 h-12 w-12 text-muted-foreground" />
-            <p className="text-center text-muted-foreground">No messages yet</p>
+            <p className="text-center text-muted-foreground">
+              {t("noMessagesYet")}
+            </p>
             {isLive && (
               <p className="mt-1 text-center text-sm text-muted-foreground">
-                Be the first to say hello!
+                {t("beTheFirstToSayHello")}
               </p>
             )}
           </div>
@@ -230,7 +236,7 @@ export function Chat({ streamId }: ChatProps) {
             <Input
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type a message..."
+              placeholder={t("typeMessage")}
               className={cn(
                 "flex-1 bg-background text-foreground placeholder-muted-foreground",
                 !isLive && "cursor-not-allowed opacity-50"
@@ -241,13 +247,17 @@ export function Chat({ streamId }: ChatProps) {
               type="submit"
               disabled={sending || !message.trim() || !isLive}
             >
-              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Send"}
+              {sending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                t("sendMessage")
+              )}
             </Button>
           </form>
         ) : (
           <div className="flex h-10 items-center justify-center rounded-md bg-muted/30">
             <p className="text-sm text-muted-foreground">
-              Chat is unavailable while the stream is offline
+              {t("chatUnavailableOffline")}
             </p>
           </div>
         )}

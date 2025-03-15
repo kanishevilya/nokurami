@@ -33,8 +33,10 @@ import { useRouter } from "next/navigation";
 import { InputOTPGroup } from "@/components/ui/shadcn/InputOtp";
 import { InputOTP, InputOTPSlot } from "@/components/ui/shadcn/InputOtp";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslations } from "next-intl";
 
 export function LoginAccountForm() {
+  const t = useTranslations("auth");
   const [show2FA, setShow2FA] = useState(false);
   const router = useRouter();
 
@@ -54,12 +56,12 @@ export function LoginAccountForm() {
         setShow2FA(true);
       } else {
         authenticate();
-        toast.success("Вход в аккаунт выполнен успешно");
+        toast.success(t("loginSuccess"));
         router.push("/dashboard/settings");
       }
     },
     onError() {
-      toast.error("Ошибка при входе в аккаунт");
+      toast.error(t("loginError"));
     },
   });
 
@@ -75,8 +77,8 @@ export function LoginAccountForm() {
 
   return (
     <AuthWrapper
-      heading="Вход в Nokurami"
-      backButtonLabel="Нет учетной записи? Зарегистрироваться"
+      heading={t("loginTitle")}
+      backButtonLabel={t("dontHaveAccount") + " " + t("register")}
       backButtonHref="/account/register"
     >
       <Form {...form}>
@@ -87,7 +89,7 @@ export function LoginAccountForm() {
               name="pin"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Код подтверждения</FormLabel>
+                  <FormLabel>{t("verificationCode")}</FormLabel>
                   <FormControl>
                     <InputOTP maxLength={6} disabled={loading} {...field}>
                       <InputOTPGroup>
@@ -101,7 +103,7 @@ export function LoginAccountForm() {
                     </InputOTP>
                   </FormControl>
                   <FormDescription>
-                    Введите 6-значный код из вашего приложения 2FA
+                    {t("verificationCodeDescription")}
                   </FormDescription>
                 </FormItem>
               )}
@@ -113,16 +115,16 @@ export function LoginAccountForm() {
                 name="login"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Логин</FormLabel>
+                    <FormLabel>{t("username")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Email или имя пользователя"
+                        placeholder={t("loginPlaceholder")}
                         disabled={loading}
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      Введите email или имя пользователя
+                      {t("usernameDescription")}
                     </FormDescription>
                   </FormItem>
                 )}
@@ -133,16 +135,18 @@ export function LoginAccountForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Пароль</FormLabel>
+                    <FormLabel>{t("password")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="********"
+                        placeholder={t("passwordPlaceholder")}
                         type="password"
                         disabled={loading}
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>Введите ваш пароль</FormDescription>
+                    <FormDescription>
+                      {t("passwordDescription")}
+                    </FormDescription>
                   </FormItem>
                 )}
               />
@@ -150,7 +154,7 @@ export function LoginAccountForm() {
           )}
 
           <Button className="w-full mt-4" disabled={!isValid || loading}>
-            Войти
+            {t("loginButtonLabel")}
           </Button>
         </form>
       </Form>

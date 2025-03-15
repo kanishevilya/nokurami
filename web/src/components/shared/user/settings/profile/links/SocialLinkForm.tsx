@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import {
@@ -29,6 +30,7 @@ import { Heading } from "@/components/ui/items/Heading";
 import { Separator } from "@/components/ui/shadcn/Separator";
 
 export function SocialLinksForm() {
+  const t = useTranslations("settings");
   const { loading: isLoadingLinks, refetch } = useFindSocialLinksQuery();
   const form = useForm<SocialLinkFormData>({
     resolver: zodResolver(socialLinkSchema),
@@ -43,10 +45,10 @@ export function SocialLinksForm() {
       onCompleted() {
         refetch();
         form.reset();
-        toast.success("Social link added successfully");
+        toast.success(t("socialLinkAddedSuccess"));
       },
       onError(error) {
-        toast.error(`Error adding social link: ${error.message}`);
+        toast.error(`${t("error")}: ${error.message}`);
       },
     });
 
@@ -63,9 +65,9 @@ export function SocialLinksForm() {
 
   return (
     <FormWrapper
-      heading="Social Links"
+      heading={t("socialLinks")}
       id="social-links-form"
-      description="Add a new social media link to your profile or manage existing ones."
+      description={t("socialLinksDescription")}
     >
       {isLoadingLinks ? (
         <SocialLinksFormSkeleton />
@@ -81,9 +83,9 @@ export function SocialLinksForm() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>{t("title")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Twitter" {...field} />
+                      <Input placeholder={t("titlePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -94,26 +96,23 @@ export function SocialLinksForm() {
                 name="url"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>URL</FormLabel>
+                    <FormLabel>{t("url")}</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="e.g., https://twitter.com/yourprofile"
-                        {...field}
-                      />
+                      <Input placeholder={t("urlPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" disabled={isLoadingCreate}>
-                {isLoadingCreate ? "Adding..." : "Add Link"}
+                {isLoadingCreate ? t("adding") : t("addLink")}
               </Button>
             </form>
           </Form>
           <div className="p-6 gap-6 flex flex-col">
             <Heading
-              title="Your Social Links"
-              description="Manage your existing social links. Drag to reorder."
+              title={t("yourSocialLinks")}
+              description={t("socialLinksManageDescription")}
               size="md"
             />
             <SocialLinksList />

@@ -5,6 +5,7 @@ import { Trash } from "lucide-react";
 import { type ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/shadcn/Button";
 import { Form, FormDescription, FormField } from "@/components/ui/shadcn/Form";
@@ -26,6 +27,7 @@ import {
 } from "@/schemas/dashboard/profile/upload-file.schema";
 
 export function AvatarChangeForm() {
+  const t = useTranslations("settings");
   const { user, isLoadingProfile, refetch, updateUserAvatar } = useCurrent();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,10 +43,10 @@ export function AvatarChangeForm() {
     {
       onCompleted(data) {
         refetch();
-        toast.success("Avatar updated successfully");
+        toast.success(t("avatarUpdatedSuccess"));
       },
       onError() {
-        toast.error("Error updating avatar");
+        toast.error(t("avatarUpdateError"));
       },
     }
   );
@@ -53,10 +55,10 @@ export function AvatarChangeForm() {
     {
       onCompleted() {
         refetch();
-        toast.success("Avatar removed successfully");
+        toast.success(t("avatarRemovedSuccess"));
       },
       onError() {
-        toast.error("Error removing avatar");
+        toast.error(t("avatarRemoveError"));
       },
     }
   );
@@ -73,10 +75,9 @@ export function AvatarChangeForm() {
 
   return (
     <FormWrapper
-      heading="Avatar"
+      heading={t("avatar")}
       id="avatar"
-      description="Change your avatar to a new image. You can upload a new image or remove your current avatar."
-      
+      description={t("avatarDescription")}
     >
       {isLoadingProfile ? (
         <ChangeAvatarFormSkeleton />
@@ -105,7 +106,7 @@ export function AvatarChangeForm() {
                       />
                       <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <p className="text-white text-sm font-medium">
-                          Change Avatar
+                          {t("changeAvatar")}
                         </p>
                       </div>
                     </div>
@@ -126,13 +127,13 @@ export function AvatarChangeForm() {
                           disabled={isLoadingUpdate || isLoadingRemove}
                         >
                           {isLoadingUpdate
-                            ? "Uploading..."
-                            : "Upload New Avatar"}
+                            ? t("uploading")
+                            : t("uploadNewAvatar")}
                         </Button>
                         {user?.avatar && (
                           <ConfirmModal
-                            heading="Remove Avatar"
-                            message="Are you sure you want to remove your avatar? This action cannot be undone."
+                            heading={t("removeAvatar")}
+                            message={t("removeAvatarConfirmation")}
                             onConfirm={() => remove()}
                           >
                             <Button
@@ -141,8 +142,8 @@ export function AvatarChangeForm() {
                               disabled={isLoadingUpdate || isLoadingRemove}
                             >
                               {isLoadingRemove
-                                ? "Removing..."
-                                : "Remove Avatar"}
+                                ? t("removing")
+                                : t("removeAvatar")}
                               <Trash className="ml-2 size-4" />
                             </Button>
                           </ConfirmModal>
@@ -150,10 +151,10 @@ export function AvatarChangeForm() {
                       </div>
                       <div className="space-y-2">
                         <p className="text-sm text-muted-foreground">
-                          Recommended: Square image, at least 512x512px
+                          {t("avatarRecommendedSize")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Supported formats: JPG, PNG, GIF, WEBP (max 10MB)
+                          {t("avatarSupportedFormats")}
                         </p>
                       </div>
                     </div>
@@ -161,9 +162,7 @@ export function AvatarChangeForm() {
                 </div>
               )}
             />
-            <FormDescription>
-              You can upload a new avatar or remove your current avatar.
-            </FormDescription>
+            <FormDescription>{t("avatarUploadDescription")}</FormDescription>
           </div>
         </Form>
       )}

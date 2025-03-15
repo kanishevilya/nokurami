@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -46,58 +45,45 @@ import {
 import { UserTable } from "./UserTable";
 import { ActionDropdown } from "@/components/ui/shadcn/ActionDropdown";
 import { getMediaSource } from "@/utils/get-media-source";
+import { useTranslations } from "next-intl";
 
 export function FollowersTable() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState<"username" | "createdAt">("createdAt");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [sortOrder, setSortOrder] = useState<{
+    column: "username" | "createdAt";
+    direction: "asc" | "desc";
+  }>({
+    column: "createdAt",
+    direction: "desc",
+  });
+  const t = useTranslations("profile");
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [debouncedSearch]);
-
-  const debouncedSetSearch = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearch(value);
-      setPage(1);
-    }, 300),
-    []
-  );
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    debouncedSetSearch(e.target.value);
-  };
-
-  const { data, loading } = useFindMyFollowersQuery({
+  const { data, loading, refetch } = useFindMyFollowersQuery({
     variables: {
       data: {
-        search: debouncedSearch || undefined,
-        skip: (page - 1) * itemsPerPage,
+        search: debouncedSearch,
         take: itemsPerPage,
-        orderBy: { [sortBy]: sortOrder },
+        skip: (page - 1) * itemsPerPage,
+        orderBy: {
+          [sortOrder.column]: sortOrder.direction === "asc" ? 1 : -1,
+        },
       },
     },
+    notifyOnNetworkStatusChange: true,
   });
 
-  const followers = data?.findMyFollowers.followers || [];
-  const totalCount = data?.findMyFollowers.totalCount || 0;
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  const totalCount = data?.findMyFollowers?.totalCount || 0;
+  const followers = data?.findMyFollowers?.followers || [];
 
   const handleSort = (column: "username" | "createdAt") => {
-    if (sortBy === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(column);
-      setSortOrder("asc");
-    }
+    setSortOrder((prev) => ({
+      column,
+      direction:
+        prev.column === column && prev.direction === "asc" ? "desc" : "asc",
+    }));
   };
 
   const handleItemsPerPageChange = (value: number) => {
@@ -107,8 +93,8 @@ export function FollowersTable() {
 
   return (
     <UserTable
-      title="Followers"
-      description="View users who follow you"
+      title={t("followers")}
+      description={t("followersDescription")}
       data={followers}
       loading={loading}
       totalCount={totalCount}
@@ -141,7 +127,7 @@ export function FollowersTable() {
             <ActionDropdown
               actions={[
                 {
-                  label: "View Channel",
+                  label: t("viewChannel"),
                   onClick: () =>
                     (window.location.href = `/${follower.follower.username}`),
                 },

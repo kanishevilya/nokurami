@@ -14,6 +14,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { FormWrapper } from "@/components/ui/items/FormWrapper";
 import {
@@ -23,19 +24,19 @@ import {
 import { SocialLinkItem } from "./SocailLinkItem";
 
 export function SocialLinksList() {
+  const t = useTranslations("settings");
   const { data, loading, refetch } = useFindSocialLinksQuery();
   const [links, setLinks] = useState(data?.findSocialLinks || []);
 
   const [reorderSocialLinks, { loading: isReordering }] =
     useReorderSocialLinksMutation({
       onError(error) {
-        toast.error(`Error reordering links: ${error.message}`);
+        toast.error(`${t("error")}: ${error.message}`);
       },
     });
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  
   useEffect(() => {
     if (data?.findSocialLinks) {
       setLinks(data.findSocialLinks);
@@ -50,7 +51,6 @@ export function SocialLinksList() {
         const newIndex = prevLinks.findIndex((link) => link.id === over.id);
         const newLinks = arrayMove(prevLinks, oldIndex, newIndex);
 
-        
         reorderSocialLinks({
           variables: {
             input: newLinks.map((link, index) => ({
@@ -71,7 +71,7 @@ export function SocialLinksList() {
       <div className="h-10 w-full bg-gray-300 rounded" />
     </div>
   ) : links.length === 0 ? (
-    <p className="text-muted-foreground">No social links added yet.</p>
+    <p className="text-muted-foreground">{t("noSocialLinks")}</p>
   ) : (
     <DndContext
       sensors={sensors}

@@ -35,6 +35,7 @@ const languages = {
 export function LanguageSettings() {
   const [isPending, startTransition] = useTransition();
   const locale = useLocale();
+  const t = useTranslations("settings");
 
   const form = useForm<LanguageSettingsFormData>({
     resolver: zodResolver(languageSettingsSchema),
@@ -47,17 +48,18 @@ export function LanguageSettings() {
     startTransition(async () => {
       try {
         await setLanguage(values.language);
+        toast.success(t("languageUpdatedSuccess"));
       } catch (error) {
-        toast.success("Language updated successfully");
+        toast.error(t("somethingWentWrong"));
       }
     });
   };
 
   return (
     <FormWrapper
-      heading="Language"
+      heading={t("language")}
       id="language-settings"
-      description="Select your preferred language for the interface"
+      description={t("selectLanguage")}
     >
       {isPending ? (
         <LanguageSettingsSkeleton />
@@ -78,7 +80,9 @@ export function LanguageSettings() {
                   <SelectTrigger className="w-full">
                     <div className="flex items-center gap-2">
                       <Globe className="h-4 w-4" />
-                      <SelectValue placeholder="Select language" />
+                      <SelectValue
+                        placeholder={t("selectLanguagePlaceholder")}
+                      />
                     </div>
                   </SelectTrigger>
                   <SelectContent>

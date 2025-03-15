@@ -23,6 +23,8 @@ import { Notifications } from "@/components/layout/header/notifications/Notifica
 
 export function ProfileMenu() {
   const router = useRouter();
+  const t = useTranslations("profile");
+  const commonT = useTranslations("common");
 
   const { unauthenticate } = useAuth();
   const { user, isLoadingProfile } = useCurrent();
@@ -30,11 +32,11 @@ export function ProfileMenu() {
   const [logout] = useLogoutUserMutation({
     onCompleted() {
       unauthenticate();
-      toast.success("Вы успешно вышли из системы");
+      toast.success(t("logoutSuccess"));
       router.push("/account/login");
     },
     onError() {
-      toast.error("Произошла ошибка при выходе из системы");
+      toast.error(commonT("error"));
     },
   });
 
@@ -62,18 +64,18 @@ export function ProfileMenu() {
           <Link href={`/${user.username}`}>
             <DropdownMenuItem>
               <User className="mr-2 size-2" />
-              Профиль
+              {t("profile")}
             </DropdownMenuItem>
           </Link>
           <Link href="/dashboard/settings">
             <DropdownMenuItem>
               <LayoutDashboard className="mr-2 size-2" />
-              Панель управления
+              {t("dashboard")}
             </DropdownMenuItem>
           </Link>
           <DropdownMenuItem onClick={() => logout()}>
             <LogOut className="mr-2 size-2" />
-            Выйти
+            {t("logOut")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

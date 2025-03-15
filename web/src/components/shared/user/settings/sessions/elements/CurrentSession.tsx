@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/shadcn/Card";
 import { SessionItem } from "../data/SessionItem";
 import { SessionSkeleton } from "./SessionSkeleton";
+import { useTranslations } from "next-intl";
 
 type CurrentSessionProps = {
   currentSession: any;
@@ -18,10 +19,14 @@ export function CurrentSession({
   isLoading,
   onShowDetails,
 }: CurrentSessionProps) {
+  const t = useTranslations("settings");
+
   return (
     <Card className="shadow-lg rounded-xl border border-border">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Current Session</CardTitle>
+        <CardTitle className="text-xl font-semibold">
+          {t("currentSession")}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -33,9 +38,7 @@ export function CurrentSession({
             onShowDetails={onShowDetails}
           />
         ) : (
-          <p className="text-muted-foreground">
-            No current session data available.
-          </p>
+          <p className="text-muted-foreground">{t("noCurrentSessionData")}</p>
         )}
       </CardContent>
     </Card>

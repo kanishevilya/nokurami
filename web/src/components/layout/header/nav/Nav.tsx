@@ -1,16 +1,19 @@
 import { FilesIcon, Users } from "lucide-react";
 import { NavItem } from "./NavItem";
 import { Route } from "@/components/layout/sidebar/types/Route";
+import { useTranslations } from "next-intl";
 
 export function Nav() {
+  const t = useTranslations("navigation");
+
   const routes: Route[] = [
     {
-      label: "Following",
+      label: t("following"),
       href: "/directory/following",
       icon: Users,
     },
     {
-      label: "Browse",
+      label: t("browse"),
       href: "/directory",
       icon: FilesIcon,
     },

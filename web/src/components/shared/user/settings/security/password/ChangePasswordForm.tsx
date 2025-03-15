@@ -21,8 +21,11 @@ import {
   ChangePasswordFormData,
 } from "@/schemas/dashboard/security/change-password.schema";
 import { useChangePasswordMutation } from "@/graphql/generated/output";
+import { useTranslations } from "next-intl";
 
 export function ChangePasswordForm() {
+  const t = useTranslations("settings");
+
   const form = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -33,11 +36,11 @@ export function ChangePasswordForm() {
 
   const [changePassword, { loading: isLoading }] = useChangePasswordMutation({
     onCompleted() {
-      toast.success("Password changed successfully");
+      toast.success(t("passwordChangedSuccess"));
       form.reset();
     },
     onError(error) {
-      toast.error(`Error changing password: ${error.message}`);
+      toast.error(`${t("error")}: ${error.message}`);
     },
   });
 
@@ -54,9 +57,9 @@ export function ChangePasswordForm() {
 
   return (
     <FormWrapper
-      heading="Change Password"
+      heading={t("changePassword")}
       id="change-password"
-      description="Update your account password. Please use a strong password."
+      description={t("changePasswordDescription")}
     >
       <Form {...form}>
         <form
@@ -68,11 +71,11 @@ export function ChangePasswordForm() {
             name="oldPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Current Password</FormLabel>
+                <FormLabel>{t("currentPassword")}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Enter your current password"
+                    placeholder={t("currentPasswordPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -85,11 +88,11 @@ export function ChangePasswordForm() {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel>{t("newPassword")}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Enter your new password"
+                    placeholder={t("newPasswordPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -98,12 +101,9 @@ export function ChangePasswordForm() {
             )}
           />
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Changing Password..." : "Change Password"}
+            {isLoading ? t("changingPassword") : t("changePassword")}
           </Button>
-          <FormDescription>
-            Password must be at least 8 characters long. Use a combination of
-            letters, numbers, and special characters for better security.
-          </FormDescription>
+          <FormDescription>{t("passwordRequirements")}</FormDescription>
         </form>
       </Form>
     </FormWrapper>
