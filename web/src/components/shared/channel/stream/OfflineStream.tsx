@@ -14,7 +14,7 @@ export function OfflineStream({ channel }: OfflineStreamProps) {
         status="offline"
         className="mb-4 h-16 w-16"
       />
-      <h3 className="text-lg font-semibold text-white">
+      <h3 className="text-lg font-semibold text-foreground">
         {channel.username} не в сети
       </h3>
       <p className="text-sm text-muted-foreground">
