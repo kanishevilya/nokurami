@@ -21,7 +21,7 @@ export default function FollowingCard({ following, myId }: FollowingCardProps) {
   return (
     <div className="group relative block w-full max-w-[400px] rounded-lg shadow-md bg-card overflow-hidden">
       <Link href={`/${username}`}>
-        <div className="relative flex flex-col items-center justify-center w-full h-[200px] dark:bg-zinc-800 light:bg-zinc-100 rounded-t-lg">
+        <div className="relative flex flex-col items-center justify-center w-full h-[200px] bg-card rounded-t-lg">
           <ChannelAvatar
             channel={following}
             className={`w-16 h-16 ${isLive ? "border-2 border-red-500" : ""}`}

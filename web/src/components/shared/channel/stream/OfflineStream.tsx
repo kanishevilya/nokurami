@@ -8,7 +8,7 @@ interface OfflineStreamProps {
 
 export function OfflineStream({ channel }: OfflineStreamProps) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-gray-900 rounded-lg p-4 text-center">
+    <div className="flex h-full w-full flex-col items-center justify-center rounded-lg bg-card p-4 text-center">
       <ChannelAvatar
         channel={channel}
         status="offline"
