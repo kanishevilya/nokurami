@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../../../shared/guards/gql-auth.guard';
@@ -222,18 +223,20 @@ export class SocialResolver {
 
     @Subscription(() => PrivateMessageModel, {
         name: 'onChatMessage',
-        filter: (payload: any, variables: any, context: any) => {
-            const userId = context.req.user?.id;
+        filter: (payload: any, variables: any) => {
+            const userId = variables.userId;
+            console.log("USERID:", userId);
             if (!userId) return false;
-
-            // Проверяем, что пользователь является участником чата
             const chat = payload.onChatMessage.chat;
+            console.log("CHAT:", chat);
             return chat.creatorId === userId || chat.recipientId === userId;
         },
     })
     onChatMessage(
         @Args('chatId') chatId: string,
+        @Args('userId') userId: string,
     ) {
+        console.log("CHATID:", chatId);
         return this.socialService.onChatMessage(chatId);
     }
 } 

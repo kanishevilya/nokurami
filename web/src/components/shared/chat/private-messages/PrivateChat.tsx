@@ -12,6 +12,7 @@ import {
   useUpdateChatStatusMutation,
   useMarkMessagesAsReadMutation,
   usePrivateMessageSentSubscription,
+  useOnChatMessageSubscription,
 } from "@/graphql/generated/output";
 
 interface PrivateChatProps {
@@ -26,8 +27,7 @@ export function PrivateChat({
   onRefetchChats,
 }: PrivateChatProps) {
   const [newMessage, setNewMessage] = useState("");
-  console.log(chatId);
-  // Запрос на получение конкретного чата с сообщениями
+
   const {
     data: selectedChatData,
     loading: loadingSelectedChat,
@@ -37,59 +37,40 @@ export function PrivateChat({
     variables: { id: chatId! },
   });
 
-  // Мутация для отправки сообщения
   const [sendMessage, { loading: isSendingMessage }] =
     useSendPrivateMessageMutation({
       onCompleted: () => {
         setNewMessage("");
-        refetchSelectedChat();
+        refetchSelectedChat(); // Обновляем только текущий чат
       },
       onError: (error) => {
         console.error(`Failed to send message: ${error.message}`);
       },
     });
 
-  // Мутация для обновления статуса чата (принять/отклонить)
   const [updateChatStatus, { loading: isUpdatingStatus }] =
     useUpdateChatStatusMutation({
-      onCompleted: (data) => {
-        onRefetchChats();
+      onCompleted: () => {
+        onRefetchChats(); // Обновляем список чатов только при изменении статуса
+        refetchSelectedChat(); // Обновляем текущий чат
       },
       onError: (error) => {
         console.error(`Failed to update chat status: ${error.message}`);
       },
     });
 
-  // Мутация для отметки сообщений как прочитанных
-
-  console.log(chatId, currentUserId);
-  // Подписка на новые сообщения
-  const { data: newMessageData } = usePrivateMessageSentSubscription({
-    skip: !chatId || !currentUserId,
+  const { data: newMessageData } = useOnChatMessageSubscription({
+    variables: { chatId: chatId!, userId: currentUserId! },
   });
 
-  // Обработка новых сообщений через подписку
   useEffect(() => {
-    if (newMessageData?.privateMessageSent) {
-      if (chatId === newMessageData.privateMessageSent.chatId) {
-        refetchSelectedChat();
-        // Отмечаем сообщения как прочитанные
-        // markAsRead(chatId);
+    if (newMessageData?.onChatMessage) {
+      if (chatId === newMessageData.onChatMessage.chatId) {
+        refetchSelectedChat(); // Обновляем только текущий чат при новом сообщении
       }
-      onRefetchChats();
     }
-  }, [newMessageData, chatId, refetchSelectedChat, onRefetchChats]);
+  }, [newMessageData, chatId, refetchSelectedChat]);
 
-  // Отмечаем сообщения как прочитанные при выборе чата
-  // useEffect(() => {
-  //   if (chatId) {
-  //     markAsRead(chatId);
-  //   }
-  // }, [chatId]);
-
-  // Функция для отметки сообщений как прочитанных
-
-  // Функция для отправки сообщения
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !chatId) return;
@@ -108,10 +89,8 @@ export function PrivateChat({
     }
   };
 
-  // Функция для принятия запроса на чат
   const handleAcceptChat = async () => {
     if (!chatId) return;
-
     try {
       await updateChatStatus({
         variables: {
@@ -126,10 +105,8 @@ export function PrivateChat({
     }
   };
 
-  // Функция для отклонения запроса на чат
   const handleRejectChat = async () => {
     if (!chatId) return;
-
     try {
       await updateChatStatus({
         variables: {
@@ -145,9 +122,6 @@ export function PrivateChat({
   };
 
   const selectedChatDetails = selectedChatData?.privateChat;
-
-  console.log(selectedChatData);
-  console.log(loadingSelectedChat);
 
   if (loadingSelectedChat) {
     return (
@@ -178,7 +152,6 @@ export function PrivateChat({
     );
   }
 
-  // Преобразуем сообщения в формат, ожидаемый компонентом ChatMessages
   const formattedMessages = (selectedChatDetails.messages || []).map((msg) => {
     const sender =
       msg.senderId === selectedChatDetails.creatorId
@@ -207,13 +180,11 @@ export function PrivateChat({
         onReject={handleRejectChat}
         isUpdatingStatus={isUpdatingStatus}
       />
-
       <ChatMessages
         messages={formattedMessages}
         status={selectedChatDetails.status as ChatStatus}
         currentUserId={currentUserId}
       />
-
       <div className="border-t p-3">
         <ChatInput
           status={selectedChatDetails.status as ChatStatus}

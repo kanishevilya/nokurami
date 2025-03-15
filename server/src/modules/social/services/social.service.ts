@@ -405,7 +405,6 @@ export class SocialService {
             },
         });
 
-        console.log(chat);
 
         if (!chat) {
             throw new NotFoundException(`Chat with ID ${chatId} not found`);
@@ -425,10 +424,6 @@ export class SocialService {
             },
         });
 
-        console.log({
-            ...chat,
-            unreadCount,
-        });
 
         return {
             ...chat,
@@ -570,6 +565,7 @@ export class SocialService {
         });
 
         // Публикуем событие для подписок
+        console.log("MESSAGE:", message);
         this.pubSub.publish('privateMessageSent', { privateMessageSent: message });
         this.pubSub.publish(`chatMessages:${input.chatId}`, { onChatMessage: message });
 
@@ -630,6 +626,7 @@ export class SocialService {
     }
 
     onChatMessage(chatId: string) {
+        console.log(chatId);
         return this.pubSub.asyncIterableIterator(`chatMessages:${chatId}`);
     }
 } 

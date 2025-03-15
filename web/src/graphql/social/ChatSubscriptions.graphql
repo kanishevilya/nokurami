@@ -45,8 +45,8 @@ subscription PrivateMessageSent {
   }
 }
 
-subscription OnChatMessage($chatId: String!) {
-  onChatMessage(chatId: $chatId) {
+subscription OnChatMessage($chatId: String!, $userId: String!) {
+  onChatMessage(chatId: $chatId, userId: $userId) {
     id
     content
     chatId

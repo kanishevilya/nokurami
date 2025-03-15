@@ -452,7 +452,7 @@ type Subscription {
   commentCreated: CommentModel!
   newMessageAdded(streamId: String!): MessageModel!
   newNotificationAdded(userId: String!): NotificationModel!
-  onChatMessage(chatId: String!): PrivateMessageModel!
+  onChatMessage(chatId: String!, userId: String!): PrivateMessageModel!
   postCreated: PostModel!
   privateMessageSent: PrivateMessageModel!
 }

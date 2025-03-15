@@ -762,6 +762,7 @@ export type SubscriptionNewNotificationAddedArgs = {
 
 export type SubscriptionOnChatMessageArgs = {
   chatId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
 };
 
 export type ToggleLikeInput = {
@@ -1144,6 +1145,7 @@ export type PrivateMessageSentSubscription = { __typename?: 'Subscription', priv
 
 export type OnChatMessageSubscriptionVariables = Exact<{
   chatId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
 }>;
 
 
@@ -3259,8 +3261,8 @@ export function usePrivateMessageSentSubscription(baseOptions?: Apollo.Subscript
 export type PrivateMessageSentSubscriptionHookResult = ReturnType<typeof usePrivateMessageSentSubscription>;
 export type PrivateMessageSentSubscriptionResult = Apollo.SubscriptionResult<PrivateMessageSentSubscription>;
 export const OnChatMessageDocument = gql`
-    subscription OnChatMessage($chatId: String!) {
-  onChatMessage(chatId: $chatId) {
+    subscription OnChatMessage($chatId: String!, $userId: String!) {
+  onChatMessage(chatId: $chatId, userId: $userId) {
     id
     content
     chatId
@@ -3290,6 +3292,7 @@ export const OnChatMessageDocument = gql`
  * const { data, loading, error } = useOnChatMessageSubscription({
  *   variables: {
  *      chatId: // value for 'chatId'
+ *      userId: // value for 'userId'
  *   },
  * });
  */
