@@ -6,109 +6,86 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 @layer base {
+  :root {
+    --background: 40, 50%, 90%;
+    --foreground: 40, 15%, 20%;
+    --muted: 50, 20%, 85%;
+    --muted-foreground: 40, 10%, 40%;
+    --accent: 45, 30%, 87%;
+    --accent-foreground: 40, 20%, 25%;
+    --popover: 0, 0%, 100%;
+    --popover-foreground: 40, 20%, 25%;
+    --card: 40, 45%, 88%;
+    --card-foreground: 40, 20%, 25%;
+    --primary: 20, 60%, 60%;
+    --primary-foreground: 0, 0%, 98%;
+    --secondary: 45, 25%, 89%;
+    --secondary-foreground: 40, 20%, 25%;
+    --sidebar-background: 50, 15%, 92%;
+    --sidebar-foreground: 40, 15%, 30%;
+    --sidebar-primary: 20, 50%, 50%;
+    --sidebar-primary-foreground: 0, 0%, 98%;
+    --sidebar-accent: 45, 20%, 90%;
+    --sidebar-accent-foreground: 40, 20%, 25%;
+    --sidebar-border: 40, 15%, 80%;
+    --sidebar-ring: 20, 60%, 60%;
+    --border: 40, 15%, 80%;
+    --input: 40, 20%, 90%;
+    --radius: 0.5rem;
+  }
 
-	:root {
-		--background: 240, 7%, 97%;
-		--foreground: 240, 7%, 6%;
-
-		--muted: 210 40% 96.1%;
-		--muted-foreground: 215.4 16.3% 46.9%;
-
-		--accent: 260 40% 96.1%;
-		--accent-foreground: 270 47.4% 11.2%;
-
-		--popover: 0 0% 100%;
-		--popover-foreground: 270 47.4% 11.2%;
-
-		--card: 240, 10%, 93%;
-		--card-foreground: 270 47.4% 11.2%;
-
-		--primary: 270, 76%, 52%;
-		--primary-foreground: 210 40% 98%;
-
-
-		--secondary: 260, 29%, 96%;
-		--secondary-foreground: 270 47.4% 11.2%;
-
-		--sidebar-background: 0 0% 98%;
-		--sidebar-foreground: 240 5.3% 26.1%;
-		--sidebar-primary: 240 5.9% 10%;
-		--sidebar-primary-foreground: 0 0% 98%;
-		--sidebar-accent: 240 4.8% 95.9%;
-		--sidebar-accent-foreground: 240 5.9% 10%;
-		--sidebar-border: 220 13% 91%;
-		--sidebar-ring: 217.2 91.2% 59.8%;
-
-		--border: 240 19% 91.4%;
-		--input: 240, 7%, 97%;
-		--radius: 0.5rem;
-	}
-
-	.dark {
-		--background: 250, 13%, 14%;
-		--foreground: 270 31% 91%;
-
-		--muted: 250, 16%, 27%;
-		--muted-foreground: 255 16.3% 56.9%;
-
-		--accent: 250, 13%, 27%;
-		--accent-foreground: 270 40% 98%;
-
-		--popover: 255, 14%, 20%;
-		--popover-foreground: 270 31% 91%;
-
-		--card: 250, 16%, 19%;
-		--card-foreground: 270 31% 91%;
-
-		--primary: 270, 76%, 52%;
-		--primary-foreground: 210 40% 98%;
-
-		--secondary: 270, 12%, 29%;
-		--secondary-foreground: 210 40% 98%;
-
-		--sidebar-background: 240 5.9% 10%;
-		--sidebar-foreground: 240 4.8% 95.9%;
-		--sidebar-primary: 224.3 76.3% 48%;
-		--sidebar-primary-foreground: 0 0% 100%;
-		--sidebar-accent: 240 3.7% 15.9%;
-		--sidebar-accent-foreground: 240 4.8% 95.9%;
-		--sidebar-border: 240 3.7% 15.9%;
-		--sidebar-ring: 217.2 91.2% 59.8%;
-
-		--border: 265, 19%, 27%;
-		--input: 250, 13%, 14%;
-		--radius: 0.5rem;
-	}
+  .dark {
+    --background: 30, 10%, 8%;
+    --foreground: 30, 10%, 90%;
+    --muted: 30, 10%, 18%;
+    --muted-foreground: 30, 10%, 60%;
+    --accent: 30, 10%, 13%;
+    --accent-foreground: 30, 10%, 95%;
+    --popover: 30, 10%, 13%;
+    --popover-foreground: 30, 10%, 90%;
+    --card: 30, 10%, 11%;
+    --card-foreground: 30, 10%, 90%;
+    --primary: 330, 70%, 60%;
+    --primary-foreground: 0, 0%, 98%;
+    --secondary: 30, 10%, 18%;
+    --secondary-foreground: 30, 10%, 95%;
+    --sidebar-background: 30, 15%, 6%;
+    --sidebar-foreground: 30, 10%, 90%;
+    --sidebar-primary: 330, 70%, 60%;
+    --sidebar-primary-foreground: 0, 0%, 98%;
+    --sidebar-accent: 30, 10%, 13%;
+    --sidebar-accent-foreground: 30, 10%, 90%;
+    --sidebar-border: 30, 10%, 18%;
+    --sidebar-ring: 330, 70%, 60%;
+    --border: 30, 10%, 18%;
+    --input: 30, 10%, 8%;
+    --radius: 0.5rem;
+  }
 }
+
 @layer base {
   * {
     @apply border-border;
   }
-
   html {
-		@apply scroll-smooth;
-	}
-
+    @apply scroll-smooth;
+  }
   body {
     @apply bg-background text-foreground;
-    
-	font-family: var(--font-geist-sans), sans-serif;
-
+    font-family: var(--font-geist-sans), sans-serif;
     height: 100vh;
   }
 }
 
-
 ::-webkit-scrollbar {
-	width: 9px;
+  width: 9px;
 }
 
 ::-webkit-scrollbar-track {
-	@apply bg-background;
+  @apply bg-background;
 }
 
 ::-webkit-scrollbar-thumb {
-	@apply rounded-full bg-secondary;
+  @apply rounded-full bg-secondary;
 }
