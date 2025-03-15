@@ -59,7 +59,7 @@ export function FeaturedChannelsCarousel() {
     setTimeout(() => setIsAnimating(false), 500);
   };
 
-  // Handle touch events for mobile swipe
+  
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -70,15 +70,15 @@ export function FeaturedChannelsCarousel() {
 
   const handleTouchEnd = () => {
     if (touchStartX.current - touchEndX.current > 50) {
-      // Swipe left
+      
       handleNext();
     } else if (touchEndX.current - touchStartX.current > 50) {
-      // Swipe right
+      
       handlePrev();
     }
   };
 
-  // Auto-advance carousel every 8 seconds
+  
   useEffect(() => {
     if (streams.length < 2) return;
 
@@ -127,7 +127,7 @@ export function FeaturedChannelsCarousel() {
         onTouchEnd={handleTouchEnd}
       >
         <div className="relative h-[400px] overflow-visible">
-          {/* Main active card */}
+          {}
           <div
             className={cn(
               "absolute left-1/2 top-0 w-full max-w-md -translate-x-1/2 transition-all duration-500 ease-out z-20",
@@ -140,7 +140,7 @@ export function FeaturedChannelsCarousel() {
             />
           </div>
 
-          {/* Previous card */}
+          {}
           {streams.length > 1 && (
             <div
               className={cn(
@@ -160,7 +160,7 @@ export function FeaturedChannelsCarousel() {
             </div>
           )}
 
-          {/* Next card */}
+          {}
           {streams.length > 1 && (
             <div
               className={cn(
@@ -182,7 +182,7 @@ export function FeaturedChannelsCarousel() {
         </div>
       </div>
 
-      {/* Carousel indicators */}
+      {}
       {streams.length > 1 && (
         <div className="mt-4 flex justify-center gap-2">
           {streams.map((_, index) => (
@@ -214,7 +214,7 @@ interface FeaturedChannelCardProps {
 }
 
 function FeaturedChannelCard({ stream, isActive }: FeaturedChannelCardProps) {
-  // Check if avatar exists and is not an empty string
+  
   const hasAvatar = stream.user.avatar && stream.user.avatar.trim() !== "";
   const router = useRouter();
   return (

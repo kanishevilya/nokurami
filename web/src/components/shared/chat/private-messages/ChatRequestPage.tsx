@@ -40,7 +40,7 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
       skip: !debouncedUsername || debouncedUsername.length < 3,
     });
 
-  // Мутация для запроса чата
+  
   const [requestChat, { loading: isRequesting }] = useRequestChatMutation({
     onCompleted: (data) => {
       toast.success("Chat request sent successfully");
@@ -51,7 +51,7 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
     },
   });
 
-  // Обработчик отправки запроса на чат
+  
   const handleRequestChat = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -73,12 +73,12 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
     }
   };
 
-  // Выбор пользователя из результатов поиска
+  
   const handleSelectUser = (userId: string) => {
     setSelectedUserId(userId);
   };
 
-  // Если не аутентифицирован, показываем сообщение о необходимости входа
+  
   if (!isAuthenticated) {
     return (
       <div className="container mx-auto py-8">
@@ -124,14 +124,14 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
-                      setSelectedUserId(null); // Сбрасываем выбор при изменении поиска
+                      setSelectedUserId(null); 
                     }}
                     className="pl-9"
                   />
                 </div>
               </div>
 
-              {/* Результаты поиска */}
+              {}
               <div className="border rounded-md overflow-hidden">
                 <div className="p-3 bg-muted/50 border-b">
                   <h3 className="font-medium text-sm">Search Results</h3>

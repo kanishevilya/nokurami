@@ -174,7 +174,6 @@ export class PrivateMessageModel {
     updatedAt: Date;
 }
 
-// Input Types для создания и обновления
 @InputType()
 export class CreatePostInput {
     @Field()

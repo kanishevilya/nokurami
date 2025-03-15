@@ -7,7 +7,8 @@
     "build": "graphql-codegen --config graphql.config.ts && next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-codegen --config graphql.config.ts"
+    "codegen": "graphql-codegen --config graphql.config.ts",
+    "remove-comments": "node remove-comments.js"
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
@@ -69,6 +70,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/crypto-js": "^4.2.2",
@@ -76,9 +78,15 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.22.0",
+    "eslint-plugin-no-comments": "^1.1.10",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0",
     "postcss": "^8",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "strip-comments": "^2.0.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.26.1"
   }
 }

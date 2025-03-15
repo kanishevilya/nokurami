@@ -16,7 +16,7 @@ export function ChatMessages({
 }: ChatMessagesProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when messages change
+  
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =

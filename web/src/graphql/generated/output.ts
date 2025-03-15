@@ -8,7 +8,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
-/** All built-in and custom scalars, mapped to their actual values */
+
 export type Scalars = {
   ID: { input: string; output: string; }
   String: { input: string; output: string; }
@@ -84,7 +84,7 @@ export type ChatSettingsModel = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-/** Status of a private chat */
+
 export enum ChatStatus {
   Accepted = 'ACCEPTED',
   Pending = 'PENDING',
@@ -713,7 +713,7 @@ export type SocialLinkOrderInput = {
   position: Scalars['Float']['input'];
 };
 
-/** Order direction (ascending or descending) */
+
 export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
@@ -1352,7 +1352,7 @@ export const FindAllCategoriesDocument = gql`
  * When your component renders, `useFindAllCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindAllCategoriesQuery({
@@ -1408,12 +1408,12 @@ export const FindCategoryBySlugDocument = gql`
  * When your component renders, `useFindCategoryBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindCategoryBySlugQuery({
  *   variables: {
- *      slug: // value for 'slug'
+ *      slug: 
  *   },
  * });
  */
@@ -1465,7 +1465,7 @@ export const FindRandomCategoriesDocument = gql`
  * When your component renders, `useFindRandomCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindRandomCategoriesQuery({
@@ -1521,12 +1521,12 @@ export const FindChannelByUsernameDocument = gql`
  * When your component renders, `useFindChannelByUsernameQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindChannelByUsernameQuery({
  *   variables: {
- *      username: // value for 'username'
+ *      username: 
  *   },
  * });
  */
@@ -1578,12 +1578,12 @@ export const FindChannelsContainingUsernameDocument = gql`
  * When your component renders, `useFindChannelsContainingUsernameQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindChannelsContainingUsernameQuery({
  *   variables: {
- *      username: // value for 'username'
+ *      username: 
  *   },
  * });
  */
@@ -1633,7 +1633,7 @@ export const FindRecommendedChannelsDocument = gql`
  * When your component renders, `useFindRecommendedChannelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindRecommendedChannelsQuery({
@@ -1672,12 +1672,12 @@ export type ChangeChatSettingsMutationFn = Apollo.MutationFunction<ChangeChatSet
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeChatSettingsMutation, { data, loading, error }] = useChangeChatSettingsMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -1710,12 +1710,12 @@ export const FindMessagesByStreamDocument = gql`
  * When your component renders, `useFindMessagesByStreamQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindMessagesByStreamQuery({
  *   variables: {
- *      streamId: // value for 'streamId'
+ *      streamId: 
  *   },
  * });
  */
@@ -1756,12 +1756,12 @@ export const NewMessageAddedDocument = gql`
  * When your component renders, `useNewMessageAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useNewMessageAddedSubscription({
  *   variables: {
- *      streamId: // value for 'streamId'
+ *      streamId: 
  *   },
  * });
  */
@@ -1795,12 +1795,12 @@ export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation,
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -1824,12 +1824,12 @@ export const FindFollowersCountByChannelDocument = gql`
  * When your component renders, `useFindFollowersCountByChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindFollowersCountByChannelQuery({
  *   variables: {
- *      channelId: // value for 'channelId'
+ *      channelId: 
  *   },
  * });
  */
@@ -1862,12 +1862,12 @@ export const FindFollowingsCountByChannelDocument = gql`
  * When your component renders, `useFindFollowingsCountByChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindFollowingsCountByChannelQuery({
  *   variables: {
- *      channelId: // value for 'channelId'
+ *      channelId: 
  *   },
  * });
  */
@@ -1909,12 +1909,12 @@ export const FindMyFollowersDocument = gql`
  * When your component renders, `useFindMyFollowersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindMyFollowersQuery({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -1957,12 +1957,12 @@ export const FindMyFollowingsDocument = gql`
  * When your component renders, `useFindMyFollowingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindMyFollowingsQuery({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2017,12 +2017,12 @@ export const FindMyFollowingsChannelsDocument = gql`
  * When your component renders, `useFindMyFollowingsChannelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindMyFollowingsChannelsQuery({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2057,12 +2057,12 @@ export type FollowToChannelMutationFn = Apollo.MutationFunction<FollowToChannelM
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [followToChannelMutation, { data, loading, error }] = useFollowToChannelMutation({
  *   variables: {
- *      channelId: // value for 'channelId'
+ *      channelId: 
  *   },
  * });
  */
@@ -2088,12 +2088,12 @@ export type UnfollowFromChannelMutationFn = Apollo.MutationFunction<UnfollowFrom
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [unfollowFromChannelMutation, { data, loading, error }] = useUnfollowFromChannelMutation({
  *   variables: {
- *      channelId: // value for 'channelId'
+ *      channelId: 
  *   },
  * });
  */
@@ -2125,12 +2125,12 @@ export type ChangeNotificationSettingsMutationFn = Apollo.MutationFunction<Chang
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeNotificationSettingsMutation, { data, loading, error }] = useChangeNotificationSettingsMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2160,7 +2160,7 @@ export const FindNotificationsByUserDocument = gql`
  * When your component renders, `useFindNotificationsByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindNotificationsByUserQuery({
@@ -2197,7 +2197,7 @@ export const FindUnreadNotificationsCountDocument = gql`
  * When your component renders, `useFindUnreadNotificationsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindUnreadNotificationsCountQuery({
@@ -2236,12 +2236,12 @@ export type ChangeProfileAvatarMutationFn = Apollo.MutationFunction<ChangeProfil
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeProfileAvatarMutation, { data, loading, error }] = useChangeProfileAvatarMutation({
  *   variables: {
- *      avatar: // value for 'avatar'
+ *      avatar: 
  *   },
  * });
  */
@@ -2267,12 +2267,12 @@ export type ChangeProfileInformationMutationFn = Apollo.MutationFunction<ChangeP
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeProfileInformationMutation, { data, loading, error }] = useChangeProfileInformationMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -2298,12 +2298,12 @@ export type CreateSocialLinkMutationFn = Apollo.MutationFunction<CreateSocialLin
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [createSocialLinkMutation, { data, loading, error }] = useCreateSocialLinkMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -2360,7 +2360,7 @@ export const FindProfileDocument = gql`
  * When your component renders, `useFindProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindProfileQuery({
@@ -2402,7 +2402,7 @@ export const FindSocialLinksDocument = gql`
  * When your component renders, `useFindSocialLinksQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindSocialLinksQuery({
@@ -2441,7 +2441,7 @@ export type RemoveProfileAvatarMutationFn = Apollo.MutationFunction<RemoveProfil
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [removeProfileAvatarMutation, { data, loading, error }] = useRemoveProfileAvatarMutation({
@@ -2471,12 +2471,12 @@ export type RemoveSocialLinkMutationFn = Apollo.MutationFunction<RemoveSocialLin
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [removeSocialLinkMutation, { data, loading, error }] = useRemoveSocialLinkMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -2502,12 +2502,12 @@ export type ReorderSocialLinksMutationFn = Apollo.MutationFunction<ReorderSocial
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [reorderSocialLinksMutation, { data, loading, error }] = useReorderSocialLinksMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -2533,13 +2533,13 @@ export type UpdateSocialLinkMutationFn = Apollo.MutationFunction<UpdateSocialLin
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [updateSocialLinkMutation, { data, loading, error }] = useUpdateSocialLinkMutation({
  *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
+ *      id: 
+ *      input: 
  *   },
  * });
  */
@@ -2565,12 +2565,12 @@ export type ChangeEmailMutationFn = Apollo.MutationFunction<ChangeEmailMutation,
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeEmailMutation, { data, loading, error }] = useChangeEmailMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2596,12 +2596,12 @@ export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMut
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2627,12 +2627,12 @@ export type ConfirmChangedEmailMutationFn = Apollo.MutationFunction<ConfirmChang
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [confirmChangedEmailMutation, { data, loading, error }] = useConfirmChangedEmailMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2658,12 +2658,12 @@ export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, C
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2689,7 +2689,7 @@ export type Disable2FaMutationFn = Apollo.MutationFunction<Disable2FaMutation, D
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [disable2FaMutation, { data, loading, error }] = useDisable2FaMutation({
@@ -2719,12 +2719,12 @@ export type Enable2FaMutationFn = Apollo.MutationFunction<Enable2FaMutation, Ena
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [enable2FaMutation, { data, loading, error }] = useEnable2FaMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2751,7 +2751,7 @@ export const GenerateTotpSecretDocument = gql`
  * When your component renders, `useGenerateTotpSecretQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useGenerateTotpSecretQuery({
@@ -2797,12 +2797,12 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2828,7 +2828,7 @@ export type LogoutUserMutationFn = Apollo.MutationFunction<LogoutUserMutation, L
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [logoutUserMutation, { data, loading, error }] = useLogoutUserMutation({
@@ -2858,12 +2858,12 @@ export type NewPasswordMutationFn = Apollo.MutationFunction<NewPasswordMutation,
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [newPasswordMutation, { data, loading, error }] = useNewPasswordMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2889,7 +2889,7 @@ export type RequestToEmailChangeMutationFn = Apollo.MutationFunction<RequestToEm
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [requestToEmailChangeMutation, { data, loading, error }] = useRequestToEmailChangeMutation({
@@ -2919,12 +2919,12 @@ export type PasswordResetMutationFn = Apollo.MutationFunction<PasswordResetMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [passwordResetMutation, { data, loading, error }] = usePasswordResetMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2957,12 +2957,12 @@ export type VerifyAccountMutationFn = Apollo.MutationFunction<VerifyAccountMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [verifyAccountMutation, { data, loading, error }] = useVerifyAccountMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -2988,7 +2988,7 @@ export type ClearSessionMutationFn = Apollo.MutationFunction<ClearSessionMutatio
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [clearSessionMutation, { data, loading, error }] = useClearSessionMutation({
@@ -3034,7 +3034,7 @@ export const GetCurrentSessionDocument = gql`
  * When your component renders, `useGetCurrentSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useGetCurrentSessionQuery({
@@ -3089,7 +3089,7 @@ export const GetSessionsByUserDocument = gql`
  * When your component renders, `useGetSessionsByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useGetSessionsByUserQuery({
@@ -3128,12 +3128,12 @@ export type RemoveSessionMutationFn = Apollo.MutationFunction<RemoveSessionMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [removeSessionMutation, { data, loading, error }] = useRemoveSessionMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -3174,7 +3174,7 @@ export const ChatRequestedDocument = gql`
  * When your component renders, `useChatRequestedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useChatRequestedSubscription({
@@ -3206,7 +3206,7 @@ export const ChatStatusUpdatedDocument = gql`
  * When your component renders, `useChatStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useChatStatusUpdatedSubscription({
@@ -3246,7 +3246,7 @@ export const PrivateMessageSentDocument = gql`
  * When your component renders, `usePrivateMessageSentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = usePrivateMessageSentSubscription({
@@ -3286,13 +3286,13 @@ export const OnChatMessageDocument = gql`
  * When your component renders, `useOnChatMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useOnChatMessageSubscription({
  *   variables: {
- *      chatId: // value for 'chatId'
- *      userId: // value for 'userId'
+ *      chatId: 
+ *      userId: 
  *   },
  * });
  */
@@ -3329,12 +3329,12 @@ export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -3373,12 +3373,12 @@ export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, C
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -3404,12 +3404,12 @@ export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -3435,12 +3435,12 @@ export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, D
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -3492,12 +3492,12 @@ export const FindPostByIdDocument = gql`
  * When your component renders, `useFindPostByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindPostByIdQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -3563,15 +3563,15 @@ export const FindPostsDocument = gql`
  * When your component renders, `useFindPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindPostsQuery({
  *   variables: {
- *      filters: // value for 'filters'
- *      sort: // value for 'sort'
- *      skip: // value for 'skip'
- *      take: // value for 'take'
+ *      filters: 
+ *      sort: 
+ *      skip: 
+ *      take: 
  *   },
  * });
  */
@@ -3637,12 +3637,12 @@ export const GetPrivateChatDocument = gql`
  * When your component renders, `useGetPrivateChatQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useGetPrivateChatQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -3702,7 +3702,7 @@ export const GetPrivateChatsDocument = gql`
  * When your component renders, `useGetPrivateChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useGetPrivateChatsQuery({
@@ -3744,12 +3744,12 @@ export type MarkMessagesAsReadMutationFn = Apollo.MutationFunction<MarkMessagesA
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [markMessagesAsReadMutation, { data, loading, error }] = useMarkMessagesAsReadMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -3786,7 +3786,7 @@ export const PostCreatedDocument = gql`
  * When your component renders, `usePostCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = usePostCreatedSubscription({
@@ -3829,7 +3829,7 @@ export const CommentCreatedDocument = gql`
  * When your component renders, `useCommentCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useCommentCreatedSubscription({
@@ -3875,12 +3875,12 @@ export type RequestChatMutationFn = Apollo.MutationFunction<RequestChatMutation,
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [requestChatMutation, { data, loading, error }] = useRequestChatMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -3919,12 +3919,12 @@ export type SendPrivateMessageMutationFn = Apollo.MutationFunction<SendPrivateMe
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [sendPrivateMessageMutation, { data, loading, error }] = useSendPrivateMessageMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -3950,12 +3950,12 @@ export type ToggleLikeMutationFn = Apollo.MutationFunction<ToggleLikeMutation, T
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [toggleLikeMutation, { data, loading, error }] = useToggleLikeMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -3986,12 +3986,12 @@ export type UpdateChatStatusMutationFn = Apollo.MutationFunction<UpdateChatStatu
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [updateChatStatusMutation, { data, loading, error }] = useUpdateChatStatusMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -4020,12 +4020,12 @@ export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -4054,12 +4054,12 @@ export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, U
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      input: 
  *   },
  * });
  */
@@ -4085,12 +4085,12 @@ export type ChangeStreamInfoMutationFn = Apollo.MutationFunction<ChangeStreamInf
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeStreamInfoMutation, { data, loading, error }] = useChangeStreamInfoMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -4116,12 +4116,12 @@ export type ChangeStreamPreviewMutationFn = Apollo.MutationFunction<ChangeStream
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [changeStreamPreviewMutation, { data, loading, error }] = useChangeStreamPreviewMutation({
  *   variables: {
- *      preview: // value for 'preview'
+ *      preview: 
  *   },
  * });
  */
@@ -4147,12 +4147,12 @@ export type CreateIngressMutationFn = Apollo.MutationFunction<CreateIngressMutat
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [createIngressMutation, { data, loading, error }] = useCreateIngressMutation({
  *   variables: {
- *      ingressType: // value for 'ingressType'
+ *      ingressType: 
  *   },
  * });
  */
@@ -4188,12 +4188,12 @@ export const FindAllLiveStreamsDocument = gql`
  * When your component renders, `useFindAllLiveStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindAllLiveStreamsQuery({
  *   variables: {
- *      filters: // value for 'filters'
+ *      filters: 
  *   },
  * });
  */
@@ -4238,12 +4238,12 @@ export const FindAllStreamsDocument = gql`
  * When your component renders, `useFindAllStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindAllStreamsQuery({
  *   variables: {
- *      filters: // value for 'filters'
+ *      filters: 
  *   },
  * });
  */
@@ -4290,7 +4290,7 @@ export const FindRandomStreamsDocument = gql`
  * When your component renders, `useFindRandomStreamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindRandomStreamsQuery({
@@ -4331,12 +4331,12 @@ export const FindStreamByIdDocument = gql`
  * When your component renders, `useFindStreamByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https:
  *
  * @example
  * const { data, loading, error } = useFindStreamByIdQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      id: 
  *   },
  * });
  */
@@ -4373,12 +4373,12 @@ export type GenerateStreamTokenMutationFn = Apollo.MutationFunction<GenerateStre
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [generateStreamTokenMutation, { data, loading, error }] = useGenerateStreamTokenMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */
@@ -4404,7 +4404,7 @@ export type RemoveStreamPreviewMutationFn = Apollo.MutationFunction<RemoveStream
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [removeStreamPreviewMutation, { data, loading, error }] = useRemoveStreamPreviewMutation({
@@ -4434,12 +4434,12 @@ export type UpdateStreamMutationFn = Apollo.MutationFunction<UpdateStreamMutatio
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https:
  *
  * @example
  * const [updateStreamMutation, { data, loading, error }] = useUpdateStreamMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      data: 
  *   },
  * });
  */

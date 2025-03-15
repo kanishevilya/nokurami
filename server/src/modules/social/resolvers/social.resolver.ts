@@ -29,7 +29,6 @@ import { Authorization } from '@/src/shared/decorators/auth.decorator';
 export class SocialResolver {
     constructor(private socialService: SocialService) { }
 
-    // Запросы для постов
     @Query(() => [PostModel], { name: 'findPosts' })
     @UseGuards(GqlAuthGuard)
     async posts(
@@ -74,7 +73,6 @@ export class SocialResolver {
         return this.socialService.deletePost(user.id, id);
     }
 
-    // Запросы для комментариев
     @Mutation(() => CommentModel, { name: 'createComment' })
     @Authorization()
     async createComment(
@@ -102,7 +100,6 @@ export class SocialResolver {
         return this.socialService.deleteComment(user.id, id);
     }
 
-    // Запросы для лайков
     @Mutation(() => Boolean, { name: 'toggleLike' })
     @Authorization()
     async toggleLike(
@@ -113,7 +110,6 @@ export class SocialResolver {
         return result.liked;
     }
 
-    // Запросы для приватных чатов
     @Query(() => [PrivateChatModel], { name: 'privateChats' })
     @Authorization()
     async privateChats(@Authorized() user: User) {
@@ -165,7 +161,6 @@ export class SocialResolver {
         return this.socialService.markMessagesAsRead(user.id, input);
     }
 
-    // Подписки
     @Subscription(() => PostModel, { name: 'postCreated' })
     postCreated() {
         return this.socialService.onPostCreated();
@@ -183,7 +178,7 @@ export class SocialResolver {
             if (!userId) return false;
 
             const chat = payload.chatRequested;
-            return chat.recipientId === userId; // Только получатель запроса получает уведомление
+            return chat.recipientId === userId;
         },
     })
     chatRequested() {
@@ -197,7 +192,7 @@ export class SocialResolver {
             if (!userId) return false;
 
             const chat = payload.chatStatusUpdated;
-            return chat.creatorId === userId; // Только создатель чата получает уведомление об изменении статуса
+            return chat.creatorId === userId;
         },
     })
     chatStatusUpdated() {
@@ -213,7 +208,6 @@ export class SocialResolver {
             const message = payload.privateMessageSent;
             const chat = message.chat;
 
-            // Сообщение получает другой участник чата (не отправитель)
             return (chat.creatorId === userId || chat.recipientId === userId) && message.senderId !== userId;
         },
     })

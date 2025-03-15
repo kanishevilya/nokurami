@@ -86,10 +86,8 @@ export function Chat({ streamId }: ChatProps) {
     onError: (error) => console.error("Error sending message:", error.message),
   });
 
-  // Добавляем обработчик клика для проверки активности чата
   useEffect(() => {
     const handleScreenClick = () => {
-      // Проверяем только если чат изначально неактивен
       refetch().then((result) => {
         if (result.data?.findStreamById?.isLive) {
           setIsLive(true);
@@ -99,13 +97,11 @@ export function Chat({ streamId }: ChatProps) {
 
     document.addEventListener("click", handleScreenClick);
 
-    // Очищаем слушатель при размонтировании компонента
     return () => {
       document.removeEventListener("click", handleScreenClick);
     };
-  }, [isLive, refetch]); // Зависимости: isLive и refetch
+  }, [isLive, refetch]);
 
-  // Остальной код остается без изменений
   const { data: subscriptionData } = useNewMessageAddedSubscription({
     variables: {
       streamId: streamId,
@@ -161,7 +157,6 @@ export function Chat({ streamId }: ChatProps) {
     return format(new Date(timestamp), "HH:mm");
   };
 
-  // JSX остается без изменений
   return (
     <div className="flex w-full flex-col rounded-lg bg-card shadow-md">
       <div className="flex items-center justify-between border-b border-border p-4">

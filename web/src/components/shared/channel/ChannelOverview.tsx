@@ -31,23 +31,23 @@ export default function ChannelOverview({ channel }: ChannelOverviewProps) {
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WSS_URL}
       >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* Main content - Video and Info */}
+          {}
           <div className="order-1 col-span-1 flex flex-col space-y-6 lg:col-span-8">
             <div className="overflow-hidden rounded-lg bg-card shadow-md">
               <StreamVideo channel={channel} />
             </div>
-            {/* <div> */}
+            {}
             <StreamInfo
               channel={channel}
               isCurrentUser={isCurrentUser}
               myId={user?.id!}
             />
 
-            {/* <AboutChannel channel={channel} /> */}
+            {}
             <AdditionalInfo username={channel.username} />
           </div>
 
-          {/* Chat sidebar */}
+          {}
           <div className="order-2 col-span-1 lg:col-span-4">
             <Chat streamId={channel.stream?.id} />
           </div>

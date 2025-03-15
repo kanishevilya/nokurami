@@ -79,7 +79,7 @@ export function ChangePreviewForm() {
       heading="Stream Preview"
       id="preview"
       description="Change your stream preview to a new image. You can upload a new image or remove your current preview."
-      // alwaysOpen={true}
+      
     >
       {isLoadingProfile ? (
         <ChangePreviewFormSkeleton />

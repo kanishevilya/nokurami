@@ -42,7 +42,6 @@ export default function AdditionalInfo({ username }: AdditionalInfoProps) {
 
   const channel = data?.findChannelByUsername;
 
-  // Fetch follower and following counts
   const { data: followerData } = useFindFollowersCountByChannelQuery({
     variables: { channelId: channel?.id || "" },
     skip: !channel?.id,
@@ -56,24 +55,6 @@ export default function AdditionalInfo({ username }: AdditionalInfoProps) {
   const followerCount = followerData?.findFollowersCountByChannel || 0;
   const followingCount = followingData?.findFollowingsCountByChannel || 0;
 
-  const handleChatRequest = async () => {
-    if (!currentUser || !channel) return;
-
-    setRequestingChat(true);
-
-    // This would be replaced with an actual API call
-    try {
-      // Simulate API call
-      setTimeout(() => {
-        toast.success("Chat request sent successfully");
-        setRequestingChat(false);
-      }, 1000);
-    } catch (error) {
-      toast.error("Failed to send chat request");
-      setRequestingChat(false);
-    }
-  };
-
   if (loading || !channel) return <Skeleton className="w-full h-full" />;
 
   return (
@@ -84,7 +65,7 @@ export default function AdditionalInfo({ username }: AdditionalInfoProps) {
         <TabsTrigger value="content">Content</TabsTrigger>
       </TabsList>
 
-      {/* Overview Tab - Shows follower and following counts */}
+      {}
       <TabsContent value="overview" className="space-y-4">
         <Card>
           <CardHeader>
@@ -111,7 +92,7 @@ export default function AdditionalInfo({ username }: AdditionalInfoProps) {
         </Card>
       </TabsContent>
 
-      {/* About Tab - Shows information and social links */}
+      {}
       <TabsContent value="about" className="space-y-4">
         <Card>
           <CardHeader>
@@ -150,7 +131,7 @@ export default function AdditionalInfo({ username }: AdditionalInfoProps) {
         </Card>
       </TabsContent>
 
-      {/* Content Tab - Shows recent content */}
+      {}
       <TabsContent value="content" className="space-y-4">
         <Card>
           <CardHeader>

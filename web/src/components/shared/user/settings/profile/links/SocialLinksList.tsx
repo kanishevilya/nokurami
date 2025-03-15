@@ -35,7 +35,7 @@ export function SocialLinksList() {
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  // Обновляем локальное состояние при изменении данных
+  
   useEffect(() => {
     if (data?.findSocialLinks) {
       setLinks(data.findSocialLinks);
@@ -50,7 +50,7 @@ export function SocialLinksList() {
         const newIndex = prevLinks.findIndex((link) => link.id === over.id);
         const newLinks = arrayMove(prevLinks, oldIndex, newIndex);
 
-        // Отправляем новый порядок на сервер
+        
         reorderSocialLinks({
           variables: {
             input: newLinks.map((link, index) => ({

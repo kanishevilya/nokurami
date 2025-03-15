@@ -41,8 +41,8 @@ export function SocialLinksForm() {
   const [createSocialLink, { loading: isLoadingCreate }] =
     useCreateSocialLinkMutation({
       onCompleted() {
-        refetch(); // Обновляем список после добавления
-        form.reset(); // Сбрасываем форму
+        refetch();
+        form.reset();
         toast.success("Social link added successfully");
       },
       onError(error) {

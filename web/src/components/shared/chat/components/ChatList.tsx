@@ -55,7 +55,7 @@ export function ChatListItem({
   selected,
   onClick,
 }: ChatListItemProps) {
-  // Определяем, кто другой пользователь в чате
+  
   const otherUser = creatorId === currentUserId ? recipient : creator;
   const isCreator = creatorId === currentUserId;
 
@@ -139,7 +139,7 @@ export function ChatList({
   onRetry,
   searchTerm,
 }: ChatListProps) {
-  // Фильтруем чаты по поисковому запросу
+  
   const filteredChats = chats.filter((chat) => {
     const otherUser =
       chat.creatorId === currentUserId ? chat.recipient : chat.creator;

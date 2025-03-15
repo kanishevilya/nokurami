@@ -37,7 +37,7 @@ export default function DirectoryLiveStreamsPage() {
   async function fetchMoreStreams() {
     if (!hasMore || loading) return;
 
-    const skip = streamList.length; // Фиксируем текущую длину перед запросом
+    const skip = streamList.length;
     const { data: newData } = await fetchMore({
       variables: {
         filters: {
@@ -56,7 +56,7 @@ export default function DirectoryLiveStreamsPage() {
               existingStream.title === newStream.title &&
               existingStream.user.username === newStream.user.username
           )
-      ); // Фильтруем дубликаты по title и username
+      );
 
       if (newStreams.length > 0) {
         setStreamList((prev) => [...prev, ...newStreams]);

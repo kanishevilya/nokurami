@@ -141,16 +141,12 @@ export function PostCard({
     setShowCommentInput(!showCommentInput);
   };
 
-  // Normalize the like array access
   const likes = post.likes || [];
-  // Check if the post is liked by current user
   const isLikedByCurrentUser = likes.some(
     (like: any) => like.userId === currentUserId
   );
 
-  // Normalize the comments array access
   const [comments, setComments] = useState(post.comments || []);
-  // Get comment count properly
   const commentCount = comments.length;
 
   return (
@@ -259,7 +255,6 @@ export function PostCard({
           </Button>
         </div>
 
-        {/* Comment input */}
         {showCommentInput && (
           <form
             onSubmit={handleCommentSubmit}
@@ -287,7 +282,6 @@ export function PostCard({
           </form>
         )}
 
-        {/* Comments section */}
         {showComments && comments.length > 0 && (
           <div className="mt-3 space-y-3 border-t pt-3">
             <h4 className="text-sm font-medium">Comments</h4>

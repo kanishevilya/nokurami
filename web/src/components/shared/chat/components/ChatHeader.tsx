@@ -67,7 +67,7 @@ export function ChatHeader({
           </div>
         </div>
 
-        {/* Кнопки для принятия/отклонения, если это входящий запрос */}
+        {}
         {status === ChatStatus.Pending && recipientId === currentUserId && (
           <div className="flex gap-2">
             <Button
@@ -102,7 +102,7 @@ export function ChatHeader({
           </Button>
         )}
 
-        {/* Уведомление о статусе, если это исходящий запрос */}
+        {}
         {status === ChatStatus.Pending && creatorId === currentUserId && (
           <Badge
             variant="outline"

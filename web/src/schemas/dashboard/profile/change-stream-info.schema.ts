@@ -1,4 +1,4 @@
-// web/src/schemas/dashboard/stream/change-stream-info.schema.ts
+
 import { z } from "zod";
 
 export const changeStreamInfoSchema = z.object({

@@ -54,7 +54,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
 
   const channel = data?.findChannelByUsername;
 
-  // Fetch follower and following counts
+  
   const { data: followerData } = useFindFollowersCountByChannelQuery({
     variables: { channelId: channel?.id || "" },
     skip: !channel?.id,
@@ -112,7 +112,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
 
   return (
     <div className="container py-6 space-y-6">
-      {/* Profile Header */}
+      {}
       <div className="flex flex-col md:flex-row gap-6 ml-16">
         <Avatar className="h-32 w-32">
           <AvatarImage src={getMediaSource(channel.avatar) || ""} />

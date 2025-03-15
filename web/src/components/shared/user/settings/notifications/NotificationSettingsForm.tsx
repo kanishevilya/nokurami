@@ -124,7 +124,7 @@ export function NotificationSettingsForm() {
       },
     });
     setIsModalOpen(false);
-    clearTelegramToken(); // Удаляем токен при отключении
+    clearTelegramToken(); 
   };
 
   const handleCheckStatus = async () => {

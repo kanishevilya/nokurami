@@ -7,7 +7,6 @@ export class PubSubService extends PubSub {
         super();
     }
 
-    // Метод asyncIterator используется в подписках GraphQL
     asyncIterator<T>(triggers: string | string[]): AsyncIterator<T> {
         // @ts-expect-error - метод существует, но TS его не видит в типах
         return super.asyncIterator<T>(triggers);

@@ -5,7 +5,6 @@ export class FilteredPubSub extends PubSub {
         super();
     }
 
-    // Метод для создания итератора с фильтрацией событий
     public async asyncIterator<T>(
         triggers: string | string[],
         options?: {

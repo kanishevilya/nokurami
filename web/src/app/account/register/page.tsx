@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 }
 
 
-// export async function generateMetadata(): Promise<Metadata> {
-// 	const t = await getTranslations('auth.register')
 
-// 	return {
-// 		title: t('heading')
-// 	}
-// }
+
+
+
+
+
+
 
 export default function CreateAccountPage() {
     return <CreateAccountForm />

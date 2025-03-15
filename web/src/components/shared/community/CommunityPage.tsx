@@ -277,7 +277,7 @@ export function CommunityPage() {
             </div>
 
             <TabsContent value="posts" className="space-y-6">
-              {/* Create Post Card */}
+              {}
               {isAuthenticated && (
                 <Card>
                   <CardHeader className="pb-3">
@@ -316,7 +316,7 @@ export function CommunityPage() {
                 </Card>
               )}
 
-              {/* Posts List */}
+              {}
               {loadingPosts ? (
                 <div className="space-y-6">
                   {[1, 2, 3].map((i) => (

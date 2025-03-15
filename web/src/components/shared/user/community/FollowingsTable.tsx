@@ -1,4 +1,4 @@
-// FollowingsTable.tsx
+
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -142,18 +142,18 @@ export function FollowingsTable() {
                 },
               ]}
             />
-            {/* <Button variant="outline" size="default" asChild>
-              <a href={`/${following.following.username}`}>View Channel</a>
-            </Button>
-            <Button
-              variant="outline"
-              className="bg-red-500"
-              size="default"
-              onClick={() => handleUnfollow(following.followingId)}
-              disabled={unfollowing}
-            >
-              {unfollowing ? "Unfollowing..." : "Unfollow"}
-            </Button> */}
+            {
+
+
+
+
+
+
+
+
+
+
+}
           </TableCell>
         </TableRow>
       )}

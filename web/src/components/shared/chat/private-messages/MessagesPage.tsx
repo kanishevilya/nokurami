@@ -25,7 +25,6 @@ export function MessagesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
-  // Запрос на получение всех приватных чатов
   const {
     data: chatsData,
     loading: loadingChats,
@@ -60,12 +59,11 @@ export function MessagesPage() {
       const chat = chatStatusUpdateData.chatStatusUpdated;
 
       if (chat.status === ChatStatus.Accepted) {
-        // Обновляем список чатов для получения актуальных данных
         refetchChats();
         toast.success("Chat request accepted");
       } else if (chat.status === ChatStatus.Rejected) {
         toast.error("Chat request rejected");
-        // Если текущий выбранный чат был отклонен, сбрасываем его
+
         if (selectedChat === chat.id) {
           setSelectedChat(null);
         }
@@ -100,7 +98,6 @@ export function MessagesPage() {
     }
   }, [selectedChat]);
 
-  // Если не аутентифицирован, показываем сообщение о необходимости входа
   if (!isAuthenticated) {
     return (
       <div className="container mx-auto py-8">
@@ -125,7 +122,7 @@ export function MessagesPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        {/* Список чатов */}
+        {}
         <div className="md:col-span-4">
           <Card className="h-[650px] flex flex-col">
             <div className="border-b p-4">

@@ -13,14 +13,12 @@ export class SocialService {
         @Inject(PUB_SUB) private pubSub: PubSub,
     ) { }
 
-    // Posts
     async getPosts(filters?: PostFiltersInput, sort?: PostSortInput, skip = 0, take = 10) {
         const where: any = {
             isPublic: true,
         };
 
         if (filters?.followingOnly && filters?.userId) {
-            // Get users that the current user follows
             const following = await this.prisma.follow.findMany({
                 where: { followerId: filters.userId },
                 select: { followingId: true },
@@ -68,7 +66,6 @@ export class SocialService {
             },
         });
 
-        // Преобразуем counts в поля объекта
         return posts.map(post => ({
             ...post,
             likeCount: post._count.likes,
@@ -106,7 +103,6 @@ export class SocialService {
             throw new NotFoundException(`Post with ID ${id} not found`);
         }
 
-        // Преобразуем counts в поля объекта и добавляем likeCount для комментариев
         return {
             ...post,
             likeCount: post._count.likes,
@@ -133,7 +129,6 @@ export class SocialService {
             },
         });
 
-        // Публикуем событие для подписок
         this.pubSub.publish('postCreated', { postCreated: post });
 
         return post;
@@ -187,7 +182,6 @@ export class SocialService {
         return true;
     }
 
-    // Comments
     async createComment(userId: string, input: CreateCommentInput) {
         const post = await this.prisma.post.findUnique({
             where: { id: input.postId },
@@ -213,7 +207,6 @@ export class SocialService {
             },
         });
 
-        // Публикуем событие для подписок
         this.pubSub.publish('commentCreated', { commentCreated: comment });
 
         return comment;
@@ -266,7 +259,6 @@ export class SocialService {
         return true;
     }
 
-    // Likes
     async toggleLike(userId: string, input: ToggleLikeInput) {
         if (!input.postId && !input.commentId) {
             throw new Error('Either postId or commentId must be provided');
@@ -276,7 +268,6 @@ export class SocialService {
             throw new Error('Only one of postId or commentId can be provided');
         }
 
-        // Проверяем существование поста или комментария
         if (input.postId) {
             const post = await this.prisma.post.findUnique({
                 where: { id: input.postId },
@@ -286,7 +277,6 @@ export class SocialService {
                 throw new NotFoundException(`Post with ID ${input.postId} not found`);
             }
 
-            // Проверяем, есть ли уже лайк от этого пользователя
             const existingLike = await this.prisma.like.findFirst({
                 where: {
                     userId,
@@ -295,13 +285,11 @@ export class SocialService {
             });
 
             if (existingLike) {
-                // Если лайк уже есть, то удаляем его
                 await this.prisma.like.delete({
                     where: { id: existingLike.id },
                 });
                 return { liked: false, entityId: input.postId, entityType: 'POST' };
             } else {
-                // Если лайка нет, то создаем его
                 const like = await this.prisma.like.create({
                     data: {
                         user: {
@@ -323,7 +311,6 @@ export class SocialService {
                 throw new NotFoundException(`Comment with ID ${input.commentId} not found`);
             }
 
-            // Проверяем, есть ли уже лайк от этого пользователя
             const existingLike = await this.prisma.like.findFirst({
                 where: {
                     userId,
@@ -332,13 +319,11 @@ export class SocialService {
             });
 
             if (existingLike) {
-                // Если лайк уже есть, то удаляем его
                 await this.prisma.like.delete({
                     where: { id: existingLike.id },
                 });
                 return { liked: false, entityId: input.commentId, entityType: 'COMMENT' };
             } else {
-                // Если лайка нет, то создаем его
                 const like = await this.prisma.like.create({
                     data: {
                         user: {
@@ -354,7 +339,6 @@ export class SocialService {
         }
     }
 
-    // Private Chats
     async getPrivateChats(userId: string) {
         const chats = await this.prisma.privateChat.findMany({
             where: {
@@ -373,7 +357,6 @@ export class SocialService {
             },
         });
 
-        // Для каждого чата вычисляем количество непрочитанных сообщений
         return Promise.all(chats.map(async (chat) => {
             const unreadCount = await this.prisma.privateMessage.count({
                 where: {
@@ -410,12 +393,10 @@ export class SocialService {
             throw new NotFoundException(`Chat with ID ${chatId} not found`);
         }
 
-        // Проверяем, что пользователь является участником чата
         if (chat.creatorId !== userId && chat.recipientId !== userId) {
             throw new ForbiddenException('You are not authorized to view this chat');
         }
 
-        // Вычисляем количество непрочитанных сообщений
         const unreadCount = await this.prisma.privateMessage.count({
             where: {
                 chatId: chat.id,
@@ -455,7 +436,6 @@ export class SocialService {
             return existingChat;
         }
 
-        // Создаем новый чат
         const chat = await this.prisma.privateChat.create({
             data: {
                 creator: {
@@ -472,7 +452,6 @@ export class SocialService {
             },
         });
 
-        // Публикуем событие для подписок
         this.pubSub.publish('chatRequested', {
             chatRequested: {
                 ...chat,
@@ -496,7 +475,6 @@ export class SocialService {
             throw new NotFoundException(`Chat with ID ${input.chatId} not found`);
         }
 
-        // Только получатель запроса может изменить статус
         if (chat.recipientId !== userId) {
             throw new ForbiddenException('Only the recipient can update the chat status');
         }
@@ -512,7 +490,6 @@ export class SocialService {
             },
         });
 
-        // Публикуем событие для подписок
         this.pubSub.publish('chatStatusUpdated', {
             chatStatusUpdated: {
                 ...updatedChat,
@@ -532,12 +509,10 @@ export class SocialService {
             throw new NotFoundException(`Chat with ID ${input.chatId} not found`);
         }
 
-        // Проверяем, что пользователь является участником чата
         if (chat.creatorId !== userId && chat.recipientId !== userId) {
             throw new ForbiddenException('You are not authorized to send messages in this chat');
         }
 
-        // Проверяем, что чат принят
         if (chat.status !== ChatStatus.ACCEPTED) {
             throw new ForbiddenException('Cannot send messages in a chat that is not accepted');
         }
@@ -564,7 +539,6 @@ export class SocialService {
             },
         });
 
-        // Публикуем событие для подписок
         console.log("MESSAGE:", message);
         this.pubSub.publish('privateMessageSent', { privateMessageSent: message });
         this.pubSub.publish(`chatMessages:${input.chatId}`, { onChatMessage: message });
@@ -581,12 +555,10 @@ export class SocialService {
             throw new NotFoundException(`Chat with ID ${input.chatId} not found`);
         }
 
-        // Проверяем, что пользователь является участником чата
         if (chat.creatorId !== userId && chat.recipientId !== userId) {
             throw new ForbiddenException('You are not authorized to mark messages in this chat');
         }
 
-        // Помечаем все сообщения от другого пользователя как прочитанные
         const result = await this.prisma.privateMessage.updateMany({
             where: {
                 chatId: input.chatId,
@@ -604,7 +576,6 @@ export class SocialService {
         };
     }
 
-    // Подписки
     onPostCreated() {
         return this.pubSub.asyncIterableIterator('postCreated');
     }
