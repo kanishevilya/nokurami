@@ -17,6 +17,11 @@ export class ChannelResolver {
     return this.channelService.findByUsername(username)
   }
 
+  @Query(() => [UserModel], { name: 'findChannelsContainingUsername' })
+  public async findChannelsContainingUsername(@Args('username') username: string) {
+    return this.channelService.findChannelsContainingUsername(username)
+  }
+
   @Query(() => Number, { name: 'findFollowersCountByChannel' })
   public async findFollowersCountByChannel(
     @Args('channelId') channelId: string

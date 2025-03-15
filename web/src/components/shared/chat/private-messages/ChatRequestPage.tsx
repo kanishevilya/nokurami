@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
   useRequestChatMutation,
-  useFindChannelByUsernameQuery,
+  useFindChannelsContainingUsernameQuery,
 } from "@/graphql/generated/output";
 import {
   Avatar,
@@ -34,9 +34,8 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
   const debouncedUsername = useDebounce(username, 500);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  // Запрос на поиск пользователей по имени
-  const { data: channelData, loading: loadingChannel } =
-    useFindChannelByUsernameQuery({
+  const { data: channelsData, loading: loadingChannels } =
+    useFindChannelsContainingUsernameQuery({
       variables: { username: debouncedUsername },
       skip: !debouncedUsername || debouncedUsername.length < 3,
     });
@@ -138,7 +137,7 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
                   <h3 className="font-medium text-sm">Search Results</h3>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto">
-                  {loadingChannel ? (
+                  {loadingChannels ? (
                     <div className="flex justify-center items-center p-6">
                       <Loader2 className="h-6 w-6 animate-spin text-primary" />
                     </div>
@@ -146,46 +145,47 @@ export function ChatRequestPage({ usernameParam }: { usernameParam: string }) {
                     <div className="p-6 text-center text-muted-foreground">
                       <p>Enter at least 3 characters to search</p>
                     </div>
-                  ) : !channelData?.findChannelByUsername ? (
+                  ) : channelsData?.findChannelsContainingUsername.length ===
+                    0 ? (
                     <div className="p-6 text-center text-muted-foreground">
                       <p>No users found</p>
                     </div>
                   ) : (
                     <div>
-                      <div
-                        className={`p-3 flex items-center hover:bg-accent cursor-pointer ${
-                          selectedUserId ===
-                          channelData.findChannelByUsername.id
-                            ? "bg-accent/50"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          handleSelectUser(channelData.findChannelByUsername.id)
-                        }
-                      >
-                        <Avatar className="h-10 w-10 mr-3">
-                          <AvatarImage
-                            src={getMediaSource(
-                              channelData.findChannelByUsername.avatar
-                            )}
-                            alt={channelData.findChannelByUsername.username}
-                          />
-                          <AvatarFallback>
-                            {channelData.findChannelByUsername.username
-                              .substring(0, 2)
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">
-                            {channelData.findChannelByUsername.displayName ||
-                              channelData.findChannelByUsername.username}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            @{channelData.findChannelByUsername.username}
-                          </p>
-                        </div>
-                      </div>
+                      {channelsData?.findChannelsContainingUsername.map(
+                        (foundChannel) => (
+                          <div
+                            key={foundChannel.id}
+                            className={`p-3 flex items-center hover:bg-accent cursor-pointer ${
+                              selectedUserId === foundChannel.id
+                                ? "bg-accent/50"
+                                : ""
+                            }`}
+                            onClick={() => handleSelectUser(foundChannel.id)}
+                          >
+                            <Avatar className="h-10 w-10 mr-3">
+                              <AvatarImage
+                                src={getMediaSource(foundChannel.avatar)}
+                                alt={foundChannel.username}
+                              />
+                              <AvatarFallback>
+                                {foundChannel.username
+                                  .substring(0, 2)
+                                  .toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium">
+                                {foundChannel.displayName ||
+                                  foundChannel.username}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                @{foundChannel.username}
+                              </p>
+                            </div>
+                          </div>
+                        )
+                      )}
                     </div>
                   )}
                 </div>

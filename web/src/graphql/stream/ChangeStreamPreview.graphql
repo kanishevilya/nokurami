@@ -1,0 +1,3 @@
+mutation ChangeStreamPreview($preview: Upload!) {
+  changeStreamPreview(preview: $preview)
+}

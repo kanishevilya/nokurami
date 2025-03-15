@@ -4,6 +4,8 @@ import { Card, CardContent } from "@/components/ui/shadcn/Card";
 import { AvatarChangeForm } from "./avatar/AvatarChangeForm";
 import { ProfileInfoChangeForm } from "./information/ProfileInfoChangeForm";
 import { SocialLinksForm } from "./links/SocialLinkForm";
+import { ChangePreviewForm } from "./stream-info/ChangePreviewForm";
+import { ChangeStreamInfoForm } from "./stream-info/ChangeStreamInfoForm";
 
 export function ProfileSettings() {
   return (
@@ -18,6 +20,10 @@ export function ProfileSettings() {
       <ProfileInfoChangeForm />
       <Separator />
       <SocialLinksForm />
+      <Separator />
+      <ChangePreviewForm />
+      <Separator />
+      <ChangeStreamInfoForm />
     </div>
   );
 }

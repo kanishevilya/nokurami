@@ -54,6 +54,37 @@ export class ChannelService {
         return channel
     }
 
+
+    public async findChannelsContainingUsername(username: string) {
+        const channels = await this.prismaService.user.findMany({
+            where: {
+                username: {
+                    contains: username,
+                    mode: 'insensitive'
+                }
+            },
+            include: {
+                socialLinks: {
+                    orderBy: {
+                        position: 'asc'
+                    }
+                },
+                stream: {
+                    include: {
+                        category: true
+                    }
+                },
+                followers: true
+            }
+        })
+
+        if (!channels) {
+            throw new NotFoundException('Channels not found')
+        }
+
+        return channels
+    }
+
     public async findFollowersCountByChannel(channelId: string) {
         const count = await this.prismaService.follow.count({
             where: {

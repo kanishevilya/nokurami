@@ -10,7 +10,7 @@ import {
 import { ProfileSettings } from "./profile/ProfileSettings";
 import { NotificationSettingsForm } from "./notifications/NotificationSettingsForm";
 import { SessionSettings } from "./sessions/SessionSettings";
-import AppearanceLanguageSettings from "./appearance_language/AppearanceLanguageSettings";
+import AppearanceLanguageSettings from "./appearance-language/AppearanceLanguageSettings";
 import { SecuritySettings } from "./security/SecuritySettings";
 import { useClearAccordions } from "@/hooks/useAccordion";
 import { useCallback } from "react";

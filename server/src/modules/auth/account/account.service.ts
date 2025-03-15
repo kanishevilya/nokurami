@@ -37,6 +37,7 @@ export class AccountService {
                 notificationSettings: true,
                 stream: {
                     include: {
+                        category: true,
                         chatSettings: true
                     }
                 },

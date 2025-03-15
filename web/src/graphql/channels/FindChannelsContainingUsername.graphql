@@ -1,0 +1,22 @@
+query FindChannelsContainingUsername($username: String!) {
+  findChannelsContainingUsername(username: $username) {
+    id
+    username
+    avatar
+    displayName
+    information
+    stream {
+      id
+      title
+      previewUrl
+      isLive
+    }
+    socialLinks {
+      id
+      url
+      title
+      userId
+      position
+    }
+  }
+}

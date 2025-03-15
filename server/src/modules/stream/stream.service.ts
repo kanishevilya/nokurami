@@ -119,6 +119,8 @@ export class StreamService {
 
 
     public async changePreview(user: User, file: Upload) {
+        console.log(user)
+        console.log(file)
         const stream = await this.findByUserId(user)
 
         if (stream.previewUrl) {

@@ -20,6 +20,13 @@ query FindProfile {
       isLive
       serverUrl
       streamKey
+      categoryId
+      category {
+        id
+        title
+        slug
+      }
+      previewUrl
       chatSettings {
         isChatEnabled
         isChatFollowersOnly

@@ -562,6 +562,7 @@ export type Query = {
   findAllStreams: Array<StreamModel>;
   findCategoryBySlug: CategoryModel;
   findChannelByUsername: UserModel;
+  findChannelsContainingUsername: Array<UserModel>;
   findFollowersCountByChannel: Scalars['Float']['output'];
   findFollowingsCountByChannel: Scalars['Float']['output'];
   findMessagesByStream: Array<MessageModel>;
@@ -602,6 +603,11 @@ export type QueryFindCategoryBySlugArgs = {
 
 
 export type QueryFindChannelByUsernameArgs = {
+  username: Scalars['String']['input'];
+};
+
+
+export type QueryFindChannelsContainingUsernameArgs = {
   username: Scalars['String']['input'];
 };
 
@@ -852,6 +858,13 @@ export type FindChannelByUsernameQueryVariables = Exact<{
 
 export type FindChannelByUsernameQuery = { __typename?: 'Query', findChannelByUsername: { __typename?: 'UserModel', id: string, username: string, avatar?: string | null, displayName: string, information?: string | null, stream: { __typename?: 'StreamModel', id: string, title: string, previewUrl?: string | null, isLive: boolean }, socialLinks: Array<{ __typename?: 'SocialLinkModel', id: string, url: string, title: string, userId: string, position: number }> } };
 
+export type FindChannelsContainingUsernameQueryVariables = Exact<{
+  username: Scalars['String']['input'];
+}>;
+
+
+export type FindChannelsContainingUsernameQuery = { __typename?: 'Query', findChannelsContainingUsername: Array<{ __typename?: 'UserModel', id: string, username: string, avatar?: string | null, displayName: string, information?: string | null, stream: { __typename?: 'StreamModel', id: string, title: string, previewUrl?: string | null, isLive: boolean }, socialLinks: Array<{ __typename?: 'SocialLinkModel', id: string, url: string, title: string, userId: string, position: number }> }> };
+
 export type FindRecommendedChannelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -975,7 +988,7 @@ export type CreateSocialLinkMutation = { __typename?: 'Mutation', createSocialLi
 export type FindProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, telegramChatId?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', title: string, isLive: boolean, serverUrl?: string | null, streamKey?: string | null, chatSettings?: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } | null } } };
+export type FindProfileQuery = { __typename?: 'Query', getProfile: { __typename?: 'UserModel', id: string, username: string, displayName: string, email: string, avatar?: string | null, information?: string | null, telegramChatId?: string | null, userSecurity: { __typename?: 'UserSecurityModel', isEmailVerified: boolean, isTwoFAEnabled: boolean }, notificationSettings: { __typename?: 'NotificationSettingsModel', siteNotificationsEnable: boolean, telegramNotificationsEnable: boolean }, stream: { __typename?: 'StreamModel', title: string, isLive: boolean, serverUrl?: string | null, streamKey?: string | null, categoryId: string, previewUrl?: string | null, category: { __typename?: 'CategoryModel', id: string, title: string, slug: string }, chatSettings?: { __typename?: 'ChatSettingsModel', isChatEnabled: boolean, isChatFollowersOnly: boolean } | null } } };
 
 export type FindSocialLinksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1252,6 +1265,20 @@ export type UpdatePostMutationVariables = Exact<{
 
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'PostModel', id: string, content: string } };
 
+export type ChangeStreamInfoMutationVariables = Exact<{
+  data: ChangeStreamInfoInput;
+}>;
+
+
+export type ChangeStreamInfoMutation = { __typename?: 'Mutation', changeStreamInfo: boolean };
+
+export type ChangeStreamPreviewMutationVariables = Exact<{
+  preview: Scalars['Upload']['input'];
+}>;
+
+
+export type ChangeStreamPreviewMutation = { __typename?: 'Mutation', changeStreamPreview: boolean };
+
 export type CreateIngressMutationVariables = Exact<{
   ingressType: Scalars['Float']['input'];
 }>;
@@ -1291,6 +1318,11 @@ export type GenerateStreamTokenMutationVariables = Exact<{
 
 
 export type GenerateStreamTokenMutation = { __typename?: 'Mutation', generateStreamToken: { __typename?: 'GenerateStreamTokenModel', token: string } };
+
+export type RemoveStreamPreviewMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RemoveStreamPreviewMutation = { __typename?: 'Mutation', removeStreamPreview: boolean };
 
 export type UpdateStreamMutationVariables = Exact<{
   data: ChangeStreamInfoInput;
@@ -1512,6 +1544,63 @@ export type FindChannelByUsernameQueryHookResult = ReturnType<typeof useFindChan
 export type FindChannelByUsernameLazyQueryHookResult = ReturnType<typeof useFindChannelByUsernameLazyQuery>;
 export type FindChannelByUsernameSuspenseQueryHookResult = ReturnType<typeof useFindChannelByUsernameSuspenseQuery>;
 export type FindChannelByUsernameQueryResult = Apollo.QueryResult<FindChannelByUsernameQuery, FindChannelByUsernameQueryVariables>;
+export const FindChannelsContainingUsernameDocument = gql`
+    query FindChannelsContainingUsername($username: String!) {
+  findChannelsContainingUsername(username: $username) {
+    id
+    username
+    avatar
+    displayName
+    information
+    stream {
+      id
+      title
+      previewUrl
+      isLive
+    }
+    socialLinks {
+      id
+      url
+      title
+      userId
+      position
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindChannelsContainingUsernameQuery__
+ *
+ * To run a query within a React component, call `useFindChannelsContainingUsernameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindChannelsContainingUsernameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindChannelsContainingUsernameQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useFindChannelsContainingUsernameQuery(baseOptions: Apollo.QueryHookOptions<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables> & ({ variables: FindChannelsContainingUsernameQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables>(FindChannelsContainingUsernameDocument, options);
+      }
+export function useFindChannelsContainingUsernameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables>(FindChannelsContainingUsernameDocument, options);
+        }
+export function useFindChannelsContainingUsernameSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables>(FindChannelsContainingUsernameDocument, options);
+        }
+export type FindChannelsContainingUsernameQueryHookResult = ReturnType<typeof useFindChannelsContainingUsernameQuery>;
+export type FindChannelsContainingUsernameLazyQueryHookResult = ReturnType<typeof useFindChannelsContainingUsernameLazyQuery>;
+export type FindChannelsContainingUsernameSuspenseQueryHookResult = ReturnType<typeof useFindChannelsContainingUsernameSuspenseQuery>;
+export type FindChannelsContainingUsernameQueryResult = Apollo.QueryResult<FindChannelsContainingUsernameQuery, FindChannelsContainingUsernameQueryVariables>;
 export const FindRecommendedChannelsDocument = gql`
     query FindRecommendedChannels {
   findRecommendedChannels {
@@ -2246,6 +2335,13 @@ export const FindProfileDocument = gql`
       isLive
       serverUrl
       streamKey
+      categoryId
+      category {
+        id
+        title
+        slug
+      }
+      previewUrl
       chatSettings {
         isChatEnabled
         isChatFollowersOnly
@@ -3971,6 +4067,68 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const ChangeStreamInfoDocument = gql`
+    mutation ChangeStreamInfo($data: ChangeStreamInfoInput!) {
+  changeStreamInfo(data: $data)
+}
+    `;
+export type ChangeStreamInfoMutationFn = Apollo.MutationFunction<ChangeStreamInfoMutation, ChangeStreamInfoMutationVariables>;
+
+/**
+ * __useChangeStreamInfoMutation__
+ *
+ * To run a mutation, you first call `useChangeStreamInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeStreamInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeStreamInfoMutation, { data, loading, error }] = useChangeStreamInfoMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useChangeStreamInfoMutation(baseOptions?: Apollo.MutationHookOptions<ChangeStreamInfoMutation, ChangeStreamInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeStreamInfoMutation, ChangeStreamInfoMutationVariables>(ChangeStreamInfoDocument, options);
+      }
+export type ChangeStreamInfoMutationHookResult = ReturnType<typeof useChangeStreamInfoMutation>;
+export type ChangeStreamInfoMutationResult = Apollo.MutationResult<ChangeStreamInfoMutation>;
+export type ChangeStreamInfoMutationOptions = Apollo.BaseMutationOptions<ChangeStreamInfoMutation, ChangeStreamInfoMutationVariables>;
+export const ChangeStreamPreviewDocument = gql`
+    mutation ChangeStreamPreview($preview: Upload!) {
+  changeStreamPreview(preview: $preview)
+}
+    `;
+export type ChangeStreamPreviewMutationFn = Apollo.MutationFunction<ChangeStreamPreviewMutation, ChangeStreamPreviewMutationVariables>;
+
+/**
+ * __useChangeStreamPreviewMutation__
+ *
+ * To run a mutation, you first call `useChangeStreamPreviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeStreamPreviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeStreamPreviewMutation, { data, loading, error }] = useChangeStreamPreviewMutation({
+ *   variables: {
+ *      preview: // value for 'preview'
+ *   },
+ * });
+ */
+export function useChangeStreamPreviewMutation(baseOptions?: Apollo.MutationHookOptions<ChangeStreamPreviewMutation, ChangeStreamPreviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeStreamPreviewMutation, ChangeStreamPreviewMutationVariables>(ChangeStreamPreviewDocument, options);
+      }
+export type ChangeStreamPreviewMutationHookResult = ReturnType<typeof useChangeStreamPreviewMutation>;
+export type ChangeStreamPreviewMutationResult = Apollo.MutationResult<ChangeStreamPreviewMutation>;
+export type ChangeStreamPreviewMutationOptions = Apollo.BaseMutationOptions<ChangeStreamPreviewMutation, ChangeStreamPreviewMutationVariables>;
 export const CreateIngressDocument = gql`
     mutation CreateIngress($ingressType: Float!) {
   createIngress(ingressType: $ingressType)
@@ -4228,6 +4386,36 @@ export function useGenerateStreamTokenMutation(baseOptions?: Apollo.MutationHook
 export type GenerateStreamTokenMutationHookResult = ReturnType<typeof useGenerateStreamTokenMutation>;
 export type GenerateStreamTokenMutationResult = Apollo.MutationResult<GenerateStreamTokenMutation>;
 export type GenerateStreamTokenMutationOptions = Apollo.BaseMutationOptions<GenerateStreamTokenMutation, GenerateStreamTokenMutationVariables>;
+export const RemoveStreamPreviewDocument = gql`
+    mutation RemoveStreamPreview {
+  removeStreamPreview
+}
+    `;
+export type RemoveStreamPreviewMutationFn = Apollo.MutationFunction<RemoveStreamPreviewMutation, RemoveStreamPreviewMutationVariables>;
+
+/**
+ * __useRemoveStreamPreviewMutation__
+ *
+ * To run a mutation, you first call `useRemoveStreamPreviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveStreamPreviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeStreamPreviewMutation, { data, loading, error }] = useRemoveStreamPreviewMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRemoveStreamPreviewMutation(baseOptions?: Apollo.MutationHookOptions<RemoveStreamPreviewMutation, RemoveStreamPreviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveStreamPreviewMutation, RemoveStreamPreviewMutationVariables>(RemoveStreamPreviewDocument, options);
+      }
+export type RemoveStreamPreviewMutationHookResult = ReturnType<typeof useRemoveStreamPreviewMutation>;
+export type RemoveStreamPreviewMutationResult = Apollo.MutationResult<RemoveStreamPreviewMutation>;
+export type RemoveStreamPreviewMutationOptions = Apollo.BaseMutationOptions<RemoveStreamPreviewMutation, RemoveStreamPreviewMutationVariables>;
 export const UpdateStreamDocument = gql`
     mutation UpdateStream($data: ChangeStreamInfoInput!) {
   changeStreamInfo(data: $data)
