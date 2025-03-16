@@ -50,7 +50,7 @@ export function LanguageSettings() {
         await setLanguage(values.language);
         toast.success(t("languageUpdatedSuccess"));
       } catch (error) {
-        toast.error(t("somethingWentWrong"));
+        // toast.error("Something went wrong");
       }
     });
   };

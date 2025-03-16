@@ -116,6 +116,7 @@
         "selectCategory": "Выберите категорию",
         "thumbnailUrl": "URL превью (необязательно)",
         "enterThumbnailUrl": "Введите URL превью",
+        "thisChannelIsNotStreaming": "Этот канал сейчас не проводит трансляцию.",
         "updating": "Обновление...",
         "settingsUpdatedSuccess": "Настройки стрима успешно обновлены",
         "settingsUpdateError": "Ошибка обновления настроек стрима",

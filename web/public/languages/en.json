@@ -109,6 +109,7 @@
         "streamSettings": "Stream Settings",
         "streamSettingsDescription": "Manage your stream information",
         "streamInformation": "Stream Information",
+        "thisChannelIsNotStreaming": "This channel is not streaming",
         "streamInformationDescription": "Update your stream title, category, and thumbnail.",
         "streamTitle": "Stream Title",
         "enterStreamTitle": "Enter your stream title",
