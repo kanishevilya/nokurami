@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { User } from "lucide-react";
 import { ChatMessage, MessageProps } from "./ChatMessage";
 import { ChatStatus } from "@/graphql/generated/output";
+import { useTranslations } from "next-intl";
 
 interface ChatMessagesProps {
   messages: Array<Omit<MessageProps, "isCurrentUser">>;
@@ -15,8 +16,8 @@ export function ChatMessages({
   currentUserId,
 }: ChatMessagesProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("chat");
 
-  
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -31,8 +32,8 @@ export function ChatMessages({
           <User className="mx-auto h-12 w-12 text-muted-foreground" />
           <p className="mt-2 text-muted-foreground">
             {status === ChatStatus.Pending
-              ? "Chat request is pending"
-              : "No messages yet. Start a conversation!"}
+              ? t("pendingRequest")
+              : t("noMessagesYet")}
           </p>
         </div>
       </div>

@@ -9,7 +9,7 @@ import {
 import ChannelOverview from "@/components/shared/channel/ChannelOverview";
 import { Skeleton } from "@/components/ui/shadcn/Skeleton";
 import { Button } from "@/components/ui/shadcn/Button";
-import { MessageSquare } from "lucide-react";
+import { Loader2, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/shadcn/Badge";
 import {
   Avatar,
@@ -145,7 +145,7 @@ export default function ChannelPage({ params }: ChannelPageProps) {
                 size="sm"
               >
                 <MessageSquare className="mr-2 h-4 w-4" />
-                {requestingChat ? "Sending request..." : "Send message"}
+                {requestingChat && <Loader2 className="h-4 w-4 animate-spin" />}
               </Button>
             )}
 
